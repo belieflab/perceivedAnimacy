@@ -11,6 +11,34 @@ let instructions0 = {
   }
 };
 
+let fixation = {
+  type: 'html-keyboard-response',
+  stimulus: '<div style="font-size:60px; color:white;">+</div>',
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 1000
+};
+
+var trial = {
+  type: 'video-keyboard-response',
+  stimulus: ["stim/mirrorChasing/trial1.mp4"],
+  choices: jsPsych.NO_KEYS,
+  trial_ends_after_video: true,
+  trial_duration: 1000
+};
+// let trial = {
+//   type: 'video-keyboard-response',
+//   // stimulus: jsPsych.timelineVariable('stimulus'), //train_stimuli_array, //jsPsych.timelineVariable('stimulus'),
+//   stimulus: ["stim/mirrorChasing/trial1.mp4"],
+//   choices: ['1', '0'],
+//   trial_ends_after_video: true,
+//   // data: jsPsych.timelineVariable('data'),
+//   trial_duration: 1000
+// };
+
+let postTrial = {
+  type: "html-keyboard-response",
+}
+
 let dataSave = {
   type: "html-keyboard-response",
   stimulus: "<p style='color:white;'>Data saving...</p>" +
