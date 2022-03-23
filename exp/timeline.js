@@ -1,5 +1,3 @@
-let timeline = [];
-
 let instructions0 = {
   type: "html-keyboard-response",
   stimulus: "<p> Hello and thank you for taking part in our experiment!</p>" +
@@ -26,6 +24,12 @@ var trial = {
   choices: jsPsych.NO_KEYS,
   trial_ends_after_video: true,
   // trial_duration: 2000,
+};
+
+let procedure = {
+  timeline: [fixation, trial],
+  timeline_variables: randomizedTrials,
+  choices: [48, 49],
 };
 // let trial = {
 //   type: 'video-keyboard-response',
@@ -81,5 +85,7 @@ let end = {
   //   alert(reward);
   // }
 };
+
+
 
 $.getScript("exp/main.js");
