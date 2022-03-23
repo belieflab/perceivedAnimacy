@@ -12,18 +12,20 @@ let instructions0 = {
 };
 
 let fixation = {
-  type: 'html-keyboard-response',
+  type: "html-keyboard-response",
   stimulus: '<div style="font-size:60px; color:white;">+</div>',
   choices: jsPsych.NO_KEYS,
   trial_duration: 1000
 };
 
 var trial = {
-  type: 'video-keyboard-response',
-  stimulus: ["stim/mirrorChasing/trial1.mp4"],
+  type: "video-keyboard-response",
+  // sources: ["stim/mirrorChasing/trial10.mp4"],
+  sources: jsPsych.timelineVariable("stimulus"),
+  data: jsPsych.timelineVariable("data"),
   choices: jsPsych.NO_KEYS,
   trial_ends_after_video: true,
-  trial_duration: 1000
+  // trial_duration: 2000,
 };
 // let trial = {
 //   type: 'video-keyboard-response',
