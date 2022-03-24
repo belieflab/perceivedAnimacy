@@ -21,13 +21,18 @@ var trial = {
   // sources: ["stim/mirrorChasing/trial10.mp4"],
   sources: jsPsych.timelineVariable("stimulus"),
   data: jsPsych.timelineVariable("data"),
-  choices: jsPsych.NO_KEYS,
+  choices: [48, 49],
   trial_ends_after_video: true,
   // trial_duration: 2000,
 };
 
+let postTrial = {
+  type: "html-keyboard-response",
+  choices: [48, 49],
+}
+
 let procedure = {
-  timeline: [fixation, trial],
+  timeline: [fixation, trial, postTrial],
   timeline_variables: randomizedTrials,
   choices: [48, 49],
 };
@@ -40,10 +45,6 @@ let procedure = {
 //   // data: jsPsych.timelineVariable('data'),
 //   trial_duration: 1000
 // };
-
-let postTrial = {
-  type: "html-keyboard-response",
-}
 
 let dataSave = {
   type: "html-keyboard-response",
@@ -63,7 +64,7 @@ let dataSave = {
   choices: jsPsych.NO_KEYS,
   trial_duration: 5000,
   on_finish: function () {
-    saveData("task_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
+    saveData("perAnima_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
     document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
     // returns cursor functionality
     $(document).ready(function () {

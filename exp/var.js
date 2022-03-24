@@ -1,3 +1,4 @@
+// trial counter
 trialIterator = 1;
 
 // (1) define variables
@@ -30,12 +31,13 @@ for (let i = 0; i < noChase.length; i++) {
     }); //creating csv file "baseline_ratings" with liking ratings data saved
 }
 
+// change randomization
 let randomizedTrials = jsPsych.randomization.repeat(trials, 1); //shuffled array no repeats
 
-let practiceTrial = [{
-    stimulus: ["stim/chasing/trial1.mp4"],
-    data: {
-        test_part: "no_chase",
-        stim: "stim/chasing/trial1.mp4"
-    }
-}];
+// let practiceTrial = [{
+//     stimulus: ["stim/chasing/trial1.mp4"],
+//     data: {
+//         test_part: "no_chase",
+//         stim: "stim/chasing/trial1.mp4"
+//     }
+// }];
