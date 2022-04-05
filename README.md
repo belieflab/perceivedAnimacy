@@ -1,4 +1,13 @@
-# jsPsych Template v6.3
+# Perceived Animacy
+
+## Configuration
+
+If you want no feedback then activate:
+"const version = 'noFeedback';"
+If you want feedback then activate:
+"const version = 'feedback';"
+feedbackDuration: duration of "correct" or "incorrect" display to praticipants after each trial (in miliseconds).
+numberTrials: number of trials per trial type (max = 300).
 
 ## Development Guide
 
@@ -21,18 +30,16 @@
 
 7. Clone into htdocs:
 
-        git clone https://github.com/belieflab/pessiglionne.git
+        git clone https://github.com/santiagocdo/perceivedAnimacy.git
 
 #### Modifty permissions:
 8. Copy this text into your terminal from the htdocs folder (the folder you are already in).
 
-        sudo chmod -R 777 pessiglionne/
+        sudo chmod -R 777 perceivedAnimacy/
         
 #### Start experiment:     
-9. Click this URL: [http://localhost:8080/pessiglionne](http://localhost:8080/pessiglionne)
+9. Click this URL: [http://localhost/perceivedAnimacy/?workerId](http://localhost/perceivedAnimacy/?workerId)
       
       
       
 ### BRAVO! You're a XAMPP master.
-        
-
