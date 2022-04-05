@@ -13,7 +13,7 @@ let fixation = {
   trial_duration: 1000
 };
 
-var trial = {
+let trial = {
   type: "video-keyboard-response",
   // sources: ["stim/mirrorChasing/trial10.mp4"],
   sources: jsPsych.timelineVariable("stimulus"),
@@ -24,61 +24,73 @@ var trial = {
   on_finish: function (data) {
     data.index = trialIterator;
     trialIterator ++;
+    data.version = version;
+    let response = data.key_press;
+    // console.log(response);
+    let trialType = jsPsych.data.get().last(1).values()[0].test_part;
+    // console.log(trialType);
+    switch (response) {
+      case 48: 
+        if (trialType == "chase") {
+          data.response = "incorrect";
+        } else if (trialType == "no_chase") {
+          data.response = "correct";
+        } 
+        break;
+
+      case 49:
+        if (trialType == "chase") {
+          data.response = "correct";
+        } else if (trialType == "no_chase") {
+          data.response = "incorrect";
+        } 
+        break;
+    }
   }
-  // // if response during trial then no response in postTrial
-  // on_finish: function(data) {
-  //   //let responseTime = jsPsych.data.getLastTrialData('rt');
-  //   let responseTime = jsPsych.data.get().last(1).values()[0].rt;
-  //   if (responseTime == null) {
-  //     // go to postTrial
-  //     console.log("trial: "+responseTime);
-  //   } else {
-  //     // finish trial
-  //     console.log("trial: "+responseTime);
-  //     jsPsych.finishTrial();
-  //   }
-  // }
 };
 
-// let feedback = {
-//   type: "html-keyboard-response",
-//   stimulus: '<div style="font-size:60px; color:white;">+</div>',
-//   choices: jsPsych.NO_KEYS,
-//   trial_duration: 500
-// };
+let feedback = {
+  type: "html-keyboard-response",
+  stimulus: feedbackGenerator,
+  choices: jsPsych.NO_KEYS,
+  trial_duration: 1000,
+  on_load: function (data) {
+    let response = jsPsych.data.get().last(1).values()[0].key_press;
+    // console.log(response);
+    let trialType = jsPsych.data.get().last(1).values()[0].test_part;
+    // console.log(trialType);
+    switch (response) {
+      case 48: 
+        if (trialType == "chase") {
+          document.getElementById("feedback").innerHTML = "incorrect";
+        } else if (trialType == "no_chase") {
+          document.getElementById("feedback").innerHTML = "correct";
+        } 
+        break;
 
-// let postTrial = {
-//   type: "html-keyboard-response",
-//   stimulus: '<div style="font-size:60px; color:white;">postTrial</div>',
-//   choices: [48, 49],
-//   // if response during trial then no response in postTrial
-//   on_start: function(data) {
-//     let responseTime = jsPsych.data.get().last(2).values()[1].rt;
-//     if (responseTime == null) {   
-//       // accept postTrial reponse
-//       console.log("postTrial: "+responseTime);
-//     } else {
-//       // finish postTrial
-//       console.log("postTrial: "+responseTime);
-//       jsPsych.finishTrial();
-//     }
-//   }
-// }
+      case 49:
+        if (trialType == "chase") {
+          document.getElementById("feedback").innerHTML = "correct";
+        } else if (trialType == "no_chase") {
+          document.getElementById("feedback").innerHTML = "incorrect";
+        } 
+        break;
+    }
+  },
 
-let procedure = {
+};
+
+let procedureNoFeedback = {
   timeline: [fixation, trial],
   timeline_variables: randomizedTrials,
   choices: [48, 49],
 };
-// let trial = {
-//   type: 'video-keyboard-response',
-//   // stimulus: jsPsych.timelineVariable('stimulus'), //train_stimuli_array, //jsPsych.timelineVariable('stimulus'),
-//   stimulus: ["stim/mirrorChasing/trial1.mp4"],
-//   choices: ['1', '0'],
-//   trial_ends_after_video: true,
-//   // data: jsPsych.timelineVariable('data'),
-//   trial_duration: 1000
-// };
+
+let procedureFeedback = {
+  timeline: [fixation, trial, feedback],
+  timeline_variables: randomizedTrials,
+  choices: [48, 49],
+};
 
 let dataSave = {
   type: "html-keyboard-response",

@@ -1,10 +1,11 @@
 // trial counter
-trialIterator = 1;
+let trialIterator = 1;
+let feedbackGenerator = '<div id="feedback" style="font-size:60px; color:white;">lol</div>';
 
 // (1) define variables
 let chase = [];
 let noChase = [];
-for (let i = 1; i <= 3; i++) {
+for (let i = 1; i <= 4; i++) {
     chase.push("stim/chasing2/trial" + i + "mod.mp4")
     noChase.push("stim/mirrorChasing2/trial" + i + "mod.mp4")
 }
