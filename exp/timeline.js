@@ -4,9 +4,6 @@ let instructions0 = {
     "<p>It should take about 30 minutes.</p>" +
     "<p> <i> Press spacebar to continue</i> </p>",
   choices: [32],
-  on_finish: function (data) {
-    data.index = 'lol';
-  }
 };
 
 let fixation = {
@@ -22,17 +19,54 @@ var trial = {
   sources: jsPsych.timelineVariable("stimulus"),
   data: jsPsych.timelineVariable("data"),
   choices: [48, 49],
-  trial_ends_after_video: true,
-  // trial_duration: 2000,
+  trial_ends_after_video: false,
+  response_ends_trial: true,
+  on_finish: function (data) {
+    data.index = trialIterator;
+    trialIterator ++;
+  }
+  // // if response during trial then no response in postTrial
+  // on_finish: function(data) {
+  //   //let responseTime = jsPsych.data.getLastTrialData('rt');
+  //   let responseTime = jsPsych.data.get().last(1).values()[0].rt;
+  //   if (responseTime == null) {
+  //     // go to postTrial
+  //     console.log("trial: "+responseTime);
+  //   } else {
+  //     // finish trial
+  //     console.log("trial: "+responseTime);
+  //     jsPsych.finishTrial();
+  //   }
+  // }
 };
 
-let postTrial = {
-  type: "html-keyboard-response",
-  choices: [48, 49],
-}
+// let feedback = {
+//   type: "html-keyboard-response",
+//   stimulus: '<div style="font-size:60px; color:white;">+</div>',
+//   choices: jsPsych.NO_KEYS,
+//   trial_duration: 500
+// };
+
+// let postTrial = {
+//   type: "html-keyboard-response",
+//   stimulus: '<div style="font-size:60px; color:white;">postTrial</div>',
+//   choices: [48, 49],
+//   // if response during trial then no response in postTrial
+//   on_start: function(data) {
+//     let responseTime = jsPsych.data.get().last(2).values()[1].rt;
+//     if (responseTime == null) {   
+//       // accept postTrial reponse
+//       console.log("postTrial: "+responseTime);
+//     } else {
+//       // finish postTrial
+//       console.log("postTrial: "+responseTime);
+//       jsPsych.finishTrial();
+//     }
+//   }
+// }
 
 let procedure = {
-  timeline: [fixation, trial, postTrial],
+  timeline: [fixation, trial],
   timeline_variables: randomizedTrials,
   choices: [48, 49],
 };
@@ -64,7 +98,7 @@ let dataSave = {
   choices: jsPsych.NO_KEYS,
   trial_duration: 5000,
   on_finish: function () {
-    saveData("perAnima_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
+    saveData("animacy_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
     document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
     // returns cursor functionality
     $(document).ready(function () {
