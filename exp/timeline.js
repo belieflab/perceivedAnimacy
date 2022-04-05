@@ -53,7 +53,7 @@ let feedback = {
   type: "html-keyboard-response",
   stimulus: feedbackGenerator,
   choices: jsPsych.NO_KEYS,
-  trial_duration: 1000,
+  trial_duration: feedbackDuration,
   on_load: function (data) {
     let response = jsPsych.data.get().last(1).values()[0].key_press;
     // console.log(response);

@@ -5,7 +5,7 @@ let feedbackGenerator = '<div id="feedback" style="font-size:60px; color:white;"
 // (1) define variables
 let chase = [];
 let noChase = [];
-for (let i = 1; i <= 4; i++) {
+for (let i = 1; i <= numberTrials; i++) {
     chase.push("stim/chasing2/trial" + i + "mod.mp4")
     noChase.push("stim/mirrorChasing2/trial" + i + "mod.mp4")
 }
