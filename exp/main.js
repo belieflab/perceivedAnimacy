@@ -1,6 +1,7 @@
 let timeline = [];
 
 timeline.push(instructions0);
+timeline.push(instructions1);
 switch (version) {
     case 'feedback':
         // timeline.push(instructionsFeedback);

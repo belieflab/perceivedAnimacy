@@ -1,8 +1,21 @@
 let instructions0 = {
   type: "html-keyboard-response",
   stimulus: "<p> Hello and thank you for taking part in our experiment!</p>" +
-    "<p>It should take about 30 minutes.</p>" +
+    "<p>It should take about 10 minutes.</p>" +
     "<p> <i> Press spacebar to continue</i> </p>",
+  choices: [32],
+};
+
+let instructions1 = {
+  type: "html-keyboard-response",
+  stimulus: "<p>In this experiment you will see videos with 8 moving white discs.</p>" +
+    "<p>In half of the videos one disc will chase anohter disc, in the second half of the videos no disc is being chased.</p>" +
+    "<p>Your job is to detect if there is a chase ocurring on each video, this is, one disc following another.</p>" +
+    "<p>While you are seeing a video and you beliefe there is a chase going on, you should press 1 otherwise press 0.</p>" +
+    "<p>If you made a choise before the end of the video, this will end the video and feedback will be provided.</p>" + 
+    "<p>Feedback will be provided always after you made a response (1=chase or 0=no chase).</p>" +
+    "<p>Feedback will be a 'correct' or an 'incorrect' words on the screen.</p>" +
+    "<p> <i> Press spacebar to start</i> </p>",
   choices: [32],
 };
 
