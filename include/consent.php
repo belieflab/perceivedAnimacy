@@ -81,3 +81,8 @@
   <button id="nextButton" onclick="startExperiment()">CONSENT/NEXT</button>
 </div>
 
+<script type="text/javascript" src="js/jquery-3.5.1.min.js"></script>
+<script>$("button.loadMain").click(function(){
+      // $.getScript("exp/rand.js");
+      $.getScript("exp/timeline.js");
+  }); </script>

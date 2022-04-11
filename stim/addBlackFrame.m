@@ -2,7 +2,8 @@
 cd 'C:\xampp\htdocs\perceivedAnimacy\stim'
 
 % create last black frame in RGB (0,0,0) is black
-black = repmat(0,[720 1152 3]);
+% black = repmat(0,[720 1152 3]);
+black = imread('lastFrame.png');
 
 % loop for chasing
 for v = 1:300 

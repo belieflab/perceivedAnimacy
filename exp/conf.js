@@ -10,4 +10,4 @@
 
   const feedbackDuration = 1000;
 
-  const numberTrials = 10;
+  const numberTrials = 2;
