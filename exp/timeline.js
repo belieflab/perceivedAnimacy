@@ -136,10 +136,10 @@ let end = {
   type: "html-keyboard-response",
   stimulus: "<p style='color:white;'>Thank you!</p>" +
     "<p style='color:white;'>You have successfully completed the experiment and your data has been saved.</p>" +
-    "<p style='color:white;'>To continue the experiment, please click the following link:</p>"+
-    // "<p style='color:white;'><a href="+feedbackLink+">Leave Task Feedback!</a></p>"+
-    "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
-    "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
+    "<p style='color:white;'>To proceed to the next section of this experiment, please click the following link:</p>"+
+    "<p style='color:white;'><a href="+feedbackLink+">Continue to questionnaires!</a></p>",
+    // "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
+    // "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
   choices: jsPsych.NO_KEYS,
   // on_load: function() {
   // alert(reward);
