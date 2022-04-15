@@ -133,6 +133,7 @@ require_once 'db/config.php';
       feedbackLink = "";
       visit = "";
       week = "";
+      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
     } else if (db_connection === true) {
       GUID = "<?php echo $subjectKey ?>";
       workerId = "<?php echo $consortId ?>"; // this is necessary so that the data save with the correct id
