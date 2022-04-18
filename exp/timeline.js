@@ -1,20 +1,44 @@
 let instructions0 = {
   type: "html-keyboard-response",
-  stimulus: "<p> Hello and thank you for taking part in our experiment!</p>" +
-    "<p>It should take about 10 minutes.</p>" +
-    "<p> <i> Press spacebar to continue</i> </p>",
+  stimulus: "<p> Hello and thank you for taking part in our experiment! </p>" +
+    "<p> It should take about 30 minutes. First you will play a Chasing Detection Task and then respond some questionnaires. </p>" +
+    "<p> <i> Press spacebar to continue </i> </p>",
   choices: [32],
 };
 
 let instructions1 = {
   type: "html-keyboard-response",
-  stimulus: "<p>In this experiment you will see videos with 8 moving white discs.</p>" +
-    "<p>In half of the videos one disc will chase anohter disc, in the second half of the videos no disc is being chased.</p>" +
-    "<p>Your job is to detect if there is a chase ocurring on each video, this is, one disc following another.</p>" +
-    "<p>While you are seeing a video and you beliefe there is a chase going on, you should press 1 otherwise press 0.</p>" +
-    "<p>If you made a choise before the end of the video, this will end the video and feedback will be provided.</p>" + 
-    "<p>Feedback will be provided always after you made a response (1=chase or 0=no chase).</p>" +
-    "<p>Feedback will be a 'correct' or an 'incorrect' words on the screen.</p>" +
+  stimulus: "<p> Please ensure the following: </p>" +
+    "<p> (1) That you are in a room with no distractions (no people, music, phones etc) </p>" +
+    "<p> (2) That for the next 30 minutes, you will be able to stay focused on the task and questionnaires </p>" +
+    "<p> As the study progresses, you may find that you start to feel tired or bored. Please do your best to stay focused throughout, since our research depends on it! </p>" +
+    "<p> <i> Press spacebar to continue </i> </p>",
+  choices: [32],
+};
+
+let instructions2 = {
+  type: "html-keyboard-response",
+  stimulus: "<p> Chasing Detection Task (30 minutes) </p>" +
+    "<p> In this task, you will see a series of displays containing several moving white discs. </p>" +
+    "<p> Half of the displays will be <i>Chasing</i> displays, in which one disc will <i>chase</i> another disc by following it around the screen. </p>" +
+    "<p> The other half of the displays will be <i>No Chasing</i> displays, in which there is no chasing. </p>" +
+    "<p> Your job is to detect if there is a <i>chase</i> or not on each display. </p>" +
+    "<p> For each display, please respond as quickly as possible to report whether you saw chasing. </p>" +
+    "<p> Chasing: Press '1' </p>" +
+    "<p> No Chasing: Press '0' </p>" +
+    // "<p> While you are seeing a video and you believe there is a chase going on, you should press 1 otherwise press 0. </p>" +
+    "<p> If you made a choice before the end of a display, the display will end. </p>" + 
+    "<p> Feedback will be provided at the end of each of your choices, you will see a 'correct' or an 'incorrect' words on the screen. </p>" + 
+    // "<p>Feedback will be provided always after you made a response (1=chase or 0=no chase).</p>" +
+    // "<p>Feedback will be a 'correct' or an 'incorrect' words on the screen.</p>" +
+    "<p> <i> Press spacebar to start</i> </p>",
+  choices: [32],
+};
+
+let instructions3 = {
+  type: "html-keyboard-response",
+  stimulus: "<p> After this screen you will start the task. </p>" +
+    "<p> If you are ready to invest the next 30 minutes conducting the study and responding the questionnares then: </p>" +
     "<p> <i> Press spacebar to start</i> </p>",
   choices: [32],
 };
