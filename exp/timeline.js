@@ -1,45 +1,47 @@
 let instructions0 = {
   type: "html-keyboard-response",
-  stimulus: "<p> Hello and thank you for taking part in our experiment! </p>" +
-    "<p> It should take about 30 minutes. First you will play a Chasing Detection Task and then respond some questionnaires. </p>" +
-    "<p> <i> Press spacebar to continue </i> </p>",
+  stimulus: '<p style="font-size:26px;"> Hello and thank you for taking part in our experiment! </p>' +
+    '<p style="font-size:24px;"> The experiment consists of a Chasing Detection Task followed by some questionnaires, and it takes around 30 minutes to complete. </p>' +
+    '<p style="font-size:22px;"> <i> Press the spacebar to continue. </i> </p>',
   choices: [32],
 };
 
 let instructions1 = {
   type: "html-keyboard-response",
-  stimulus: "<p> Please ensure the following: </p>" +
-    "<p> (1) That you are in a room with no distractions (no people, music, phones etc) </p>" +
-    "<p> (2) That for the next 30 minutes, you will be able to stay focused on the task and questionnaires </p>" +
-    "<p> As the study progresses, you may find that you start to feel tired or bored. Please do your best to stay focused throughout, since our research depends on it! </p>" +
-    "<p> <i> Press spacebar to continue </i> </p>",
+  stimulus: '<p style="font-size:26px;"> Please ensure the following: </p>' +
+    '<p style="font-size:22px;"> (1) That you are in a room with no distractions (no people, music, phones, etc.), </p>' +
+    '<p style="font-size:22px;"> (2) That for the next 30 minutes, you will be able to stay focused on the task and questionnaires, </p>' +
+    '<p style="font-size:22px;"> As the study progresses, you may find that you start to feel tired. Please do your best to stay focused throughout, since our research depends on it! </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
   choices: [32],
 };
 
 let instructions2 = {
   type: "html-keyboard-response",
-  stimulus: "<p> Chasing Detection Task (30 minutes) </p>" +
-    "<p> In this task, you will see a series of displays containing several moving white discs. </p>" +
-    "<p> Half of the displays will be <i>Chasing</i> displays, in which one disc will <i>chase</i> another disc by following it around the screen. </p>" +
-    "<p> The other half of the displays will be <i>No Chasing</i> displays, in which there is no chasing. </p>" +
-    "<p> Your job is to detect if there is a <i>chase</i> or not on each display. </p>" +
-    "<p> For each display, please respond as quickly as possible to report whether you saw chasing. </p>" +
-    "<p> Chasing: Press '1' </p>" +
-    "<p> No Chasing: Press '0' </p>" +
-    // "<p> While you are seeing a video and you believe there is a chase going on, you should press 1 otherwise press 0. </p>" +
-    "<p> If you made a choice before the end of a display, the display will end. </p>" + 
-    "<p> Feedback will be provided at the end of each of your choices, you will see a 'correct' or an 'incorrect' words on the screen. </p>" + 
-    // "<p>Feedback will be provided always after you made a response (1=chase or 0=no chase).</p>" +
-    // "<p>Feedback will be a 'correct' or an 'incorrect' words on the screen.</p>" +
-    "<p> <i> Press spacebar to start</i> </p>",
+  stimulus: '<p style="font-size:26px;"> Chasing Detection Task </p>' +
+    '<p style="font-size:22px;"> In this task, you will see a series of displays containing several moving white discs. </p>' +
+    '<p style="font-size:22px;"> Half of the displays will be <i>Chasing</i> displays, in which one disc will <i>chase</i> another disc by following it around the screen. </p>' +
+    '<p style="font-size:22px;"> The other half of the displays will be <i>No Chasing</i> displays, in which there is <i>no chasing</i>. </p>' +
+    '<p style="font-size:22px;"> Your job is to detect if there is a <i>chase</i> or not on each display. </p>' +
+    '<p style="font-size:22px;"> For each display, please respond as quickly as possible to report whether you saw a <i>chase</i>. </p>' +
+    '<p style="font-size:22px;"> Chasing: Press "1" </p>' +
+    '<p style="font-size:22px;"> No Chasing: Press "0" </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
   choices: [32],
 };
 
 let instructions3 = {
   type: "html-keyboard-response",
-  stimulus: "<p> After this screen you will start the task. </p>" +
-    "<p> If you are ready to invest the next 30 minutes conducting the study and responding the questionnares then: </p>" +
-    "<p> <i> Press spacebar to start</i> </p>",
+  stimulus: '<p style="font-size:22px;"> If you made a choice before the end of a display, the display will end. </p>' + 
+    '<p style="font-size:22px;"> Feedback will be provided at the end of each of your choices, you will see a "correct" or an "incorrect" word on the screen. </p>' + 
+    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
+};
+
+let instructions4 = {
+  type: "html-keyboard-response",
+  stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
+    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes conducting the study and responding the questionnares then: </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to start. </i> </p>',
   choices: [32],
 };
 

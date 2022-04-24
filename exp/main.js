@@ -4,6 +4,7 @@ timeline.push(instructions0);
 timeline.push(instructions1);
 timeline.push(instructions2);
 timeline.push(instructions3);
+timeline.push(instructions4);
 switch (version) {
     case 'feedback':
         // timeline.push(instructionsFeedback);
