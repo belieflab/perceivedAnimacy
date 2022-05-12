@@ -2,12 +2,13 @@
 
 ## Configuration
 
-If you want no feedback then activate:
-"const version = 'noFeedback';"
-If you want feedback then activate:
-"const version = 'feedback';"
-feedbackDuration: duration of "correct" or "incorrect" display to praticipants after each trial (in miliseconds).
-numberTrials: number of trials per trial type (max = 300).
+feedbackDuration: duration of "correct" or "incorrect" feedback words  after each trial (in miliseconds).
+
+numberPracticeTrials: number of displays for the practice block, i.e., with feedback (in natural numbers).
+
+numberTestTrials: number of displays for the test block, i.e., without feedback (in natural numbers).
+
+The sum of numberPracticeTrials and numberTestTrials should be no larger than 300 (number of different displays per trial type).
 
 ## Development Guide
 

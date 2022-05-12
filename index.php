@@ -23,7 +23,6 @@ require_once 'db/config.php';
   <script type="text/javascript" src="jQuery/jquery-3.5.1.min.js"></script>
   <script type="text/javascript" src="jsPsych/jspsych.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
-  <!-- SCdO: changed image for video -->
   <script type="text/javascript" src="jsPsych/plugins/jspsych-video-keyboard-response.js"></script>
   <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css">
   </link>

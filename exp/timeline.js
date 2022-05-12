@@ -32,15 +32,17 @@ let instructions2 = {
 
 let instructions3 = {
   type: "html-keyboard-response",
-  stimulus: '<p style="font-size:22px;"> If you made a choice before the end of a display, the display will end. </p>' + 
-    '<p style="font-size:22px;"> Feedback will be provided at the end of each of your choices, you will see a "correct" or an "incorrect" word on the screen. </p>' + 
+  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. </p>' + 
+    '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 12 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
+    '<p style="font-size:22px;"> The second part of the task is the testing block, you will see 188 displays, and no feedback will be provided. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
+
 };
 
 let instructions4 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
-    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes conducting the study and responding the questionnares then: </p>' +
+    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes conducting the study and responding the questionnaires then: </p>' +
     '<p style="font-size:24px;"> <i> Press the spacebar to start. </i> </p>',
   choices: [32],
 };
@@ -63,7 +65,7 @@ let trial = {
   on_finish: function (data) {
     data.index = trialIterator;
     trialIterator ++;
-    data.version = version;
+    // data.version = version;
     let response = data.key_press;
     // console.log(response);
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
@@ -119,15 +121,23 @@ let feedback = {
 
 };
 
-let procedureNoFeedback = {
-  timeline: [fixation, trial],
-  timeline_variables: randomizedTrials,
+let procedurePractice = {
+  timeline: [fixation, trial, feedback],
+  timeline_variables: randomizedPracticeTrials,
   choices: [48, 49],
 };
 
-let procedureFeedback = {
-  timeline: [fixation, trial, feedback],
-  timeline_variables: randomizedTrials,
+let instructions5 = {
+  type: "html-keyboard-response",
+  stimulus: '<p style="font-size:26px;"> Practice trials are over. </p>' +
+    '<p style="font-size:22px;"> In the next set of testing trials you will not have feedback. </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
+  choices: [32],
+};
+
+let procedureTest = {
+  timeline: [fixation, trial],
+  timeline_variables: randomizedTestTrials,
   choices: [48, 49],
 };
 
@@ -162,8 +172,8 @@ let end = {
   type: "html-keyboard-response",
   stimulus: "<p style='color:white;'>Thank you!</p>" +
     "<p style='color:white;'>You have successfully completed the experiment and your data has been saved.</p>" +
-    "<p style='color:white;'>To proceed to the next section of this experiment, please click the following link:</p>"+
-    "<p style='color:white;'><a href="+feedbackLink+">Continue to questionnaires!</a></p>",
+    "<p style='color:white;'>To proceed to the next section of this experiment, please click the following link:</p>",// +
+    // "<p style='color:white;'><a href="+ feedbackLink +">Continue to questionnaires!</a></p>",
     // "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
     // "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
   choices: jsPsych.NO_KEYS,

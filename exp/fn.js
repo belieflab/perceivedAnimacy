@@ -3,7 +3,7 @@ function startExperiment() {
   jsPsych.init({
     timeline: timeline,
     show_progress_bar: true,
-    preload_videos: [randomizedTrials],
+    preload_videos: [randomizedPracticeTrials],
   });
 }
 
