@@ -12,5 +12,5 @@
 
   // number of trials per trial type, e.g., 100 will be a total of 200 (100 chase and 100 mirror)
   // practice trials always have feedback, test trials do not.
-  const numberTestTrials = 2;
-  const numberPracticeTrials = 2;
+  const numberTestTrials = 94;
+  const numberPracticeTrials = 6;

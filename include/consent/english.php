@@ -56,7 +56,7 @@
       <br><br>
       <u><b>Questions or Concerns</b></u>
       <br>
-      If you have any questions or concerns regarding the experiment, you may contact us here at the lab by emailing BLAMLabRequester@gmail.com If you have general questions about your rights as a research participant, you may contact the Yale University Human Investigation Committee at 203-785-4688 or human.subjects@yale.edu (HSC# 2000022111).
+      If you have any questions or concerns regarding the experiment, you may contact us here at the lab by emailing comppsyresgroup@gmail.com If you have general questions about your rights as a research participant, you may contact the Yale University Human Investigation Committee at 203-785-4688 or human.subjects@yale.edu (HSC# 2000022111).
 
     </p>
   </div>
