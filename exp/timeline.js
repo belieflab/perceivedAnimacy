@@ -64,6 +64,7 @@ let trial = {
   response_ends_trial: true,
   on_finish: function (data) {
     data.index = trialIterator;
+    data.workerId = workerId;
     trialIterator ++;
     // data.version = version;
     let response = data.key_press;
