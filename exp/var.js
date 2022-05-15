@@ -17,16 +17,16 @@ const randTestTrials = randTrials.slice(numberPracticeTrials, numberPracticeTria
 // practice trials
 let chasePractice = [];
 let noChasePractice = [];
-for (let i = 1; i <= randPracticeTrials.length; i++) {
-    chasePractice.push("stim/chasing2/trial" + randPracticeTrials[i-1] + "mod.mp4")
-    noChasePractice.push("stim/mirrorChasing2/trial" + randPracticeTrials[i-1] + "mod.mp4")
+for (let i = 0; i <= randPracticeTrials.length; i++) {
+    chasePractice.push("stim/chasing2/trial" + randPracticeTrials[i] + "mod.mp4")
+    noChasePractice.push("stim/mirrorChasing2/trial" + randPracticeTrials[i] + "mod.mp4")
 }
 // test trials
 let chaseTest = [];
 let noChaseTest = [];
-for (let i = 1; i <= randTestTrials.length; i++) {
-    chaseTest.push("stim/chasing2/trial" + randTestTrials[i-1] + "mod.mp4")
-    noChaseTest.push("stim/mirrorChasing2/trial" + randTestTrials[i-1] + "mod.mp4")
+for (let i = 0; i <= randTestTrials.length; i++) {
+    chaseTest.push("stim/chasing2/trial" + randTestTrials[i] + "mod.mp4")
+    noChaseTest.push("stim/mirrorChasing2/trial" + randTestTrials[i] + "mod.mp4")
 }
 
 
