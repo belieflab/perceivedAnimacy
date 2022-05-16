@@ -1,3 +1,8 @@
+# script created by Santiago Castiello. It is used to analyse the 600 stimulus
+# created by Ben van Buren for a perceived animacy task. Also, in this script
+# I developed a simple model to classify chasing and no chasing (mirror) videos
+# 15/05/2022. Special thanks to Josh Kenney.
+
 # Remove all of the elements currently loaded in R
 rm(list=ls(all=TRUE))
 # add work directory
@@ -28,8 +33,8 @@ source("functions.R")
 # # # # # # # # # # import data # # # # # # # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# import stimuli .txt data (from Ben van Buren)
-loc <- paste0(getwd(),"/van Buren stimuli/chasing_detection_stimuli")
+# # import stimuli .txt data (from Ben van Buren) this are 600 8sec videos
+loc <- paste0(getwd(),"/van_Buren_stimuli/chasing_detection_stimuli")
 db1 <- read.table(paste0(loc,"/chasing/chasing_frames.txt"))
 db2 <- read.table(paste0(loc,"/mirror_chasing/mirror_chasing_frames.txt"))
 
@@ -38,7 +43,7 @@ db <- data.frame(trialType=c(rep("chase",nrow(db1)),
                              rep("mirror",nrow(db2))),
                  rbind(db1,db2))
 
-# colnames titles
+# colomn names titles
 colnames(db)[-1] <- c("trial","frame","wX","wY","sX","sY",
                       "d1X","d1Y","d2X","d2Y",
                       "d3X","d3Y","d4X","d4Y",
@@ -49,23 +54,34 @@ colnames(db)[-1] <- c("trial","frame","wX","wY","sX","sY",
 # # # # # # # # # # calculate norm and angles # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# db$trial[db$trialType == "mirror"] <- db$trial[db$trialType == "mirror"] + 300
+# # in the next section we will get the distance from all the discs
+# # in all the 600 videos
+
+# create the trial condition variable
 db$trialCond <- paste0(db$trial,"_",db$trialType)
-# discs names
+
+# discs names (one wolf, one sheep, and 6 distractions)
 elem <- c("w","s","d1","d2","d3","d4","d5","d6")
-# combinations of elemements
+
+# create data.frame with the combinations of the 8 elements 
 allRelations <- data.frame(t(combn(elem,2)))
+
+# combine the name of each combination
 allRelations$name <- paste0(allRelations[,1],"_",allRelations[,2])
-# create dist and angl data frames
+
+# create distance (dist) and angle (angl) data frames
 dist <- angl <- data.frame(trialType=db$trialType,trial=db$trial,
                            frame=db$frame,trialCond=db$trialCond)
+
 # get distance and angle between all discs
 for (i in 1:nrow(allRelations)) {
   from <- db[,grepl(allRelations[i,1],colnames(db))]
   to <- db[,grepl(allRelations[i,2],colnames(db))]
   colnames(from) <- colnames(to) <- c("x","y")
+  ## ## f_normAngle is a function that is in "function.R"
   temp <- f_normAngle(from,to)
-  # dist and angl
+  
+  # distances and angles
   dist <- data.frame(dist,temp$norm)
   colnames(dist)[ncol(dist)] <- paste0("d_",allRelations$name[i])
   angl <- data.frame(angl,temp$angl)
@@ -73,17 +89,17 @@ for (i in 1:nrow(allRelations)) {
 }; remove(from,to,temp,i)
 
 
-# # # # plot distances # # # #
-dist_lf <- melt(dist, id.vars = c("trialType","trial","frame","trialCond"))
-ggplot(dist_lf[,], aes(x=frame,y=value,col=variable)) + 
-  stat_summary(geom = "line") + 
-  facet_grid(. ~ trialType) +
-  theme_classic()
-ggplot(dist_lf[,], aes(x=value,y=variable,col=trialType)) + 
-  stat_summary() + 
-  theme_classic()
+# # # # # # # # plot distances # # # # # # # #
+# dist_lf <- melt(dist, id.vars = c("trialType","trial","frame","trialCond"))
+# ggplot(dist_lf[,], aes(x=frame,y=value,col=variable)) + 
+#   stat_summary(geom = "line") + 
+#   facet_grid(. ~ trialType) +
+#   theme_classic()
+# ggplot(dist_lf[,], aes(x=value,y=variable,col=trialType)) + 
+#   stat_summary() + 
+#   theme_classic()
 
-# # # # plot angles # # # #
+# # # # # # # # plot angles # # # #  # # # #
 # angl_lf <- melt(angl, id.vars = c("trialType","trial","frame","trialCond"))
 # ggplot(angl_lf[,], aes(x=frame,y=value,col=variable)) + 
 #   stat_summary(geom = "line") + 
@@ -98,26 +114,47 @@ ggplot(dist_lf[,], aes(x=value,y=variable,col=trialType)) +
 # # # # # # # # # # simulate with the distance/memory model # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# memory capacity
+
+# vector with multiple memory capacities
 mc <- seq(6,120,by=6)
-# distance threshold
+# vector with multiple distance threshold
 theta <- seq(15,300,by=15)
-# join parameters
+# create combinations of all previous paramters (mc and theta)
 params <- data.frame(mc=rep(mc,length(theta)),theta=rep(theta,each=length(mc)))
 
-sdtPars <- f_SDTparamExplor(dist,params)
-# write.csv(sdtPars,"sdtPars2.csv")
-# sdtPars <- read.csv("sdtPars2.csv")
+# simulate with all the parametric space all the 600 videos. In order to explore
+# which parameters combinations have a good classification of the videos
 
-# marginals
+## ## f_SDTparamExplor is a function that is in "function.R" (NOTE: is slow)
+# if there is already sdtPars, then don't run
+if (sum(list.files()=="sdtPars.csv")==0) { 
+  sdtPars <- f_SDTparamExplor(dist,params)
+  # write the results in a csv
+  write.csv(sdtPars,"sdtPars.csv")
+} else {
+  # if you have already saved the results, read the csv
+  sdtPars <- read.csv("sdtPars.csv")
+}
+
+
+
+# obtain the marginals of the parametric space
+# marginal for memory capacity (mc)
 mcMarg <- sdtPars %>% group_by(mc) %>% 
   summarize(mSensit=sum(sensit),mResCri=sum(resCri))
+# marginal for distance threshold (theta)
 thetaMarg <- sdtPars %>% group_by(theta) %>% 
   summarize(mSensit=sum(sensit),mResCri=sum(resCri))
+
+# get the set of paramters that have a larger SDT d' (sensitivity)
 sdtPars[sdtPars$sensit==max(sdtPars$sensit),]
+
+# get the set of parameters that have a 'reasonable' (arbitrary 1.5 of d')
 sdtPars[sdtPars$sensit>1.5,]
 
-# figures
+
+# # # plot the parametric space
+# difference between d' (discrimination) and C (response criterion)
 p_diff <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=sensit-abs(resCri))) +
   labs(x = expression(Memory~Capacity~(tau)), 
        y = expression(Proximity~Threshold~(theta)),fill="d'-|C|") +
@@ -127,6 +164,8 @@ p_diff <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=sensit-abs
   scale_fill_gradient2(low="#0000FFFF",mid="#FFFFFFFF",high="#FF0000FF") + 
   coord_fixed() + 
   theme_classic()
+
+# d' plot
 p_dPrime <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=sensit)) +
   labs(x = expression(Memory~Capacity~(tau)), 
        y = expression(Proximity~Threshold~(theta)),fill="d'") +
@@ -136,6 +175,8 @@ p_dPrime <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=sensit))
   scale_fill_gradient2(low="#0000FFFF",mid="#FFFFFFFF",high="#FF0000FF") + 
   coord_fixed() + 
   theme_classic()
+
+# C plot
 p_rCrite <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=resCri)) +
   labs(x = expression(Memory~Capacity~(tau)), 
        y = expression(Proximity~Threshold~(theta)),fill="C") +
@@ -145,9 +186,13 @@ p_rCrite <- ggplot(sdtPars, aes(x=as.factor(mc),y=as.factor(theta),fill=resCri))
   scale_fill_gradient2(low="#0000FFFF",mid="#FFFFFFFF",high="#FF0000FF") + 
   coord_fixed() + 
   theme_classic()
+
+# select the "good" parameters (i.e., not extreme C and high d')
 sdtPars$goodPar <- ifelse(sdtPars$sensit > 1 & 
                             (sdtPars$resCri < 1 & sdtPars$resCri > -1), 
                           "good","bad")
+
+# plot d' against C and visualize the "good" parameters
 p_corPar <- ggplot(sdtPars, aes(x=resCri,y=sensit,col=goodPar)) + 
   labs(x = "Response Criterion (C)", 
        y = "Sensibility (d')") +
@@ -159,15 +204,18 @@ p_corPar <- ggplot(sdtPars, aes(x=resCri,y=sensit,col=goodPar)) +
   # coord_fixed() + 
   theme_classic()
 
+
+
+# print the previous figures if print_fig <- 1 
 print_fig <- 0
 if (print_fig == 1) {
-  ggsave("figures&tables/p_dPrime2.png",
+  ggsave("/figures_tables/p_dPrime2.jpg",
          plot = p_dPrime, width = 12, height = 12, units = "cm", 
          dpi = 900, device='png', limitsize = T)
-  ggsave("figures&tables/p_rCrite2.png",
+  ggsave("/figures_tables/p_rCrite2.png",
          plot = p_rCrite, width = 12, height = 12, units = "cm", 
          dpi = 900, device='png', limitsize = T)
-  ggsave("figures&tables/p_corPar.png",
+  ggsave("figures_tables/p_corPar.png",
          plot = p_corPar, width = 10, height = 8, units = "cm", 
          dpi = 900, device='png', limitsize = T)
 }
@@ -177,27 +225,28 @@ if (print_fig == 1) {
 # # # # # # # # # # parameters recovery # # # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-sdtPars <- read.csv("sdtPars2.csv")
-# select the set of parameters that have a good SDT discrimination value (d')
-sdtPars$goodPar <- ifelse(sdtPars$sensit > 1 & 
-                            (sdtPars$resCri < 1 & sdtPars$resCri > -1), 
-                          "good","bad")
+# This section need sdtPars (check "simulate with the distance/memory model")
+
+# select only the "good" parameters so we simulate experiment with those, 
+# then we will recover those parameters
 bestSdtPars <- sdtPars[sdtPars$goodPar == "good",]
 
-# create data frame with parameters that will be simulated
+# create data frame with parameters that will be simulated (vert slow)
 # params <- data.frame(mc=rep(bestSdtPars$mc,10),
 #                      theta=rep(bestSdtPars$theta,each=10),
 #                      eta=rep(seq(0.55,1,0.05),nrow(bestSdtPars)))
-# if you don't want to simulate with multiple eta values
+
+# if you don't want to simulate with multiple eta values (slow)
 params <- data.frame(mc=bestSdtPars$mc,
                      theta=bestSdtPars$theta,
                      eta=0.75)
-# only one set of parameters
+
+# only one set of parameters (fast)
 # params <- data.frame(mc = 52, theta = 90, eta = 0.75)
 
-
-# randomized 100 trials
-randomTrials <- sample(1:300,80)
+# select random n trials for running simulations
+n = 80
+randomTrials <- sample(1:300,n)
 for (i in 1:length(randomTrials)) {
   if (i == 1) {
     randDist <- dist[dist$trial == randomTrials[i],]
@@ -205,8 +254,14 @@ for (i in 1:length(randomTrials)) {
     randDist <- rbind(randDist,dist[dist$trial == randomTrials[i],])
   }
 }
+# randDist is a data.frame containing all discs distances from random trials
+# this data.frame is what the model will use to clasifiy chase and no-chase
+
+
 
 # # # # # # # # # # simulate with good parameters # # # # # # # # # # # # # ####
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 for (p in 1:nrow(params)) {
   message(paste("set of parameters:",p))
   if (p == 1) {
@@ -219,6 +274,7 @@ for (p in 1:nrow(params)) {
     simTrials <- rbind(simTrials,sim$dbTrials)
   }
 }; remove(sim)
+
 
 # add participant (parameters set) ID
 simPars$part <- paste0(simPars$mc,"_",simPars$theta,"_",simPars$eta)
