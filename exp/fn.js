@@ -3,7 +3,9 @@ function startExperiment() {
   jsPsych.init({
     timeline: timeline,
     show_progress_bar: true,
-    preload_videos: [chasePractice,noChasePractice,chaseTest,noChaseTest],
+    preload_video: [chasePractice,noChasePractice,chaseTest,noChaseTest],
+    preload_audio: [],
+    preload_images: [],
   });
 }
 
