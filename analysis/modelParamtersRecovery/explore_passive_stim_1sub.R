@@ -25,6 +25,10 @@ if (!require(dplyr)) {install.packages("dplyr")}; library(dplyr)
 write.csv(matrix(NA),"hello.csv")
 
 
+
+# connect to the farm
+# ssh sc3228@farnam.hpc.yale.edu
+
 # to exist the farnam
 # <code> exit </code>
 
