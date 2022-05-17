@@ -1,6 +1,6 @@
-# script created by Santiago Castiello. In this script we used the simulated
-# "good" artificial subjects to recover their parameters whom which they were
-# simulated.
+# script created by Santiago Castiello. This script is used to fit one "good"
+# artificial subject. We fit one subject by using one batch each. See the master
+# code named: paramters_recovery.R
 # 17/05/2022. Special thanks to Josh Kenney.
 
 # Remove all of the elements currently loaded in R
@@ -59,7 +59,7 @@ fitPars <- list(mcRange = c(20,100),
                 etaRange = c(0.55,0.95),
                 binsSize = data.frame(mc=30,theta=30,eta=30))
 
-# add columns which will be filled with the fitting algorithm
+# add columns which will be filled with the fihtting algorithm
 simPars$negSumLog <- simPars$hitRate <- 
   simPars$eta_fit_var <- simPars$theta_fit_var <- simPars$mc_fit_var <- 
   simPars$eta_fit_wm <- simPars$theta_fit_wm <- simPars$mc_fit_wm <- NA
@@ -96,4 +96,5 @@ total_time <- end_time - start_time
 simPars$total_time <- total_time
 
 # print fitted parameters
-write.csv(simPars,paste0("../figures_tables/simParsWithParRecovery_",i,".csv"))
+write.csv(simPars,paste0("../figures_tables/simParsWithParRecovery_",i,".csv"),
+          row.names = F)

@@ -34,9 +34,10 @@ source("functions.R")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # import stimuli .txt data (from Ben van Buren) this are 600 8sec videos
-loc <- paste0(getwd(),"/van_Buren_stimuli/chasing_detection_stimuli")
-db1 <- read.table(paste0(loc,"/chasing/chasing_frames.txt"))
-db2 <- read.table(paste0(loc,"/mirror_chasing/mirror_chasing_frames.txt"))
+db1 <- read.table("../../stim/van_Buren_stimuli/chasing_detection_stimuli/chasing/chasing_frames.txt")
+db2 <- read.table("../../stim/van_Buren_stimuli/chasing_detection_stimuli/mirror_chasing/mirror_chasing_frames.txt")
+# db1 <- read.table(paste0(loc,"/chasing/chasing_frames.txt"))
+# db2 <- read.table(paste0(loc,"/mirror_chasing/mirror_chasing_frames.txt"))
 
 # combine databases
 db <- data.frame(trialType=c(rep("chase",nrow(db1)),
@@ -127,13 +128,13 @@ params <- data.frame(mc=rep(mc,length(theta)),theta=rep(theta,each=length(mc)))
 
 ## ## f_SDTparamExplor is a function that is in "function.R" (NOTE: is slow)
 # if there is already sdtPars, then don't run
-if (sum(list.files()=="sdtPars.csv")==0) { 
+if (sum(list.files("figures_tables")=="sdtPars.csv")==0) { 
   sdtPars <- f_SDTparamExplor(dist,params)
   # write the results in a csv
-  write.csv(sdtPars,"sdtPars.csv")
+  write.csv(sdtPars,"figures_tables/sdtPars.csv",row.names = F)
 } else {
   # if you have already saved the results, read the csv
-  sdtPars <- read.csv("sdtPars.csv")
+  sdtPars <- read.csv("figures_tables/sdtPars.csv")
 }
 
 
@@ -209,10 +210,10 @@ p_corPar <- ggplot(sdtPars, aes(x=resCri,y=sensit,col=goodPar)) +
 # print the previous figures if print_fig <- 1 
 print_fig <- 0
 if (print_fig == 1) {
-  ggsave("/figures_tables/p_dPrime2.jpg",
+  ggsave("figures_tables/p_dPrime2.jpg",
          plot = p_dPrime, width = 12, height = 12, units = "cm", 
          dpi = 900, device='png', limitsize = T)
-  ggsave("/figures_tables/p_rCrite2.png",
+  ggsave("figures_tables/p_rCrite2.png",
          plot = p_rCrite, width = 12, height = 12, units = "cm", 
          dpi = 900, device='png', limitsize = T)
   ggsave("figures_tables/p_corPar.png",
@@ -282,13 +283,13 @@ simTrials$part <- paste0(simTrials$mc,"_",simTrials$theta,"_",simTrials$eta)
 
 write_csv <- 0
 if (write_csv == 1) {
-  write.csv(simPars,"simPars.csv")
-  write.csv(simTrials,"simTrials.csv")
-  write.csv(randDist,"randDist.csv")
+  write.csv(simPars,"figures_tables/simPars.csv",row.names = F)
+  write.csv(simTrials,"figures_tables/simTrials.csv",row.names = F)
+  write.csv(randDist,"figures_tables/randDist.csv",row.names = F)
 }
-simPars <- read.csv("simPars.csv")
-simTrials <- read.csv("simTrials.csv")
-randDist <- read.csv("randDist.csv")
+simPars <- read.csv("figures_tables/simPars.csv")
+simTrials <- read.csv("figures_tables/simTrials.csv")
+randDist <- read.csv("figures_tables/randDist.csv")
 plot(simPars$resCri,simPars$sensit)
 plot(simPars$mc,simPars$theta)
 
@@ -326,4 +327,4 @@ for (i in 1:length(simParticip)) {
   simPars[simPars$part == simParticip[i],grepl("var",colnames(simPars))] <- 
     temp$pars$var
 }; remove(temp)
-write.csv(simPars,"simParsWithParRecovery.csv")
+write.csv(simPars,"figures_tables/simParsWithParRecovery.csv")

@@ -1,2 +1,2 @@
-"","mc","theta","eta","sensit","resCri","h","f","R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror","part","mc_fit_wm","theta_fit_wm","eta_fit_wm","mc_fit_var","theta_fit_var","eta_fit_var","hitRate","negSumLog","total_time"
-"1",42,60,0.75,0.16059413122578,0.359616100060344,0.39,0.33,39,33,61,67,"42_60_0.75",64.6915103669503,53.200157609268,0.655940877986136,64.1656025321683,128.06383059436,0.759497348449708,0.644,128.21203153821,58.832560300827
+mc,theta,eta,sensit,resCri,h,f,R1_TTchase,R1_TTmirror,R0_TTchase,R0_TTmirror,part,mc_fit_wm,theta_fit_wm,eta_fit_wm,mc_fit_var,theta_fit_var,eta_fit_var,hitRate,negSumLog,total_time
+42,60,0.75,0.160594131,0.3596161,0.39,0.33,39,33,61,67,42_60_0.75,64.69151037,53.20015761,0.655940878,64.16560253,128.0638306,0.759497348,0.644,128.2120315,58.8325603

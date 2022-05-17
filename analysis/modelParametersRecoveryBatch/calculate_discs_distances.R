@@ -29,9 +29,8 @@ source("functions.R")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # import stimuli .txt data (from Ben van Buren) this are 600 8sec videos
-loc <- paste0(getwd(),"/van_Buren_stimuli/chasing_detection_stimuli")
-db1 <- read.table(paste0(loc,"/chasing/chasing_frames.txt"))
-db2 <- read.table(paste0(loc,"/mirror_chasing/mirror_chasing_frames.txt"))
+db1 <- read.table("../../stim/van_Buren_stimuli/chasing_detection_stimuli/chasing/chasing_frames.txt")
+db2 <- read.table("../../stim/van_Buren_stimuli/chasing_detection_stimuli/mirror_chasing/mirror_chasing_frames.txt")
 
 # combine databases
 db <- data.frame(trialType=c(rep("chase",nrow(db1)),
@@ -87,21 +86,21 @@ for (i in 1:nrow(allRelations)) {
 
 # # # # # # # # plot distances # # # # # # # #
 dist_lf <- reshape2::melt(dist, id.vars = c("trialType","trial","frame","trialCond"))
-ggplot(dist_lf[,], aes(x=frame,y=value,col=variable)) +
+ggplot2::ggplot(dist_lf[,], aes(x=frame,y=value,col=variable)) +
   stat_summary(geom = "line") +
   facet_grid(. ~ trialType) +
   theme_classic()
-ggplot(dist_lf[,], aes(x=value,y=variable,col=trialType)) +
+ggplot2::ggplot(dist_lf[,], aes(x=value,y=variable,col=trialType)) +
   stat_summary() +
   theme_classic()
 
 # # # # # # # # plot angles # # # #  # # # #
 angl_lf <- reshape2::melt(angl, id.vars = c("trialType","trial","frame","trialCond"))
-ggplot(angl_lf[,], aes(x=frame,y=value,col=variable)) +
+ggplot2::ggplot(angl_lf[,], aes(x=frame,y=value,col=variable)) +
   stat_summary(geom = "line") +
   facet_grid(. ~ trialType) +
   theme_classic()
-ggplot(angl_lf[,], aes(x=value,y=variable,col=trialType)) +
+ggplot2::ggplot(angl_lf[,], aes(x=value,y=variable,col=trialType)) +
   stat_summary() +
   theme_classic()
 

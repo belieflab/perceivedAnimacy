@@ -1,6 +1,6 @@
-# script created by Santiago Castiello. In this script we used the simulated
-# "good" artificial subjects to recover their parameters whom which they were
-# simulated.
+# script created by Santiago Castiello. This script is used to fit "good"
+# artificial subjects in order to assess if we can recover the parameters which
+# whom the artificial agents were simulated with.
 # 17/05/2022. Special thanks to Josh Kenney.
 
 # Remove all of the elements currently loaded in R
@@ -88,4 +88,4 @@ end_time <- Sys.time()
 total_time <- end_time - start_time
 
 # print fitted parameters
-write.csv(simPars,"simParsWithParRecovery.csv")
+write.csv(simPars,"simParsWithParRecovery.csv",row.names = F)

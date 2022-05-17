@@ -1,0 +1,5 @@
+Notes on these stimuli:- This folder contains 600 four-second mp4s for the chasing detection task described in van Buren, Gao & Scholl (2017).  - All movies feature a wolf, a sheep, and six randomly moving distractor discs. Unlike van Buren et al. (2017), there are no lines.- The chasing folder contains 300 movies in which chasing is present (the wolf chases the sheep). It also contains a text file with the coordinates of the discs on each frame of each movie: trial, frame, wolfX, wolfY, sheepX, sheepY, distractor1X, distractor1Y, distractor2X, distractor2Y…- The mirror_chasing folder contains 300 movies in which chasing is absent (the wolf chases the sheep’s invisible mirror image, reflected through the vertical midline of the display). It also contains a text file with the discs’ coordinates.
+
+- If you use these stimuli, please cite Gao, Newman, & Scholl (2009) and van Buren, Gao & Scholl (2017). Feel free to share the stimuli, and to address any questions to vanburenb@gmail.com.  
+
+- I am always open to new collaborations, so let me know if you have a different experimental design in mind and would like to develop some new chasing stimuli together.

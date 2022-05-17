@@ -1,6 +1,6 @@
-# script created by Santiago Castiello. In this script we used the parametric
+# script created by Santiago Castiello. In this script we used the parametric 
 # space ran with function f_SDTparamExplor in the script: 
-# visualize_parametric_space.R. Then we simulate 37 "participants" with random
+# visualize_parametric_space.R. Then we simulate N "participants" with a random
 # decision rule "eta" parameter.
 # 17/05/2022. Special thanks to Josh Kenney.
 

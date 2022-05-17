@@ -1,8 +1,8 @@
 05/Apr/2022
 
-"chasing" and "mirrorChasing" are the original videos from van Buren
-These folders were remove because the repository it is very large. The original
-videos can be found in "chasing_detection_stimuli.zip" provided by Benjamin 
+"chasing" and "mirror_chasing" are the original videos from Benjamin van Buren and
+are found inside folder "van_Buren_stimuli". Inside you will find the original
+videos in the zip folder "chasing_detection_stimuli.zip" provided by Benjamin 
 van Buren (van Buren, Gao & Scholl, 2017).
 
 "chasing2" and "mirrorChasing2" are the videos with an extra black frame 
