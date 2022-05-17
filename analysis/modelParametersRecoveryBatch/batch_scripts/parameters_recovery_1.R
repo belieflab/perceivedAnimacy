@@ -57,7 +57,7 @@ simPars <- simPars[simPars$part == simParticip[i],]
 fitPars <- list(mcRange = c(20,100),
                 thetaRange = c(50,200),
                 etaRange = c(0.55,0.95),
-                binsSize = data.frame(mc=2,theta=2,eta=30))
+                binsSize = data.frame(mc=30,theta=30,eta=30))
 
 # add columns which will be filled with the fitting algorithm
 simPars$negSumLog <- simPars$hitRate <- 
