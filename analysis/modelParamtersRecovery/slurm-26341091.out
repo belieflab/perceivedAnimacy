@@ -1,4 +1,0 @@
-Loading required package: plyr
-Error in sdtPars %>% group_by(mc) %>% summarize(mSensit = sum(sensit),  : 
-  could not find function "%>%"
-Execution halted

@@ -23,3 +23,19 @@ if (!require(dplyr)) {install.packages("dplyr")}; library(dplyr)
 # if (!require(hmisc)) {install.packages("hmisc")}; library(hmisc)
 
 write.csv(matrix(NA),"hello.csv")
+
+
+# to exist the farnam
+# <code> exit </code>
+
+# will run the script specified in .sh
+# <code> sbatch batch.sh </code>
+
+# create an interactive session through the comand line
+# <code> srun --pty -p interactive --mem=1gb bash </code>
+
+# status of a particular job
+# <code> squeue -j 26341352 </code> # the number is the job
+
+# to see what R did
+# <code> cat slurm-26341352.out </code> # cat [print something]
