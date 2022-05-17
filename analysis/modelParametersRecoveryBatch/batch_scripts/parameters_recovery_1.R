@@ -28,12 +28,12 @@ source("../functions.R")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # get artificial agents simulated with "good" parameters 
-if (sum(list.files("figures_tables") == "simPars.csv" |
-        list.files("figures_tables") == "simTrials.csv" |
-        list.files("figures_tables") == "simRandDist.csv") > 0) {
-  simPars <- read.csv("figures_tables/simPars.csv")
-  simTrials <- read.csv("figures_tables/simTrials.csv")
-  randDist <- read.csv("figures_tables/simRandDist.csv")
+if (sum(list.files("../figures_tables") == "simPars.csv" |
+        list.files("../figures_tables") == "simTrials.csv" |
+        list.files("../figures_tables") == "simRandDist.csv") > 0) {
+  simPars <- read.csv("../figures_tables/simPars.csv")
+  simTrials <- read.csv("../figures_tables/simTrials.csv")
+  randDist <- read.csv("../figures_tables/simRandDist.csv")
 } else {
   warning("Run script simulate_good_parameters.R")
 }
@@ -96,4 +96,4 @@ total_time <- end_time - start_time
 simPars$total_time <- total_time
 
 # print fitted parameters
-write.csv(simPars,paste0("figures_tables/simParsWithParRecovery_",i,".csv"))
+write.csv(simPars,paste0("../figures_tables/simParsWithParRecovery_",i,".csv"))
