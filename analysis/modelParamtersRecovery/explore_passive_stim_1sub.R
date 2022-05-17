@@ -22,4 +22,4 @@ if (!require(dplyr)) {install.packages("dplyr")}; library(dplyr)
 # if (!require(devtools)) {install.packages("devtools")}; library(devtools)
 # if (!require(hmisc)) {install.packages("hmisc")}; library(hmisc)
 
-print("hello")
+write.csv(matrix(NA),"hello.csv")
