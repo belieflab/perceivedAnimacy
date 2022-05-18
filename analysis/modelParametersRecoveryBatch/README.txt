@@ -2,6 +2,14 @@ Created by Santiago Castiello (17/05/2022). Special thanks to Josh Kenney.
 
 
 
+# # # # index # # # #
+	Main Scripts
+	Other scripts
+	data.frames 
+	terminal commands
+
+
+
 # # # # Main Scripts # # # #
 calculate_discs_distances.R
 	It is used to calculate distances and angles from the 600 stimuli (displays) 
@@ -26,11 +34,13 @@ functions.R
 	Functions used in the previous scripts, more descriptions inside this script.
 
 
+
 # # # # Other Scripts # # # #
 create_multiple_files.R
 	Used to change the name of duplicated files in batch_scripts and batch_rc. Given that
 	I don't know how to run code in paralell, then Josh suggested to run one Batch per
 	artificial participant. Therefore we duplicated R scripts and batchs.
+
 
 
 # # # # data.frames # # # #
@@ -61,3 +71,24 @@ simTrials.csv
 simRandDist.csv
 	discs distances for 100 chase + 100 mirror randomized trials.
 	Print by simulate_good_parameters.R
+
+
+
+# # # # terminal commands # # # #
+connect to the farm
+	ssh sc3228@farnam.hpc.yale.edu
+
+to exist the farnam
+	<code> exit </code>
+
+will run the script specified in .sh
+	<code> sbatch batch.sh </code>
+
+create an interactive session through the comand line
+	<code> srun --pty -p interactive --mem=1gb bash </code>
+
+status of a particular job
+	<code> squeue -j 26341352 </code> # the number is the job
+
+to see what R did
+	<code> cat slurm-26341352.out </code> # cat [print something]
