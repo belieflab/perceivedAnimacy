@@ -1,3 +1,23 @@
+# Functions index
+  # # # Entropies # # #
+  # 1.  H_error: calculate the error entropy
+  # 2.  H_path: calculate path entropy
+  # # # Angles and Vectors # # #
+  # 3.  rad2deg: transform radians to degrees
+  # 4.  f_normAngle: get the norm and angle of a vector
+  # 5.  f_angDiff: obtain the absolute angle difference (circularity)
+  # # # Signal Detection Theory # # #
+  # 6.  f_SDTparam: calculate d' and C from SDT
+  # 7.  f_SDTparamExplor: used SDT to explore parameters from Perceived Animacy
+  # # # Perceived Animacy model simulations # # #
+  # 8.  f_randNTrials: select and randomized n chasing detection task trials
+  # 9.  f_detMod: simulate choices from a artificial agent in the chasing task
+
+
+
+# # # # # # # # # # Entropies # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # calculate error entropy
 H_error <- function(x,y,xref,yref) {
   x0 <- x-xref
@@ -22,19 +42,25 @@ H_path <- function(x,y) {
   return(H.path)
 }
 
+
+
+# # # # # # # # # # Angles and Vectors# # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # transform radians to degrees
 rad2deg <- function(rad) {return((180 * rad) / pi)}
 
 # get the norm and angle from a vector
 f_normAngle <- function (from,to) {
+  if (!require(plyr)) {install.packages("plyr")}; library(plyr) # revalue()
   difX <- to$x - from$x
   difY <- to$y - from$y
   norm <- sqrt(difX^2+difY^2)
   quadrant <- ifelse(difX >= 0 & difY >= 0, "Q1",
                      ifelse(difX <= 0 & difY >= 0, "Q2",
                             ifelse(difX <= 0 & difY <= 0, "Q3", "Q4")))
-  extra <- as.integer(revalue(quadrant, c("Q1" = 0,"Q2" = 180,"Q3" = 180,"Q4" = 360)))
-  subsum <- as.integer(revalue(quadrant, c("Q1" = +1,"Q2" = -1,"Q3" = +1,"Q4" = -1)))
+  extra <- as.integer(plyr::revalue(quadrant, c("Q1" = 0,"Q2" = 180,"Q3" = 180,"Q4" = 360)))
+  subsum <- as.integer(plyr::revalue(quadrant, c("Q1" = +1,"Q2" = -1,"Q3" = +1,"Q4" = -1)))
   angle <- extra+(rad2deg(atan(abs(difY/difX)))*subsum)
   return(data.frame(norm,angle))
 }
@@ -43,6 +69,10 @@ f_normAngle <- function (from,to) {
 f_angDiff <- function(a1,a2) {return(ifelse(abs(a1-a2)>180,360-abs(a1-a2),abs(a1-a2)))}
 
 
+
+# # # # # # # # # # Signal Detection Theory # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # signal detection theory analysis used in f_SDTparamExplor
 f_SDTparam <- function (dbTrials, events) {
   # NOTE: events must be ordered as follows: hit, FA, Ms, CR
@@ -61,7 +91,6 @@ f_SDTparam <- function (dbTrials, events) {
   names(SDTtab) <- events
   return(list(sensit=sensit,resCri=resCri,SDTtab=SDTtab,h=h,f=f))
 }
-
 
 # this function is used to explore the parametric space of the detection model
 f_SDTparamExplor <- function (dist, params) {
@@ -121,6 +150,27 @@ f_SDTparamExplor <- function (dist, params) {
     params[p,7:10] <- SDTpar$SDTtab
   } # end parameter p loop
   return(params)
+}
+
+
+
+# # # # # # # # # # Perceived Animacy model simulations # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # randomized n trials from the 300 possibles in each category (chase/mirror)
+f_randNTrials <- function (dist, n) {
+  # select random n trials for running simulations
+  randomTrials <- sample(1:300,n)
+  for (i in 1:length(randomTrials)) {
+    if (i == 1) {
+      randDist <- dist[dist$trial == randomTrials[i],]
+    } else {
+      randDist <- rbind(randDist,dist[dist$trial == randomTrials[i],])
+    }
+  }
+  # randDist is a data.frame containing all discs distances from random trials
+  # this data.frame is what the model will use to classify chase and no-chase
+  return(randDist)
 }
 
 # this function is used to simulate choices given a set of parameters

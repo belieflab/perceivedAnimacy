@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --mail-type=ALL #send me emails when starting and ending
-#SBATCH -t 3:00:00 #3 hours
-#SBATCH --mem=16g  #16GB RAM
+#SBATCH -t 24:00:00 #24 hours
+#SBATCH --mem=32g  #32GB RAM
 
 
 module load R
-Rscript explore_passive_stim_1sub.R
+Rscript parameter_recovery.R
