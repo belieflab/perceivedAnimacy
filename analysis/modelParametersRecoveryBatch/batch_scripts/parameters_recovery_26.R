@@ -1,6 +1,6 @@
 # script created by Santiago Castiello. This script is used to fit one "good"
 # artificial subject. We fit one subject by using one batch each. See the master
-# code named: parameters_recovery.R
+# code named: paramters_recovery.R
 # 17/05/2022. Special thanks to Josh Kenney.
 
 # Remove all of the elements currently loaded in R
@@ -13,7 +13,7 @@ rm(list=ls(all=TRUE))
 # # # # # # # # # # global elements # # # # # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-i=1
+i=26
 
 
 
