@@ -5,4 +5,4 @@
 
 
 module load R
-Rscript ../batch_scripts/parameters_recovery_1.R
+Rscript ../batch_scripts/parameters_recovery_36.R

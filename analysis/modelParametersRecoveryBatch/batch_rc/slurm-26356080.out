@@ -1,4 +1,0 @@
-Warning message:
-Run script simulate_good_parameters.R 
-Error in unique(simPars$part) : object 'simPars' not found
-Execution halted

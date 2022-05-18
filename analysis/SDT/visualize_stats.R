@@ -53,12 +53,12 @@ for (i in 1:nSubj) {
   # read files
   genChar[i,1] <- unique(temp$workerId)[unique(temp$workerId) != ""]
   genChar[i,2] <- (sum(as.numeric(temp$rt[temp$rt != "null"]))/1000)/60
-}
+}; rm(temp)
 
 # questionnaires
 questDataFilesNames <- list.files("../../data/questionnaires")
 # read files
-quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[1]))
+quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[3]))
 quest <- quest[-(1:2),]
 # quest$EndDate - quest$StartDate
 
@@ -96,7 +96,7 @@ for (i in 1:nrow(quest)) {
 }
 # quest <- quest[quest$keep == T,] 
 # remove practice and tests
-quest <- quest[16:nrow(quest),]  
+quest <- quest[16:nrow(quest),]
 
 
 columnsToInteger <- colnames(quest)[grepl("rgpts",colnames(quest))][1:18]
@@ -107,6 +107,7 @@ for (i in 1:length(columnsToInteger)) {
 # sum paranoia scores
 quest$rgpts_ref <- rowSums(quest[,grepl("rgpts_ref",colnames(quest))])
 quest$rgpts_per <- rowSums(quest[,grepl("rgpts_per",colnames(quest))])
+quest$paranoia <- quest$rgpts_ref + quest$rgpts_per
 # quest$rgpts_attn_1
 
 # # # # Behaviour # # # #
@@ -145,7 +146,7 @@ sdtFreq <- data.frame(R1_TTchase=NA, R1_TTmirror=NA, R0_TTchase=NA, R0_TTmirror=
 genChar <- cbind(genChar,sdtFreq)
 
 # add questionnaires columns
-genChar$rgpts_per <- genChar$rgpts_ref <- NA
+genChar$paranoia <- genChar$rgpts_per <- genChar$rgpts_ref <- NA
 
 for (i in 1:nSubj) {
   # calculate SDT
@@ -158,6 +159,7 @@ for (i in 1:nSubj) {
   
   # add questionnaire
   if (sum(genChar$workerId[i] == quest$workerId) > 0) {
+    genChar$paranoia[i] <- quest$paranoia[genChar$workerId[i] == quest$workerId]
     genChar$rgpts_ref[i] <- quest$rgpts_ref[genChar$workerId[i] == quest$workerId]
     genChar$rgpts_per[i] <- quest$rgpts_per[genChar$workerId[i] == quest$workerId]
   }
@@ -190,29 +192,30 @@ fig1
 
 
 
-cor.test(genChar$rgpts_ref,genChar$sensit, method = "spearman")
-fig2A <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=sensit)) + 
-  labs(x = "Ideas of Reference", y = "d'") +
+cor.test(genChar$paranoia,genChar$sensit, method = "spearman")
+fig2A <- ggplot2::ggplot(genChar, aes(x=paranoia,y=sensit)) + 
+  labs(x = "Paranoid", y = "d'") +
   geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
-cor.test(genChar$rgpts_ref,genChar$resCri, method = "spearman")
-fig2B <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=resCri)) + 
-  labs(x = "Ideas of Reference", y = "C") +
+cor.test(genChar$paranoia,genChar$resCri, method = "spearman")
+fig2B <- ggplot2::ggplot(genChar, aes(x=paranoia,y=resCri)) + 
+  labs(x = "paranoia", y = "C") +
   geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
-cor.test(genChar$rgpts_ref,genChar$h, method = "spearman")
-fig2C <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=h)) + 
-  labs(x = "Ideas of Reference", y = "Hit rate") +
+cor.test(genChar$paranoia,genChar$h, method = "spearman")
+fig2C <- ggplot2::ggplot(genChar, aes(x=paranoia,y=h)) + 
+  labs(x = "paranoia", y = "Hit rate") +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
 cor.test(genChar$rgpts_ref,genChar$f, method = "spearman")
-fig2D <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=f)) + 
-  labs(x = "Ideas of Reference", y = "False Alarm rate") +
+cor.test(rank(genChar$rgpts_ref),rank(genChar$f))
+fig2D <- ggplot2::ggplot(genChar, aes(x=paranoia,y=f)) + 
+  labs(x = "paranoia", y = "False Alarm rate") +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
@@ -220,34 +223,34 @@ fig2D <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=f)) +
 fig2 <- ggpubr::annotate_figure(
   ggpubr::ggarrange(fig2A,fig2B,fig2C,fig2D,nrow=2,ncol=2,
                     labels=c("A","B","C","D"),align = "hv"),
-  bottom = text_grob("Ideas of Reference",face="bold",size=12))
+  bottom = text_grob("Paranoia",face="bold",size=12))
 fig2  
 
 
 
-cor.test(genChar$rgpts_per,genChar$sensit, method = "spearman")
-fig3A <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=sensit)) + 
+cor.test(genChar$rgpts_ref,genChar$sensit, method = "spearman")
+fig3A <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=sensit)) + 
   labs(x = "Ideas of Reference", y = "d'") +
   geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
-cor.test(genChar$rgpts_per,genChar$resCri, method = "spearman")
-fig3B <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=resCri)) + 
-  labs(x = "Ideas of Persecution", y = "C") +
+cor.test(genChar$rgpts_ref,genChar$resCri, method = "spearman")
+fig3B <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=resCri)) + 
+  labs(x = "Ideas of Reference", y = "C") +
   geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
-cor.test(genChar$rgpts_per,genChar$h, method = "spearman")
-fig3C <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=h)) + 
-  labs(x = "Ideas of Persecution", y = "Hit rate") +
+cor.test(genChar$rgpts_ref,genChar$h, method = "spearman")
+fig3C <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=h)) + 
+  labs(x = "Ideas of Reference", y = "Hit rate") +
   geom_smooth(method="lm",se=F,col="grey") +
-  geom_point(alpha=0.75) +  
+  geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
-cor.test(genChar$rgpts_per,genChar$f, method = "spearman")
-fig3D <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=f)) + 
-  labs(x = "Ideas of Persecution", y = "False Alarm rate") +
+cor.test(genChar$rgpts_ref,genChar$f, method = "spearman")
+fig3D <- ggplot2::ggplot(genChar, aes(x=rgpts_ref,y=f)) + 
+  labs(x = "Ideas of Reference", y = "False Alarm rate") +
   geom_smooth(method="lm",se=F,col="grey") +
   geom_point(alpha=0.75) + 
   theme_classic() + theme(axis.title.x = element_blank())
@@ -255,8 +258,43 @@ fig3D <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=f)) +
 fig3 <- ggpubr::annotate_figure(
   ggpubr::ggarrange(fig3A,fig3B,fig3C,fig3D,nrow=2,ncol=2,
                     labels=c("A","B","C","D"),align = "hv"),
+  bottom = text_grob("Ideas of Reference",face="bold",size=12))
+fig3  
+
+
+
+cor.test(genChar$rgpts_per,genChar$sensit, method = "spearman")
+fig4A <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=sensit)) + 
+  labs(x = "Ideas of Reference", y = "d'") +
+  geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
+  geom_smooth(method="lm",se=F,col="grey") +
+  geom_point(alpha=0.75) + 
+  theme_classic() + theme(axis.title.x = element_blank())
+cor.test(genChar$rgpts_per,genChar$resCri, method = "spearman")
+fig4B <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=resCri)) + 
+  labs(x = "Ideas of Persecution", y = "C") +
+  geom_hline(yintercept = 0, col = "grey", alpha = 0.2) +
+  geom_smooth(method="lm",se=F,col="grey") +
+  geom_point(alpha=0.75) + 
+  theme_classic() + theme(axis.title.x = element_blank())
+cor.test(genChar$rgpts_per,genChar$h, method = "spearman")
+fig4C <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=h)) + 
+  labs(x = "Ideas of Persecution", y = "Hit rate") +
+  geom_smooth(method="lm",se=F,col="grey") +
+  geom_point(alpha=0.75) +  
+  theme_classic() + theme(axis.title.x = element_blank())
+cor.test(genChar$rgpts_per,genChar$f, method = "spearman")
+fig4D <- ggplot2::ggplot(genChar, aes(x=rgpts_per,y=f)) + 
+  labs(x = "Ideas of Persecution", y = "False Alarm rate") +
+  geom_smooth(method="lm",se=F,col="grey") +
+  geom_point(alpha=0.75) + 
+  theme_classic() + theme(axis.title.x = element_blank())
+
+fig4 <- ggpubr::annotate_figure(
+  ggpubr::ggarrange(fig4A,fig4B,fig4C,fig4D,nrow=2,ncol=2,
+                    labels=c("A","B","C","D"),align = "hv"),
   bottom = text_grob("Ideas of Persecution",face="bold",size=12))
-fig3
+fig4
 
 
 
@@ -270,6 +308,9 @@ if (print_fig == 1) {
          dpi = 1200, device='png', limitsize = T)
   ggsave("figures_tables/fig3.png",
          plot = fig3, width = 14, height = 14, units = "cm", 
+         dpi = 1200, device='png', limitsize = T)
+  ggsave("figures_tables/fig4.png",
+         plot = fig4, width = 14, height = 14, units = "cm", 
          dpi = 1200, device='png', limitsize = T)
 }
 

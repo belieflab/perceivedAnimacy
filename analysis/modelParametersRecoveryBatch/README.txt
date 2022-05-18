@@ -2,7 +2,7 @@ Created by Santiago Castiello (17/05/2022). Special thanks to Josh Kenney.
 
 
 
-# # # # Scripts # # # #
+# # # # Main Scripts # # # #
 calculate_discs_distances.R
 	It is used to calculate distances and angles from the 600 stimuli (displays) 
 	created by Ben van Buren for a perceived animacy task.
@@ -25,6 +25,12 @@ parameters_recovery.R
 functions.R
 	Functions used in the previous scripts, more descriptions inside this script.
 
+
+# # # # Other Scripts # # # #
+create_multiple_files.R
+	Used to change the name of duplicated files in batch_scripts and batch_rc. Given that
+	I don't know how to run code in paralell, then Josh suggested to run one Batch per
+	artificial participant. Therefore we duplicated R scripts and batchs.
 
 
 # # # # data.frames # # # #
