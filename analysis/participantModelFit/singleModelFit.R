@@ -8,8 +8,8 @@ commandLineArg <- commandArgs(trailingOnly = T)
 fileBehav <- commandLineArg[1]
 fileTrial <- commandLineArg[2]
 
-workerIdBehaviour <- substr(fileBehav,7,nchar(fileBehav)-4)
-workerIdTrialDistances <- substr(fileTrial,11,nchar(fileTrial)-4)
+workerIdBehaviour <- substr(basename(fileBehav),7,nchar(basename(fileBehav))-4)
+workerIdTrialDistances <- substr(basename(fileTrial),11,nchar(basename(fileTrial))-4)
 
 # both worker IDs must be the same, otherwise error
 if (workerIdBehaviour != workerIdTrialDistances) {
