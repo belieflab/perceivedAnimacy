@@ -239,7 +239,7 @@ f_mod_detection <- function (randDist, params) {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # fitting function but in parallel
-f_fit_one <- function (randDist,   # randomized trial distances
+f_fit_one <- function (discDist,   # randomized trial distances
                        chaseResp,    # one participant choices
                        fit_posterior_space, # parameter fit specifications
                        fitParallel = F) {
@@ -277,7 +277,7 @@ f_fit_one <- function (randDist,   # randomized trial distances
     setTxtProgressBar(txtProgressBar(min = 0, max = binsMc, style = 3),i)
     # for loop for theta
     for (j in 1:binsTheta) {
-      temp <- f_mod_detection_fit(randDist, data.frame(mc=seqMc[i],theta=seqTheta[j]))
+      temp <- f_mod_detection_fit(discDist, data.frame(mc=seqMc[i],theta=seqTheta[j]))
       ar_par_trials[,i,j] <- temp$detect
     } # end theta
   } # end mc

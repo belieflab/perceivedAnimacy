@@ -25,7 +25,7 @@ if (!require(ggpubr)) {install.packages("ggpubr")}; library(ggpubr)
 # if (!require(RCurl)) {install.packages("RCurl")}; library(RCurl)
 # oneSubj <- "https://belieflab.yale.edu/perceivedAnimacy/data/animacy_A1DUPOUC9RNU4L.csv"
 # oneSubj <- getURL(oneSubj)
-source("functions.R")
+source("../modelParametersRecovery/functions.R")
 
 
 
@@ -58,7 +58,7 @@ for (i in 1:nSubj) {
 # questionnaires
 questDataFilesNames <- list.files("../../data/questionnaires")
 # read files
-quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[3]))
+quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[4]))
 quest <- quest[-(1:2),]
 # quest$EndDate - quest$StartDate
 
@@ -131,7 +131,8 @@ beh$cells <- paste0("R",beh$chaseR,"_TT",beh$trialType)
 cells <- c("R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror")
 
 # filter by relevant columns
-relCols <- c("workerId","trialType","index","rt","chaseR","response","cells")
+relCols <- c("workerId","trialType","stim","trialCond","index","rt","chaseR",
+             "response","cells")
 beh <- beh[,relCols]
 
 
@@ -163,6 +164,14 @@ for (i in 1:nSubj) {
     genChar$rgpts_ref[i] <- quest$rgpts_ref[genChar$workerId[i] == quest$workerId]
     genChar$rgpts_per[i] <- quest$rgpts_per[genChar$workerId[i] == quest$workerId]
   }
+}
+
+
+
+(genChar$workerId)==quest$workerId[order(quest$workerId)]
+print_csv <- 0
+if (print_csv == 1) {
+  write.csv(genChar,"figures_tables/genChar.csv")
 }
 
 
