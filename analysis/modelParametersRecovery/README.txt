@@ -97,12 +97,3 @@ to see what R did
 
 # # # # Git Token # # # # 
 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
-
-
-
-# # # # [in terminal: https://ood-farnam.hpc.yale.edu/pun/sys/shell/ssh/farnam.hpc.yale.internal] # # # # 
-# "manual" open on demand. Activate the R version (similar to onDemand arnam)
-module load R/4.1.0-foss-2020b 
-
-# to execute code: (when the R script have already commandArgs())
-Rscript [filename.R] 

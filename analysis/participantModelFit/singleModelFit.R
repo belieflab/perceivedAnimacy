@@ -40,5 +40,5 @@ if (workerIdBehaviour != workerIdTrialDistances) {
                       fit_posterior_space,fitParallel = F)
   
   #save to Rdata file
-  save(output, file = paste0(workerIdBehaviour,"_output.Rdata"))
+  save(output, file = paste0("outputs/",workerIdBehaviour,"_output.Rdata"))
 }

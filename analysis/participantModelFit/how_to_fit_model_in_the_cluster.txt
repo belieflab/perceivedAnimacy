@@ -1,0 +1,70 @@
+Special thanks to Thomas J. Langford, Ph.D. (HPC-Yale)
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # What will you find in this R proyect# # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+1. Folders
+	-clean_participants_behaviour: 
+		individuals csv of clean behavioural data. Created by prepareData.R (n=100)
+	-outputs: 
+		.Rdata files resulting of the parallel fit (n=100)
+	-trial_order_distances:
+		individuals csv of distances within each trials. Created by prepareData.R (n=100)
+
+2. Files
+	2.1. R
+		-participantModelFit.Rproj
+			R project for this folder
+		-prepareData.R
+			write individual csv for clean_participants_behaviour and trial_order_distances
+		-modelFit.R
+			master for looped fitting algorithm (cannot be run in local computer)
+		-singleModelFit.R
+			created based on modelFit.R. Scripts received arguments in terminal.
+		-write_terminal_text.R 
+			write job_file.txt
+	2.2. Other 
+		-how_to_fit_model_in_the_cluster.txt (this file)
+		-dsq-job_file-2022-05-19.sh
+			batch file to submitt to the Farnam cluster
+		-job_file.txt 
+			created by write_terminal_text.R, contains inputs for singleModelFit.R and used in terminal
+		
+	
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # Usefull terminals commands# # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+[in terminal: https://ood-farnam.hpc.yale.edu/pun/sys/shell/ssh/farnam.hpc.yale.internal]
+
+# "manual" open on demand. Activate the R version (similar to onDemand arnam)
+<code> module load R/4.1.0-foss-2020b </code>
+
+# to execute code, when the R script have already commandArgs() in it (e.g., singleModelFit.R)
+<code> Rscript [filename.R] </code> (e.g., Rscript singeModelFit.R)
+
+# use nano in the terminal to edit text from an R script
+<code> nano </code>
+
+# module to create a batch submission script (to submit the txt with all the 100 jobs)
+<code> module load dSQ </code>
+
+# -h is to get help
+<code> dsq -h </code>
+
+# create dsq-job_file-2022-05-19.sh
+<code> dsq --job-file job_file.txt -p general -c1 --mem-per-cpu=10G -t 1:00:00 </code>
+
+
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # Fitting a model in parallel (farnam cluster)# # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+singleModelFit.R received two arguments in the terminal responses 
+(clean_participants_behaviour) and trial distances (trial_order_distances).
+
+job_file.txt contains the 100 arguments that singleModFit.R will received when 
+submitting the batch: dsq-job_file-2022-05-19.sh
