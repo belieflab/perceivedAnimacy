@@ -36,7 +36,7 @@ functions.R
 
 
 # # # # Other Scripts # # # #
-create_multiple_files.R
+../modelParametersRecoveryBatch/create_multiple_files.R
 	Used to change the name of duplicated files in batch_scripts and batch_rc. Given that
 	I don't know how to run code in paralell, then Josh suggested to run one Batch per
 	artificial participant. Therefore we duplicated R scripts and batchs.
@@ -64,7 +64,7 @@ simPars.csv
 	55 "good" parameters (based on arbitrary "good" performance). 
 	Print by simulate_good_parameters.R
 
-simTrials.csv
+simTrials.csv [removed and substituted for sim_data, individual files. More similar to actual participants]
 	Trial by trial for the 55 "good" artificial participants.
 	Print by simulate_good_parameters.R
 
@@ -92,3 +92,8 @@ status of a particular job
 
 to see what R did
 	<code> cat slurm-26341352.out </code> # cat [print something]
+
+
+
+# # # # Git Token # # # # 
+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

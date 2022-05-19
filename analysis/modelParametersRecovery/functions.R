@@ -12,10 +12,15 @@
   # # # Perceived Animacy model simulations # # #
   # 8.  f_randNTrials: select and randomized n chasing detection task trials
   # 9.  f_detMod: simulate choices from a artificial agent in the chasing task
+  # # # Optimized fitting functions # # #
+  # 10. f_fit_one: fit one participant
+  # 11. f_mod_detection_fit: detection model optimized for use in f_fit_one 
+  # # # Old fitting function # # #
+  # 12. f_fitDetMod
 
 
 
-# # # # # # # # # # Entropies # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # Entropies # # # # # # # # # # # # # # # # # # # # # # # #### 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # calculate error entropy
@@ -44,7 +49,7 @@ H_path <- function(x,y) {
 
 
 
-# # # # # # # # # # Angles and Vectors# # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # Angles and Vectors# # # # # # # # # # # # # # # # # # # #### 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # transform radians to degrees
@@ -70,7 +75,7 @@ f_angDiff <- function(a1,a2) {return(ifelse(abs(a1-a2)>180,360-abs(a1-a2),abs(a1
 
 
 
-# # # # # # # # # # Signal Detection Theory # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # Signal Detection Theory # # # # # # # # # # # # # # # # #### 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # signal detection theory analysis used in f_SDTparamExplor
@@ -114,27 +119,24 @@ f_SDTparamExplor <- function (dist, params) {
     # Boolean given theta
     distBool[,-1:-4] <- ifelse(distBool[,-1:-4] < params$theta[p],1,0)
     
-    # distBool_lf <- melt(distBool, id.vars = c("trialType","trial","frame","trialCond"))
-    # ggplot(distBool_lf, aes(x=frame,y=value,col=variable)) + 
-    #   stat_summary(geom = "line") + 
-    #   facet_grid(. ~ trialType) +
-    #   theme_classic()
-    
     # detection as 0 for each set of parameters
     dbTrials$detect <- 0
     # dbTrials$detFrame <- NA
     # run all the trials loop to detect consecutive mc detected frames
     for (t in 1:length(unique(distBool$trialCond))) {
       temp <- distBool[distBool$trialCond == unique(distBool$trialCond)[t],-1:-4]
-      for (w in 1:(nrow(temp)-params$mc[p])) {
-        if (sum(colSums(temp[w:(w+params$mc[p]-1),]) == params$mc[p]) > 0) {
+      for (w in 1:(nrow(temp)-params$mc)) {
+        # at least one distance equal to mc
+        detection <- sum(colSums(temp[w:(w+params$mc-1),]) == params$mc)
+        if (detection > 0) {
           dbTrials$detect[t] <- 1
+          break # if detection then stop trial (for loop)
           # if detection frame is an NA then fill it with the detection frame
           # i.e., (w+params$mc[p]-1)
           # if (is.na(dbTrials$detFrame[t])) {
           #   dbTrials$detFrame[t] <- (w+params$mc[p]-1)
           # }
-        }
+        } 
       } # end window w loop
     } # end trials i loop
     # table(dbTrials$trialType,dbTrials$detect)
@@ -154,7 +156,7 @@ f_SDTparamExplor <- function (dist, params) {
 
 
 
-# # # # # # # # # # Perceived Animacy model simulations # # # # # # # # # # # # 
+# # # # # # # # # # Perceived Animacy model simulations # # # # # # # # # # #### 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # randomized n trials from the 300 possibles in each category (chase/mirror)
@@ -173,8 +175,8 @@ f_randNTrials <- function (dist, n) {
   return(randDist)
 }
 
-# this function is used to simulate choices given a set of parameters
-f_detMod <- function (randDist, params) {
+# this function is used to simulate stochastic choices given a set of parameters
+f_mod_detection <- function (randDist, params) {
   # NOTE: this function receives the distance data frame and a the three 
   # parameters (eta = explore/exploit, theta = threshold, mc = memory capacity).
   
@@ -200,10 +202,12 @@ f_detMod <- function (randDist, params) {
     temp <- distBool[distBool$trialCond == unique(distBool$trialCond)[t],-1:-4]
     # run within trials the mc window to detect consecutive detected frames
     for (w in 1:(nrow(temp)-params$mc)) {
+      # at least one distance equal to mc
       detection <- sum(colSums(temp[w:(w+params$mc-1),]) == params$mc)
       if (detection > 0) {
         dbTrials$detect[t] <- 1
-      }
+        break # if detection then stop trial (for loop)
+      } 
     } # end window w loop
     
     # simulate detection response (Sutton & Barto, 2018)
@@ -230,6 +234,164 @@ f_detMod <- function (randDist, params) {
 }
 
 
+
+# # # # # # # # # # Optimized fitting functions # # # # # # # # # # # # # # #### 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# fitting function but in parallel
+f_fit_one <- function (randDist,   # randomized trial distances
+                       chaseResp,    # one participant choices
+                       fit_posterior_space, # parameter fit specifications
+                       fitParallel = F) {
+  
+  # extract parameters from inputs
+  mcRange <- fit_posterior_space$mcRange
+  thetaRange <- fit_posterior_space$thetaRange
+  etaRange <- fit_posterior_space$etaRange
+  
+  # bins
+  binsMc <- fit_posterior_space$binsSize$mc
+  binsTheta <- fit_posterior_space$binsSize$theta
+  binsEta <- fit_posterior_space$binsSize$eta
+  
+  # parameters' sequences
+  seqMc <- seq(mcRange[1],mcRange[2],
+               by=round((mcRange[2]-mcRange[1])/binsMc))
+  seqTheta <- seq(thetaRange[1],thetaRange[2],
+                  by=round((thetaRange[2]-thetaRange[1])/binsTheta))
+  seqEta <- seq(etaRange[1],etaRange[2],
+                by=(etaRange[2]-etaRange[1])/binsEta)
+  # update bins due to mismatch in round sequences sizes
+  binsMc <- length(seqMc)
+  binsTheta <- length(seqTheta)
+  binsEta <- length(seqEta)
+  
+  # number of trials
+  nTrials <- length(chaseResp)
+  
+  # create learning rate array
+  ar_par_trials <- array(NA,dim=c(nTrials,binsMc,binsTheta))
+  
+  # for loop for memory capacity (mc)
+  for(i in 1:binsMc) {
+    setTxtProgressBar(txtProgressBar(min = 0, max = binsMc, style = 3),i)
+    # for loop for theta
+    for (j in 1:binsTheta) {
+      temp <- f_mod_detection_fit(randDist, data.frame(mc=seqMc[i],theta=seqTheta[j]))
+      ar_par_trials[,i,j] <- temp$detect
+    } # end theta
+  } # end mc
+  
+  # add bins Eta dimension
+  ar_par_trials <- array(rep(ar_par_trials,binsEta),
+                         dim=c(nTrials,binsMc,binsTheta,binsEta))
+  
+  # create eta array
+  ar_eta <- array(seqEta,dim=c(binsEta,binsTheta,binsMc,nTrials))
+  ar_eta <- aperm(ar_eta, c(4,3,2,1))
+  
+  # probability of response array
+  ar_pR <- (ar_par_trials*ar_eta) + ((1-ar_par_trials)*(1-ar_eta))
+  
+  # create choice array
+  ar_ch <- array(chaseResp, dim = c(nTrials,binsMc,binsTheta,binsEta)) 
+  
+  # likelihood array 
+  ar_ll <- (ar_ch*ar_pR) + ((1-ar_ch)*(1-ar_pR))
+  
+  # likelihood 3d distribution
+  likelihood_dist <- apply(ar_ll,c(2,3,4),prod)#*10^200
+  
+  # sum of -log evidence
+  negSumLog <- -max(apply(log(ar_ll),c(2,3,4),sum))
+  
+  # hit rate 
+  hitRate <- max(apply(ar_ll,c(2,3,4),mean)) 
+  
+  # obtain posterior probability with uniform prior
+  posterior_prob <- (likelihood_dist*1)/sum(likelihood_dist)
+  
+  
+  # mc marginal
+  mc_marg <- apply(posterior_prob,1,sum)
+  # mc weighted mean (scaling seqMc then reversing it to normal scale)
+  mc_wm <- as.vector((scale(seqMc)[1:binsMc]%*% mc_marg)
+                     *sd(seqMc)+mean(seqMc))
+  # mc variance
+  mc_var <- as.vector(((scale(seqMc)[1:binsMc] - ((mc_wm-mean(seqMc))/sd(seqMc)))^2
+                       %*% mc_marg)*sd(seqMc)+mean(seqMc))
+  
+  # theta marginal
+  theta_marg <- apply(posterior_prob,2,sum)
+  # theta weighted mean (scaling seqTheta then reversing it to normal scale)
+  theta_wm <- as.vector((scale(seqTheta)[1:binsTheta]%*% theta_marg)
+                        *sd(seqTheta)+mean(seqTheta))
+  # theta variance
+  theta_var <- as.vector(((scale(seqTheta)[1:binsTheta] -
+                             ((theta_wm-mean(seqTheta))/sd(seqTheta)))^2
+                          %*% theta_marg)*sd(seqTheta)+mean(seqTheta))
+  
+  # eta marginal
+  eta_marg <- apply(posterior_prob,3,sum)
+  # eta weighted mean (scaling seqTheta then reversing it to normal scale)
+  eta_wm <- as.vector((scale(seqEta)[1:binsEta]%*% eta_marg)
+                      *sd(seqEta)+mean(seqEta))
+  # eta variance
+  eta_var <- as.vector(((scale(seqEta)[1:binsEta] - 
+                           ((eta_wm-mean(seqEta))/sd(seqEta)))^2
+                        %*% eta_marg)*sd(seqEta)+mean(seqEta))
+  
+  # create output list
+  output <- list() 
+  output$params <- data.frame(c(mc_wm,theta_wm,eta_wm),
+                              c(mc_var,theta_var,eta_var))
+  colnames(output$params) <- c("wMean","var")
+  rownames(output$params) <- c("mc","theta","eta")
+  output$modPerformance <- data.frame(negSumLog,hitRate)
+  output$marginals <- list(mc=mc_marg,theta=theta_marg,eta=eta_marg)
+  output$post_prob <- posterior_prob
+  # return output list
+  return(output)
+}
+
+# this function is used to simulate choices given a set of parameters
+f_mod_detection_fit <- function (randDist, params) {
+  # NOTE: this function is used in the parallel algorithm fitting function.
+  # run a detection algorithm based on memory capacity
+  trials <- data.frame(mc=params$mc,theta=params$theta,
+                       trialType=gsub("[[:punct:]]|[[:digit:]]","",
+                                      unique(randDist$trialCond)),
+                       trial=1:length(unique(randDist$trialCond)),
+                       trialCond=unique(randDist$trialCond))
+  # create same size database to build Boolean
+  close <- randDist
+  # Boolean given theta
+  close[,-1:-4] <- ifelse(close[,-1:-4] < params$theta,1,0)
+  # detection as 0 for each set of parameters
+  trials$detect <- 0
+  # simulate detection in all 600 trials
+  for (t in 1:length(unique(close$trialCond))) {
+    temp <- close[close$trialCond == unique(close$trialCond)[t],-1:-4]
+    # run within trials the mc window to detect consecutive detected frames
+    for (w in 1:(nrow(temp)-params$mc)) {
+      # at least one distance equal to mc
+      detection <- sum(colSums(temp[w:(w+params$mc-1),]) == params$mc)
+      if (detection > 0) {
+        trials$detect[t] <- 1
+        break # if detection then stop trial (for loop)
+      } 
+    } # end window w loop
+  } # end trials i loop
+  # table(trials$trialType,trials$detect)
+  return(trials)
+}
+
+
+
+# # # # # # # # # # Old fitting function (non-optimal)# # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # fit algorithm with for loops # # # # #
 f_fitDetMod <- function (randDist,   # randomized trial distances
                          onePartDat, # one participant behaviour
                          fitPars,    # parameter fit specifications
@@ -261,20 +423,39 @@ f_fitDetMod <- function (randDist,   # randomized trial distances
   
   # create learning rate array
   ar_par_trials <- array(NA,dim=c(nTrials,binsMc,binsTheta))
-  # for loop for memory capacity (mc)
-  for(i in 1:binsMc) {
-    # for loop for theta
-    for (j in 1:binsTheta) {
-      # show progress bar
-      if (progress_bar == TRUE){
-        Sys.sleep(0.1)
-        setTxtProgressBar(txtProgressBar(min = 0, max = binsMc*binsTheta, style = 3), 
-                          ((i-1)*binsMc)+j)
-      }
-      temp <- f_detMod(randDist, data.frame(mc=seqMc[i],theta=seqTheta[j],eta=0.75))
-      ar_par_trials[,i,j] <- temp$dbTrials$detect
+  
+  fitParallel = F
+  if (fitParallel == T) {
+    n.cores <- parallel::detectCores() - 2  # how many cores do we want (half)
+    my.cluster <- parallel::makeCluster(n.cores, type = "PSOCK") # create the cluster
+    doParallel::registerDoParallel(cl = my.cluster)  #register it to be used by %dopar%
+    #check if it is registered (optional)
+    foreach::getDoParRegistered()
+    #how many workers are available? (optional)
+    foreach::getDoParWorkers()
+    start_time <- Sys.time()
+    temp <- foreach(i=1:binsMc,j=1:binsTheta) %dopar% {
+      f_detMod(randDist, data.frame(mc=seqMc[i],theta=seqTheta[j],eta=0.75))
     }
-  } # end lr
+    end_time <- Sys.time(); end_time - start_time
+    parallel::stopCluster(cl = my.cluster)
+  } else {
+    # for loop for memory capacity (mc)
+    for(i in 1:binsMc) {
+      # for loop for theta
+      for (j in 1:binsTheta) {
+        # show progress bar
+        if (progress_bar == TRUE){
+          Sys.sleep(0.1)
+          setTxtProgressBar(txtProgressBar(min = 0, max = binsMc*binsTheta, style = 3), 
+                            ((i-1)*binsMc)+j)
+        }
+        temp <- f_detMod(randDist, data.frame(mc=seqMc[i],theta=seqTheta[j],eta=0.75))
+        ar_par_trials[,i,j] <- temp$dbTrials$detect
+      } # end mc
+    } # end theta
+  } # end if
+  
   # ar_par_trials2 <- ar_par_trials # be protected
   # add bins Eta dimension
   ar_par_trials <- array(rep(ar_par_trials,binsEta),
@@ -296,7 +477,7 @@ f_fitDetMod <- function (randDist,   # randomized trial distances
   # likelihood 3d distribution
   likelihood_dist <- apply(ar_ll,c(2,3,4),prod)#*10^200
   
-    # sum of -log evidence
+  # sum of -log evidence
   negSumLog <- -max(apply(log(ar_ll),c(2,3,4),sum))
   
   # hit rate 
@@ -393,4 +574,3 @@ f_fitDetMod <- function (randDist,   # randomized trial distances
   # return output list
   return(output)
 }
-

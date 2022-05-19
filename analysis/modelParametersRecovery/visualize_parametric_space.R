@@ -37,19 +37,19 @@ discsPositions <- read.csv("figures_tables/discsPositions.csv")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
+# vector with multiple memory capacities
+mc <- seq(6,120,by=6)
+# vector with multiple distance threshold
+theta <- seq(15,300,by=15)
+# create combinations of all previous parameters (mc and theta)
+params <- data.frame(mc=rep(mc,length(theta)),theta=rep(theta,each=length(mc)))
+
+# simulate with all the parametric space all the 600 videos. In order to explore
+# which parameters combinations have a good classification of the videos
+
 ## ## f_SDTparamExplor is a function that is in "function.R" (NOTE: is slow)
 # if there is already sdtParameters, then don't run
 if (sum(list.files("figures_tables")=="sdtParameters.csv")==0) { 
-  # vector with multiple memory capacities
-  mc <- seq(6,120,by=6)
-  # vector with multiple distance threshold
-  theta <- seq(15,300,by=15)
-  # create combinations of all previous parameters (mc and theta)
-  params <- data.frame(mc=rep(mc,length(theta)),theta=rep(theta,each=length(mc)))
-  
-  # simulate with all the parametric space all the 600 videos. In order to explore
-  # which parameters combinations have a good classification of the videos
-  
   sdtParameters <- f_SDTparamExplor(discsDistances,params)
   # write the results in a csv
   write.csv(sdtParameters,"figures_tables/sdtParameters.csv",row.names = F)
@@ -115,9 +115,9 @@ p_rCrite <- ggplot(sdtParameters,
   theme_classic()
 
 # select the "good" parameters (i.e., not extreme C and high d')
-sdtParameters$goodPar <- ifelse(sdtParameters$sensit > 1 &
-                                  (sdtParameters$resCri < 1 & 
-                                     sdtParameters$resCri > -1),
+sdtParameters$goodPar <- ifelse(sdtParameters$sensit > 0.8 &
+                                  (sdtParameters$resCri < 1.2 & 
+                                     sdtParameters$resCri > -1.2),
                                 "good","bad")
 
 # plot d' against C and visualize the "good" parameters

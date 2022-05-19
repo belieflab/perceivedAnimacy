@@ -1,18 +1,12 @@
-# script created by Santiago Castiello. This script is used to fit "good"
-# artificial subjects in order to assess if we can recover the parameters which
-# whom the artificial agents were simulated with.
+# script created by Santiago Castiello. In this script we used the simulated
+# "good" artificial subjects to recover their parameters whom which they were
+# simulated.
 # 17/05/2022. Special thanks to Josh Kenney.
 
 # Remove all of the elements currently loaded in R
 rm(list=ls(all=TRUE))
 # add work directory
-# setwd(file.path(dirname(rstudioapi::getActiveDocumentContext()$path)))
-
-
-
-# # # # # # # # # # libraries # # # # # # # # # # # # # # # # # # # # # # # ####
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+setwd(file.path(dirname(rstudioapi::getActiveDocumentContext()$path)))
 
 
 
@@ -40,17 +34,19 @@ if (sum(list.files("figures_tables") == "simPars.csv" |
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # get all "participants" vector (i.e., set of parameters)
-simParticip <- unique(simPars$part)
+simFilesNames <- list.files("sim_data/") 
+simCode <- unique(simPars$part)
 
 range(simPars$mc)
 range(simPars$theta)
 range(simPars$eta)
 
 # parameters for fitting algorithm based on mc, theta, and eta ranges
-fitPars <- list(mcRange = c(20,100),
-                thetaRange = c(50,200),
-                etaRange = c(0.55,0.95),
-                binsSize = data.frame(mc=5,theta=5,eta=30))
+fit_posterior_space  <- list(mcRange = c(20,100),
+                             thetaRange = c(50,200),
+                             etaRange = c(0.55,0.95),
+                             # binsSize = data.frame(mc=40,theta=40,eta=40))
+                             binsSize = data.frame(mc=2,theta=2,eta=2))
 
 # add columns which will be filled with the fitting algorithm
 simPars$negSumLog <- simPars$hitRate <- 
@@ -62,22 +58,24 @@ posterior_densities <- list()
 # get starting time
 start_time <- Sys.time()
 for (i in 1:length(simParticip)) {
-  message(paste0("participant (",simParticip[i],"): ",i,"/",length(simParticip)))
+  message(paste0("participant (",simCode[i],"): ",i,"/",length(simParticip)))
   
   # get only one participant (i.e., set of parameters)
-  onePartDat <- read.csv(paste0("sim_data/sim_",simParticip[i],".csv"))
+  onePartDat <- read.csv(paste0("sim_data/",simFilesNames[i]))
+  # onePartDat <- simTrials[simTrials$part == simParticip[i],]
   # unique(randDist$trialCond) == onePartDat$trialCond
   
   # fit one participant (i.e., set of parameters)
-  temp <- f_fitDetMod(randDist, onePartDat, fitPars, plotFigure = F, progress_bar = T)
+  temp <- f_fit_one(randDist, chaseResp=onePartDat$chaseR, 
+                    fit_posterior_space,fitParallel = F)
   
   # extract fitted parameters
-  simPars$negSumLog[simPars$part == simParticip[i]] <- temp$mle$negSumLog
-  simPars$hitRate[simPars$part == simParticip[i]] <- temp$mle$hitRate
-  simPars[simPars$part == simParticip[i],grepl("wm",colnames(simPars))] <- 
-    temp$pars$wMean
-  simPars[simPars$part == simParticip[i],grepl("var",colnames(simPars))] <- 
-    temp$pars$var
+  simPars$negSumLog[simPars$part == simCode[i]] <- temp$modPerformance$negSumLog
+  simPars$hitRate[simPars$part == simCode[i]] <- temp$modPerformance$hitRate
+  simPars[simPars$part == simCode[i],grepl("wm",colnames(simPars))] <- 
+    temp$params$wMean
+  simPars[simPars$part == simCode[i],grepl("var",colnames(simPars))] <- 
+    temp$params$var
   posterior_densities[[i]] <- temp$post_prob
 }#; remove(temp)
 # get end time
@@ -86,4 +84,4 @@ end_time <- Sys.time()
 total_time <- end_time - start_time
 
 # print fitted parameters
-write.csv(simPars,"simParsWithParRecovery.csv",row.names = F)
+write.csv(simPars,"figures_tables/simParsRecoveryOneBatch.csv")

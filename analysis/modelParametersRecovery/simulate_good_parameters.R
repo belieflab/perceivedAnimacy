@@ -1,6 +1,6 @@
-# script created by Santiago Castiello. In this script we used the parametric 
+# script created by Santiago Castiello. In this script we used the parametric
 # space ran with function f_SDTparamExplor in the script: 
-# visualize_parametric_space.R. Then we simulate N "participants" with a random
+# visualize_parametric_space.R. Then we simulate 37 "participants" with random
 # decision rule "eta" parameter.
 # 17/05/2022. Special thanks to Josh Kenney.
 
@@ -65,37 +65,32 @@ params <- data.frame(mc=bestSdtPars$mc,
 nTrialsPerCond <- 100
 randDist <- f_randNTrials(discsDistances,nTrialsPerCond)
 
-# if randDist and simPars are already write, then just read the 
+# if randDist, simPars, and simTrials are already write, then just read the 
 # files and not simulate nor write them again. 
-if (sum(list.files("figures_tables") == "simPars.csv" |
+if (sum(list.files("figures_tables") == "simPars.csv" | 
+        list.files("figures_tables") == "simTrials.csv" |
         list.files("figures_tables") == "randDist.csv") == 0) {
   # for loop for parameters set
   for (p in 1:nrow(params)) {
     message(paste("set of parameters:",p))
     if (p == 1) {
-      sim <- f_detMod(randDist, params[p,])
+      sim <- f_mod_detection(randDist, params[p,])
       simPars <- sim$params
-      sim$dbTrials$part <- paste0(sim$params$mc,"_",
-                                  sim$params$theta,"_",
-                                  sim$params$eta)
-      write.csv(sim$dbTrials,paste0("sim_data/sim_",sim$dbTrials$part[1],".csv"), 
-                row.names = F)
+      simTrials <- sim$dbTrials
     } else {
-      sim <- f_detMod(randDist, params[p,])
+      sim <- f_mod_detection(randDist, params[p,])
       simPars <- rbind(simPars,sim$params)
-      sim$dbTrials$part <- paste0(sim$params$mc,"_",
-                                  sim$params$theta,"_",
-                                  sim$params$eta)
-      write.csv(sim$dbTrials,paste0("sim_data/sim_",sim$dbTrials$part[1],".csv"), 
-                row.names = F)
+      simTrials <- rbind(simTrials,sim$dbTrials)
     }
   }; remove(sim)
   
   # add participant (parameters set) ID
   simPars$part <- paste0(simPars$mc,"_",simPars$theta,"_",simPars$eta)
-
+  simTrials$part <- paste0(simTrials$mc,"_",simTrials$theta,"_",simTrials$eta)
+  
   # write the data.frames in csv inside "figures_tables" folder
   write.csv(simPars,"figures_tables/simPars.csv", row.names = F)
+  write.csv(simTrials,"figures_tables/simTrials.csv", row.names = F)
   write.csv(randDist,"figures_tables/simRandDist.csv", row.names = F)
 } else {
   warning("Simulations with good parameters are already done. Use parameters_recovery.R")
