@@ -38,8 +38,8 @@ nSubj <- length(workerIds)
 fit_posterior_space  <- list(mcRange = c(15,105),
                              thetaRange = c(40,210),
                              etaRange = c(0.52,0.98),
-                             binsSize = data.frame(mc=50,theta=50,eta=50))
-                             # binsSize = data.frame(mc=2,theta=2,eta=2))
+                             # binsSize = data.frame(mc=50,theta=50,eta=50))
+                             binsSize = data.frame(mc=2,theta=2,eta=2))
 
 # add columns which will be filled with the fitting algorithm
 fittedParameters <- data.frame(matrix(NA,nrow=nSubj,ncol=9)) 
@@ -67,7 +67,7 @@ for (i in 1:nSubj) {
                     fit_posterior_space,fitParallel = F)
   
   # # # # # extract fitted parameters # # # # #
-  # negative sum log liklihood (model evidence)
+  # negative sum log likelihood (model evidence)
   fittedParameters$negSumLog[fittedParameters$workerId == workerIds[i]] <- 
     temp$modPerformance$negSumLog
   # hit rate

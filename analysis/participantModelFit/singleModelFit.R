@@ -1,0 +1,44 @@
+# # # # # call functions # # # # #
+source("../modelParametersRecovery/functions.R")
+
+# 
+commandLineArg <- commandArgs(trailingOnly = T)
+
+# extract command line arguments
+fileBehav <- commandLineArg[1]
+fileTrial <- commandLineArg[2]
+
+workerIdBehaviour <- substr(fileBehav,7,nchar(fileBehav)-4)
+workerIdTrialDistances <- substr(fileTrial,11,nchar(fileTrial)-4)
+
+# both worker IDs must be the same, otherwise error
+if (workerIdBehaviour != workerIdTrialDistances) {
+  
+  warning("WorkerIds are not the same!")
+  
+} else {
+  
+  # one participant behaviour trial
+  onePartData <- read.csv(fileBehav)
+  print(paste0(fileBehav, "participants responses"))
+  
+  # one participants trials displays (distances)
+  onePartDists <- read.csv(fileTrial)
+  print(paste0(fileTrial, "participants displays distances"))
+  
+  
+  
+  # # # # # fitting posterior density parameters # # # # #
+  # parameters for fitting algorithm based on mc, theta, and eta ranges
+  fit_posterior_space  <- list(mcRange = c(15,105),
+                               thetaRange = c(40,210),
+                               etaRange = c(0.52,0.98),
+                               binsSize = data.frame(mc=50,theta=50,eta=50))
+  
+  # # # # # fitting one participant # # # # #
+  output <- f_fit_one(onePartDists, chaseResp=onePartData$chaseR,
+                      fit_posterior_space,fitParallel = F)
+  
+  #save to Rdata file
+  save(output, file = paste0(workerIdBehaviour,"_output.Rdata"))
+}
