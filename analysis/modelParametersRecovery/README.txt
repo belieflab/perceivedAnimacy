@@ -44,31 +44,31 @@ functions.R
 
 
 # # # # data.frames # # # #
-discsPositions.csv
+figures_tables/discsPositions.csv
 	All 600 trials positions for all the discs. Created by Ben van Buren.
 	Print by calculate_discs_distances.R
 
-discsAngles.csv
+figures_tables/discsAngles.csv
 	All 600 trials and all discs angles.
 	Print by calculate_discs_distances.R
 
-discsDistances.csv
+figures_tables/discsDistances.csv
 	All 600 trials and all discs Euclidian distances.
 	Print by calculate_discs_distances.R
 
-sdtParameters.csv
+figures_tables/sdtParameters.csv
 	All the parametric space made with f_SDTparamExplor within functions.R 
 	Print by visualize_parametric_space.R
 
-simPars.csv
+figures_tables/simPars.csv
 	55 "good" parameters (based on arbitrary "good" performance). 
 	Print by simulate_good_parameters.R
 
-simTrials.csv [removed and substituted for sim_data, individual files. More similar to actual participants]
+figures_tables/simTrials.csv [removed and substituted for sim_data, individual files. More similar to actual participants]
 	Trial by trial for the 55 "good" artificial participants.
 	Print by simulate_good_parameters.R
 
-simRandDist.csv
+figures_tables/simRandDist.csv
 	discs distances for 100 chase + 100 mirror randomized trials.
 	Print by simulate_good_parameters.R
 
@@ -76,7 +76,7 @@ simRandDist.csv
 
 # # # # terminal commands # # # #
 connect to the farm
-	ssh sc3228@farnam.hpc.yale.edu
+	<code> ssh sc3228@farnam.hpc.yale.edu </code>
 
 to exist the farnam
 	<code> exit </code>

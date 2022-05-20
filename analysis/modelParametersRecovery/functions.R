@@ -176,45 +176,47 @@ f_randNTrials <- function (dist, n) {
 }
 
 # this function is used to simulate stochastic choices given a set of parameters
-f_mod_detection <- function (randDist, params) {
+f_mod_detection <- function (discDist, params) {
   # NOTE: this function receives the distance data frame and a the three 
   # parameters (eta = explore/exploit, theta = threshold, mc = memory capacity).
   
   # event types ordered: hit  FA   Ms  CR
   events <- c("R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror")
   # run a detection algorithm based on memory capacity
-  dbTrials <- data.frame(mc=params$mc,theta=params$theta,eta=params$eta,
-                         trialType=gsub("[[:punct:]]|[[:digit:]]", "",
-                                        unique(randDist$trialCond)),
-                         trial=1:length(unique(randDist$trialCond)),
-                         trialCond=unique(randDist$trialCond))
+  trials <- data.frame(mc=params$mc,theta=params$theta,eta=params$eta,
+                       trialType=gsub("[[:punct:]]|[[:digit:]]", "",
+                                      unique(discDist$trialCond)),
+                       trial=1:length(unique(discDist$trialCond)),
+                       trialCond=unique(discDist$trialCond))
   
   # create same size database to build Boolean
-  distBool <- randDist
+  close <- discDist
   # Boolean given theta
-  distBool[,-1:-4] <- ifelse(distBool[,-1:-4] < params$theta,1,0)
+  selCols <- grepl("d_",colnames(close))
+  close[,selCols] <- ifelse(close[,selCols] < params$theta,1,0)
   
   # detection as 0 for each set of parameters
-  dbTrials$detect <- dbTrials$chaseR <- 0
-  
-  # simulate detection in all 600 trials
-  for (t in 1:length(unique(distBool$trialCond))) {
-    temp <- distBool[distBool$trialCond == unique(distBool$trialCond)[t],-1:-4]
+  trials$detect <- trials$chaseR <- 0
+  # simulate detection in trials
+  trialSequence <- unique(close$trialCond)
+  # for loop simulate detection in all 600 trials
+  for (t in 1:length(trialSequence)) {
+    temp <- close[close$trialCond == trialSequence[t],selCols]
     # run within trials the mc window to detect consecutive detected frames
     for (w in 1:(nrow(temp)-params$mc)) {
       # at least one distance equal to mc
       detection <- sum(colSums(temp[w:(w+params$mc-1),]) == params$mc)
       if (detection > 0) {
-        dbTrials$detect[t] <- 1
+        trials$detect[t] <- 1
         break # if detection then stop trial (for loop)
       } 
     } # end window w loop
     
     # simulate detection response (Sutton & Barto, 2018)
-    if (dbTrials$detect[t] == 1) {
-      dbTrials$chaseR[t] <- rbinom(1,1,params$eta)
+    if (trials$detect[t] == 1) {
+      trials$chaseR[t] <- rbinom(1,1,params$eta)
     } else {
-      dbTrials$chaseR[t] <- rbinom(1,1,1-params$eta)
+      trials$chaseR[t] <- rbinom(1,1,1-params$eta)
     }
   } # end trials i loop
   # see SDT table for detection and for chase response
@@ -222,15 +224,15 @@ f_mod_detection <- function (randDist, params) {
   # table(dbTrials$trialType,dbTrials$chaseR)
     
   # SDT cell types
-  dbTrials$cells <- paste0("R",dbTrials$chaseR,"_TT",dbTrials$trialType)
+  trials$cells <- paste0("R",trials$chaseR,"_TT",trials$trialType)
   # SDT estimation parameters
-  SDTpar <- f_SDTparam(dbTrials,events)
+  SDTpar <- f_SDTparam(trials,events)
   params$sensit <- SDTpar$sensit
   params$resCri <- SDTpar$resCri
   params$h <- SDTpar$h
   params$f <- SDTpar$f
   params <- data.frame(params,t(SDTpar$SDTtab))
-  return(list(params=params,dbTrials=dbTrials))
+  return(list(params=params,dbTrials=trials))
 }
 
 
@@ -239,7 +241,7 @@ f_mod_detection <- function (randDist, params) {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # fitting function but in parallel
-f_fit_one <- function (discDist,   # randomized trial distances
+f_fit_one <- function (discDist,     # randomized trial distances
                        chaseResp,    # one participant choices
                        fit_posterior_space, # parameter fit specifications
                        fitParallel = F) {
@@ -355,23 +357,25 @@ f_fit_one <- function (discDist,   # randomized trial distances
 }
 
 # this function is used to simulate choices given a set of parameters
-f_mod_detection_fit <- function (randDist, params) {
-  # NOTE: this function is used in the parallel algorithm fitting function.
+f_mod_detection_fit <- function (discDist, params) {
   # run a detection algorithm based on memory capacity
   trials <- data.frame(mc=params$mc,theta=params$theta,
                        trialType=gsub("[[:punct:]]|[[:digit:]]","",
-                                      unique(randDist$trialCond)),
-                       trial=1:length(unique(randDist$trialCond)),
-                       trialCond=unique(randDist$trialCond))
+                                      unique(discDist$trialCond)),
+                       trial=1:length(unique(discDist$trialCond)),
+                       trialCond=unique(discDist$trialCond))
   # create same size database to build Boolean
-  close <- randDist
+  close <- discDist
   # Boolean given theta
-  close[,-1:-4] <- ifelse(close[,-1:-4] < params$theta,1,0)
+  selCols <- grepl("d_",colnames(close))
+  close[,selCols] <- ifelse(close[,selCols] < params$theta,1,0)
   # detection as 0 for each set of parameters
   trials$detect <- 0
-  # simulate detection in all 600 trials
-  for (t in 1:length(unique(close$trialCond))) {
-    temp <- close[close$trialCond == unique(close$trialCond)[t],-1:-4]
+  # simulate detection in trials
+  trialSequence <- unique(close$trialCond)
+  # for loop
+  for (t in 1:length(trialSequence)) {
+    temp <- close[close$trialCond == trialSequence[t],selCols]
     # run within trials the mc window to detect consecutive detected frames
     for (w in 1:(nrow(temp)-params$mc)) {
       # at least one distance equal to mc

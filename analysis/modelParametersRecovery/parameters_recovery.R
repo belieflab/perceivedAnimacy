@@ -42,11 +42,11 @@ range(simPars$theta)
 range(simPars$eta)
 
 # parameters for fitting algorithm based on mc, theta, and eta ranges
-fit_posterior_space  <- list(mcRange = c(20,100),
-                             thetaRange = c(50,200),
-                             etaRange = c(0.55,0.95),
-                             # binsSize = data.frame(mc=40,theta=40,eta=40))
-                             binsSize = data.frame(mc=2,theta=2,eta=2))
+fit_posterior_space  <- list(mcRange = c(15,105),
+                             thetaRange = c(40,210),
+                             etaRange = c(0.52,0.98),
+                             # binsSize = data.frame(mc=50,theta=50,eta=50))
+                             binsSize = data.frame(mc=30,theta=30,eta=30))
 
 # add columns which will be filled with the fitting algorithm
 simPars$negSumLog <- simPars$hitRate <- 
@@ -57,8 +57,8 @@ posterior_densities <- list()
 
 # get starting time
 start_time <- Sys.time()
-for (i in 1:length(simParticip)) {
-  message(paste0("participant (",simCode[i],"): ",i,"/",length(simParticip)))
+for (i in 1:length(simCode)) {
+  message(paste0("participant (",simCode[i],"): ",i,"/",length(simCode)))
   
   # get only one participant (i.e., set of parameters)
   onePartDat <- read.csv(paste0("sim_data/",simFilesNames[i]))
@@ -81,7 +81,7 @@ for (i in 1:length(simParticip)) {
 # get end time
 end_time <- Sys.time()
 # total duration time
-total_time <- end_time - start_time
+total_time <- end_time - start_time; total_time
 
 # print fitted parameters
 write.csv(simPars,"figures_tables/simParsRecoveryOneBatch.csv")

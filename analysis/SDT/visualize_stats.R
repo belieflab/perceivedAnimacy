@@ -331,3 +331,24 @@ if (print_fig == 1) {
 #                 right = text_grob(bquote("Superscript: ("*kg~NH[3]~ha^-1~yr^-1*")"), rot = 90),
 #                 fig.lab = "Figure 1", fig.lab.face = "bold"
 # )
+
+
+
+# # # # # # # # # # model fit # # # # # # # # # # # # # # # # # # # # # # # ####
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# model fit
+modFitFilesNames <- paste0("../participantModelFit/outputs/",
+                           list.files("../participantModelFit/outputs"))
+
+for (i in 1:length(modFitFilesNames)) {
+  load(modFitFilesNames[i])
+  temp <- data.frame(substr(modFitFilesNames[1],32,nchar(modFitFilesNames[1])-13),
+                     t(output$params$wMean),output$modPerformance)
+  colnames(temp)[1:4] <- c("workerId", rownames(output$params))
+  if (i == 1) {
+    modelFit <- temp
+  } else {
+    modelFit <- rbind(modelFit,temp)
+  }
+}

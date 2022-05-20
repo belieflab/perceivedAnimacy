@@ -39,7 +39,7 @@ fit_posterior_space  <- list(mcRange = c(15,105),
                              thetaRange = c(40,210),
                              etaRange = c(0.52,0.98),
                              # binsSize = data.frame(mc=50,theta=50,eta=50))
-                             binsSize = data.frame(mc=2,theta=2,eta=2))
+                             binsSize = data.frame(mc=30,theta=20,eta=20))
 
 # add columns which will be filled with the fitting algorithm
 fittedParameters <- data.frame(matrix(NA,nrow=nSubj,ncol=9)) 
@@ -56,14 +56,15 @@ start_time <- Sys.time()
 for (i in 1:nSubj) {
   message(paste0("participant ",workerIds[i],": ",i,"/",nSubj))
   
+  # load("outputs/A107RJSS561Y7R_output.Rdata")
+  
   # get only one participant (i.e., set of parameters)
   onePartData <- read.csv(paste0("clean_participants_behaviour/",behaviourCsv[i]))
   onePartDists <- read.csv(paste0("trial_order_distances/",distancesCsv[i]))
   # unique(onePartDists$trialCond) == onePartData$trialCond
   
-  
   # fit one participant (i.e., set of parameters)
-  temp <- f_fit_one(onePartDists, chaseResp=onePartData$chaseR, 
+  temp <- f_fit_one(discDist = onePartDists, chaseResp=onePartData$chaseR, 
                     fit_posterior_space,fitParallel = F)
   
   # # # # # extract fitted parameters # # # # #
@@ -86,7 +87,7 @@ for (i in 1:nSubj) {
 # get end time
 end_time <- Sys.time()
 # total duration time
-total_time <- end_time - start_time
+total_time <- end_time - start_time; total_time
 
 # print fitted parameters
 print_csv <- 1

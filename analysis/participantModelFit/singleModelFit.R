@@ -33,7 +33,7 @@ if (workerIdBehaviour != workerIdTrialDistances) {
   fit_posterior_space  <- list(mcRange = c(15,105),
                                thetaRange = c(40,210),
                                etaRange = c(0.52,0.98),
-                               binsSize = data.frame(mc=50,theta=50,eta=50))
+                               binsSize = data.frame(mc=60,theta=60,eta=60))
   
   # # # # # fitting one participant # # # # #
   output <- f_fit_one(onePartDists, chaseResp=onePartData$chaseR,

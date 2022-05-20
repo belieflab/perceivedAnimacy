@@ -74,11 +74,11 @@ if (sum(list.files("figures_tables") == "simPars.csv" |
   for (p in 1:nrow(params)) {
     message(paste("set of parameters:",p))
     if (p == 1) {
-      sim <- f_mod_detection(randDist, params[p,])
+      sim <- f_mod_detection(discDist = randDist, params = params[p,])
       simPars <- sim$params
       simTrials <- sim$dbTrials
     } else {
-      sim <- f_mod_detection(randDist, params[p,])
+      sim <- f_mod_detection(discDist = randDist, params = params[p,])
       simPars <- rbind(simPars,sim$params)
       simTrials <- rbind(simTrials,sim$dbTrials)
     }
