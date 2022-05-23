@@ -59,7 +59,7 @@ Special thanks to Thomas J. Langford, Ph.D. (HPC-Yale)
 <code> dsq --job-file job_file.txt -p general -c1 --mem-per-cpu=10G -t 1:00:00 </code>
 
 # run the batch in terminal
-sbatch dsq-job_file-2022-05-19
+<code> sbatch dsq-job_file-2022-05-19.sh </code>
 
 
 

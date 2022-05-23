@@ -34,7 +34,7 @@ let instructions3 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. </p>' + 
     '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 12 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
-    '<p style="font-size:22px;"> The second part of the task is the testing block, you will see 188 displays, and no feedback will be provided. </p>' + 
+    '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 188 displays, and no feedback will be provided. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
 
 };
@@ -42,7 +42,7 @@ let instructions3 = {
 let instructions4 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
-    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes conducting the study and responding the questionnaires then: </p>' +
+    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes completing the study and responding the questionnaires then: </p>' +
     '<p style="font-size:24px;"> <i> Press the spacebar to start. </i> </p>',
   choices: [32],
 };
@@ -130,9 +130,10 @@ let procedurePractice = {
 
 let instructions5 = {
   type: "html-keyboard-response",
-  stimulus: '<p style="font-size:26px;"> Practice trials are over. </p>' +
+  stimulus: '<p style="font-size:26px;"> The practice trials are now over, and the next trials are real. </p>' +
     '<p style="font-size:22px;"> In the next set of testing trials you will not have feedback. </p>' +
-    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
+    '<p style="font-size:22px;"> Please do your best to pay attention throughout the experiment, since your data will be useful to us only if you stay focused and continue to respond as quickly and accurately as possible all the way until the end. </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to begin. </i> </p>',
   choices: [32],
 };
 
