@@ -1,3 +1,38 @@
+# calculate error entropy
+H_error <- function(x,y,xref,yref) {
+  x0 <- x-xref
+  y0 <- y-yref
+  xy0 <- matrix(x0,y0,nrow = length(x0), ncol=2)
+  Sigma0 <- (1/(length(xy0[,1])-1))*(t(xy0) %*% xy0)
+  eig0 <- eigen(Sigma0,only.values = T)
+  ev0 <- eig0$values
+  H.error <- log(ev0[1]*ev0[2])
+  return(H.error)
+}
+
+
+# calculate path entropy
+H_path <- function(x,y) {
+  x0 <- x-mean(x)
+  y0 <- y-mean(y)
+  xy0 <- matrix(x0,y0,nrow =length(x0),ncol=2)
+  Sigma0 <- (1/(length(xy0[,1])-1))*(t(xy0) %*%xy0)
+  eig0 <- eigen(Sigma0,only.values = T)
+  ev0 <- eig0$values
+  H.path <- log(ev0[1]*ev0[2])
+  return(H.path)
+}
+
+
+
+# calculate the outersect between between two vectors
+outersect <- function(x, y) {
+  sort(c(setdiff(x, y),
+         setdiff(y, x)))
+}
+
+
+
 # signal detection theory analysis used in f_SDTparamExplor
 f_SDTparam <- function (dbTrials, events) {
   # NOTE: events must be ordered as follows: hit, FA, Ms, CR
@@ -19,6 +54,7 @@ f_SDTparam <- function (dbTrials, events) {
 
 
 
+# create correlation labels for plots
 corLab <- function (vec1,vec2,method) {
   correl <- cor.test(vec1,vec2, method = method)
   if (correl$p.value < 0.001) {pVal <- "p < 0.001"
@@ -30,6 +66,7 @@ corLab <- function (vec1,vec2,method) {
 
 
 
+# create figure 1
 f_create_fig1 <- function(genChar) {
   fig1A <- ggplot2::ggplot(genChar, aes(x=resCri,y=sensit)) + 
     labs(title = "Signal Detection Theory (SDT) Parameters",
@@ -55,6 +92,7 @@ f_create_fig1 <- function(genChar) {
 
 
 
+# create figure 2
 f_create_fig2 <- function(genChar) {
   fig2A <- ggplot2::ggplot(genChar, aes(x=paranoia,y=sensit)) + 
     labs(subtitle = corLab(genChar$paranoia,genChar$sensit,method="spearman"),
@@ -354,3 +392,103 @@ f_create_fig7 <- function(genChar) {
 
 
 sigmoid <- function (pred) {1/(1+exp(-pred))}
+
+
+
+f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
+  AfinModLab <- as.character(summary(get_model(sMA))$call$formula)[3]
+  fig1A <- ggplot2::ggplot(beh, aes(x=paranoia,y=Herror,col=respType)) + 
+    labs(title = "Error Entropy (W-->S)", #subtitle = paste("n_trials =",sum(!is.na(beh$Herror))),
+         subtitle = substr(AfinModLab,1,nchar(AfinModLab)),
+         x = "Paranoia", y = expression(H[error]),
+         col = "Responses") +
+    geom_smooth(method="lm", alpha=0.1) +
+    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
+    theme_classic() + theme(plot.subtitle = element_text(size = 4))
+  
+  BfinModLab <- as.character(summary(get_model(sMB))$call$formula)[3]
+  fig1B <- ggplot2::ggplot(beh, aes(x=paranoia,y=HpathW,col=respType)) + 
+    labs(title = "Wolf Path Entropy", #subtitle = paste("n_trials =",sum(!is.na(beh$HpathW))),
+         subtitle = substr(BfinModLab,1,nchar(BfinModLab)),
+         x = "Paranoia", y = expression(H[path]),
+         col = "Responses") +
+    geom_smooth(method="lm", alpha=0.1) +
+    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
+    theme_classic() + theme(plot.subtitle = element_text(size = 4))
+  
+  CfinModLab <- as.character(summary(get_model(sMC))$call$formula)[3]
+  fig1C <- ggplot2::ggplot(beh, aes(x=paranoia,y=HpathS,col=respType)) + 
+    labs(title = "Sheep Path Entropy", #subtitle = paste("n_trials =",sum(!is.na(beh$HpathS))), 
+         subtitle = substr(CfinModLab,1,nchar(CfinModLab)),
+         x = "Paranoia", y = expression(H[path]),
+         col = "Responses") +
+    geom_smooth(method="lm", alpha=0.1) +
+    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
+    theme_classic() + theme(plot.subtitle = element_text(size = 4))
+  
+  DfinModLab <- as.character(summary(get_model(sMD))$call$formula)[3]
+  fig1D <- ggplot2::ggplot(beh, aes(x=paranoia,y=rt,col=respType)) + 
+    labs(title = "Decision Time (DT ms)", #subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
+         subtitle = substr(DfinModLab,1,nchar(DfinModLab)),
+         x = "Paranoia", y = "DT",
+         col = "Responses") +
+    geom_smooth(method="lm", alpha=0.1) +
+    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
+    theme_classic() + theme(plot.subtitle = element_text(size = 4))
+  
+  fig1 <- ggpubr::ggarrange(fig1A,fig1B,fig1C,fig1D,nrow=2,ncol=2,
+                            labels=c("A","B","C","D"),common.legend=T,align="hv") +
+    bgcolor("white")
+  
+  return(fig1)
+}
+
+
+
+f_create_fig9 <- function(beh) {
+  fig2A <- ggplot(beh, aes(x=sdtTrials,y=Herror,col=as.factor(rgpts_high))) + 
+    labs(title = "Error Entropy (W-->S)", subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
+         x = "SDT event", y = expression(H[error]), col="Paranoia") +
+    stat_summary() +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    theme_classic()
+  
+  fig2B <- ggplot(beh, aes(x=sdtTrials,y=HpathW,col=as.factor(rgpts_high))) + 
+    labs(title = "Wolf Path Entropy", subtitle = paste("n_trials =",sum(!is.na(beh$HpathW))),
+         x = "SDT event", y = expression(H[path]), col="Paranoia") +
+    stat_summary() +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    theme_classic()
+  
+  fig2C <- ggplot(beh, aes(x=sdtTrials,y=HpathS,col=as.factor(rgpts_high))) + 
+    labs(title = "Sheep Path Entropy", subtitle = paste("n_trials =",sum(!is.na(beh$HpathS))), 
+         x = "SDT event", y = expression(H[path]), col="Paranoia") +
+    stat_summary() +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    theme_classic()
+  
+  fig2D <- ggplot(beh, aes(x=sdtTrials,y=rt,col=as.factor(rgpts_high))) + 
+    labs(title = "Decision Time (DT ms)", subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
+         x = "SDT event", y = "DT", col="Paranoia") +
+    stat_summary() +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    theme_classic()
+  
+  fig2 <- ggarrange(fig2A,fig2B,fig2C,fig2D,nrow=2,ncol=2,
+                    labels=c("A","B","C","D"),common.legend=T,align="hv") +
+    bgcolor("white")
+  
+  return(fig2)
+}

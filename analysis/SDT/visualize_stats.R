@@ -5,17 +5,6 @@
 rm(list=ls(all=TRUE))
 
 
-# # # # # # download data from terminal with: # # # # # #
-
-# # # Specific # # # 
-# only if we are in "C:\xampp\htdocs\perceivedAnimacy\data\behaviour"
-# then
-# scp sc3228@10.5.121.48:/var/www/belieflab.yale.edu/perceivedAnimacy/data/* .
-
-# # # General # # # 
-# scp sc3228@10.5.121.48:/var/www/belieflab.yale.edu/perceivedAnimacy/data/* C:\xampp\htdocs\perceivedAnimacy\data\behaviour
-
-
 
 # # # # # # # # # # libraries and functions # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
@@ -28,6 +17,34 @@ if (!require(dplyr)) {install.packages("dplyr")}; library(dplyr) # revalue
 # oneSubj <- "https://belieflab.yale.edu/perceivedAnimacy/data/animacy_A1DUPOUC9RNU4L.csv"
 # oneSubj <- getURL(oneSubj)
 source("functions.R")
+
+
+
+# # # # # # download data from terminal with: # # # # # #
+
+# # # Specific # # # 
+# only if we are in "C:\xampp\htdocs\perceivedAnimacy\data\behaviour"
+# then
+# scp sc3228@10.5.121.48:/var/www/belieflab.yale.edu/perceivedAnimacy/data/* .
+
+# # # General # # # 
+# scp sc3228@10.5.121.48:/var/www/belieflab.yale.edu/perceivedAnimacy/data/* C:\xampp\htdocs\perceivedAnimacy\data\behaviour
+
+
+# test ID:
+# A2FGKKWP33DFWS
+# missing ID:
+cloRes <- list.files("../../data/questionnaires/cloudResearch_details")
+cloRes1 <- read.csv("../../data/questionnaires/cloudResearch_details/perceivedAnimacy_SC [Psychology Detection Game(_ 30 minutes)] (364564).csv")
+cloRes1$sample <- "pilot"
+cloRes2 <- read.csv("../../data/questionnaires/cloudResearch_details/perceivedAnimacy_SC100 [Psychology Detection Game(_ 30 minutes)] (364802).csv")
+cloRes2$sample <- "experiment"
+cloRes <- rbind(cloRes1,cloRes2)
+cloRes <- cloRes[cloRes$ApprovalStatus != "Not Submitted",]
+javScr <- substr(list.files("../../data/behaviour"),9,nchar(list.files("../../data/behaviour"))-4)
+intersect(cloRes$AmazonIdentifier,javScr)
+outersect(cloRes$AmazonIdentifier,javScr)
+remove(javScr,cloRes2,cloRes1,cloRes)
 
 
 
@@ -68,7 +85,6 @@ quest <- quest[16:nrow(quest),]
 quest <- quest[order(quest$workerId),]
 quest$questDurationMin <- as.numeric(as.POSIXlt(quest$EndDate) - as.POSIXlt(quest$StartDate))
 
-
 # workerId vector the intersect between quest and bheaviour
 workerId <- intersect(quest$workerId,workerIdBeh)
 
@@ -87,6 +103,7 @@ if (sum(genChar$workerId == quest$workerId)==length(workerId)) {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 columnsToInteger <- colnames(quest)[grepl("rgpts",colnames(quest))][1:18]
+columnsToInteger <- c(columnsToInteger,"demo_age")
 for (i in 1:length(columnsToInteger)) {
   quest[,columnsToInteger[i]] <- as.integer(quest[,columnsToInteger[i]])
 }
@@ -106,12 +123,17 @@ beh <- beh[!is.na(beh$index),]
 beh$chaseR <- as.integer(ifelse(beh$key_press == "49",1,0))
 # reaction time to numeric
 beh$rt <- as.numeric(beh$rt)
+# remove bad trials
+beh <- beh[beh$rt > 500 & beh$rt < 8000,]
 
 # trialType instead of test_part
 beh$test_part <- ifelse(beh$test_part == "chase","chase","mirror")
 colnames(beh)[grepl("test_part",colnames(beh))] <- "trialType"
-# identify which specific video was played at trial t
+# correct or incorrect
+beh$response <- ifelse(beh$response == "correct",1,0)
+colnames(beh)[grepl("response",colnames(beh))] <- "corr"
 
+# trial conditions (i.e., which displays)
 beh$trialCond <- paste0(substr(beh$stim,6,nchar(beh$stim)-7),"_",beh$trialType)
 # get the cells for the SDT contingency table (pressed key and trial type)
 beh$cells <- paste0("R",beh$chaseR,"_TT",beh$trialType)
@@ -121,8 +143,10 @@ cells <- c("R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror")
 
 # filter by relevant columns
 relCols <- c("workerId","trialType","stim","trialCond","index","rt","chaseR",
-             "response","cells")
+             "corr","cells")
 beh <- beh[,relCols]
+# add questionnaires columns
+beh$paranoia <- beh$rgpts_per <- beh$rgpts_ref <- NA
 
 
 
@@ -131,18 +155,19 @@ beh <- beh[,relCols]
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # add behavioural columns
-genChar$rt <- NA 
+genChar$rt <- genChar$corr <- genChar$age <- genChar$sex <- NA 
 
 # add SDT columns
 genChar$f <- genChar$h <- genChar$resCri <- genChar$sensit <- NA
-sdtFreq <- data.frame(R1_TTchase=NA, R1_TTmirror=NA, R0_TTchase=NA, R0_TTmirror=NA)
-genChar <- cbind(genChar,sdtFreq)
+genChar <- cbind(genChar,data.frame(R1_TTchase=NA, R1_TTmirror=NA, 
+                                    R0_TTchase=NA, R0_TTmirror=NA))
 
 # add questionnaires columns
 genChar$paranoia <- genChar$rgpts_per <- genChar$rgpts_ref <- NA
 
 for (i in 1:nSubj) {
   genChar$rt[i] <- mean(beh$rt[beh$workerId == workerId[i]])
+  genChar$corr[i] <- mean(beh$corr[beh$workerId == workerId[i]])
   # calculate SDT
   temp <- f_SDTparam(beh[beh$workerId == workerId[i],],cells)
   genChar$sensit[i] <- temp$sensit
@@ -153,31 +178,60 @@ for (i in 1:nSubj) {
   
   # add questionnaire
   if (sum(genChar$workerId[i] == quest$workerId) > 0) {
+    genChar$age[i] <- quest$demo_age[genChar$workerId[i] == quest$workerId]
+    genChar$sex[i] <- quest$demo_sex[genChar$workerId[i] == quest$workerId]
     genChar$paranoia[i] <- quest$paranoia[genChar$workerId[i] == quest$workerId]
     genChar$rgpts_ref[i] <- quest$rgpts_ref[genChar$workerId[i] == quest$workerId]
     genChar$rgpts_per[i] <- quest$rgpts_per[genChar$workerId[i] == quest$workerId]
-  }
-}
+    beh$paranoia[beh$workerId == genChar$workerId[i]] <- genChar$paranoia[i] 
+    beh$rgpts_ref[beh$workerId == genChar$workerId[i]] <- genChar$rgpts_ref[i]
+    beh$rgpts_per[beh$workerId == genChar$workerId[i]] <- genChar$rgpts_per[i] 
+  } else {warning(genChar$workerId[i])}
+}; remove(temp)
 genChar$rgpts_ref_high <- ifelse(genChar$rgpts_ref <= 5, "average","elevated")
 genChar$rgpts_per_high <- ifelse(genChar$rgpts_per <= 9, "average","elevated")
 # at least one subscale elevated
 genChar$rgpts_high <- ifelse(genChar$rgpts_ref_high == "elevated" | 
                                genChar$rgpts_per_high == "elevated",1, 0)
 
-print_csv <- 0
-if (print_csv == 1) {
-  write.csv(genChar,"figures_tables/genChar.csv")
-}
-
 
 
 # # # # # # # # # # remove bad participants # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-# plot(genChar$rt,genChar$sensit)
-# plot(genChar$taskDurationMin,genChar$sensit)
-# plot(genChar$taskDurationMin,genChar$rt)
-# genChar <- genChar[genChar$taskDurationMin >= 4,]
+plot(genChar$rt,genChar$sensit)
+plot(genChar$taskDurationMin,genChar$sensit)
+plot(genChar$taskDurationMin,genChar$rt)
+plot(genChar$taskDurationMin,genChar$corr)
+plot(genChar$corr,genChar$sensit)
+
+# good and bad participants
+badParticipants <- union(genChar$workerId[genChar$corr <= 0.55 |
+                                            genChar$taskDurationMin <= 7],
+                         names(table(beh$workerId))[table(beh$workerId)<=50])
+goodParticipants <- intersect(genChar$workerId[genChar$corr > 0.55 &
+                                                 genChar$taskDurationMin > 7],
+                              names(table(beh$workerId))[table(beh$workerId)>50])
+
+
+# remove trials from bad participants
+genChar$remove <- T; beh$remove <- T 
+for (i in 1:length(goodParticipants)) {
+  genChar$remove[genChar$workerId == goodParticipants[i]] <- F
+  beh$remove[beh$workerId == goodParticipants[i]] <- F
+}
+genCharBad <- genChar[genChar$remove == T,]; genCharBad$remove <- NULL
+genChar <- genChar[genChar$remove == F,]; genChar$remove <- NULL
+beh <- beh[beh$remove == F,]; beh$remove <- NULL
+
+
+
+# print data bases
+print_csv <- 0
+if (print_csv == 1) {
+  write.csv(genChar,"figures_tables/genChar.csv",row.names = F)
+  write.csv(beh, "figures_tables/beh.csv",row.names = F)
+}
 
 
 
@@ -273,6 +327,9 @@ if (print_fig == 1) {
 
 
 
+# # # # # # # # # # modelling elevated paranoia # # # # # # # # # # # # # # ####
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # univariate analysis
 summary(glm(rgpts_high~sensit, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~resCri, data = genChar, family = "binomial"))
@@ -284,7 +341,7 @@ summary(glm(rgpts_high~eta, data = genChar, family = "binomial"))
 
 
 # create vector with all combination of possible regressors
-covars <- c("sensit","resCri","f","mc")
+covars <- c("resCri","mc","theta")
 for (i in 1:length(covars)) {
   temp <- t(combn(covars,i))
   if (ncol(temp) == 1) {
@@ -310,7 +367,7 @@ m <- list()
 for (i in 1:length(allModels)) {
   m[[i]] <- glm(as.formula(paste0("rgpts_high ~ ",allModels[i])), 
                 data=genChar, family="binomial")
-  if (i <= 16) {
+  if (i <= 26) {
     temp <- report::report_table(glm(as.formula(paste0("rgpts_high ~ ",
                                                        allModels[i])), 
                              data=genChar, family="binomial"))
@@ -356,6 +413,7 @@ estimates$Parameter <- factor(estimates$Parameter, levels = unique(estimates$Par
 estimates$model <- factor(estimates$model, levels = rev(unique(estimates$model)))
 
 
+
 estimates$sig <- ifelse(estimates$p < 0.05, "*", "")
 ggplot2::ggplot(estimates, aes(x=Parameter,y=model,size=abs(Std_Coefficient),
                       fill=Std_Coefficient,label=sig)) +
@@ -382,9 +440,17 @@ ggplot2::ggplot(estimates, aes(x=Parameter,y=model,size=abs(Std_Coefficient),
 
 # mediation analysis
 # https://data.library.virginia.edu/introduction-to-mediation-analysis/
-y_x <- glm(rgpts_high~mc, data = genChar, family = "binomial"); summary(y_x)
-y_xm <- glm(rgpts_high~mc+f, data = genChar, family = "binomial"); summary(y_xm)
-x_m <- glm(f~mc, data = genChar, family = "gaussian"); summary(x_m)
+y_x <- glm(rgpts_high~theta, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~theta+resCri, data = genChar, family = "binomial"); summary(y_xm)
+x_m <- glm(resCri~theta, data = genChar, family = "gaussian"); summary(x_m)
+
+y_x <- glm(rgpts_high~resCri, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~resCri+theta, data = genChar, family = "binomial"); summary(y_xm)
+x_m <- glm(theta~resCri, data = genChar, family = "gaussian"); summary(x_m)
+
+# y_x <- glm(rgpts_high~mc, data = genChar, family = "binomial"); summary(y_x)
+# y_xm <- glm(rgpts_high~mc+resCri, data = genChar, family = "binomial"); summary(y_xm)
+# x_m <- glm(resCri~mc, data = genChar, family = "gaussian"); summary(x_m)
 
 # # # # # Mediation analysis with Lavaan # # # # #
 # categorical (binary) variables
@@ -393,24 +459,24 @@ x_m <- glm(f~mc, data = genChar, family = "gaussian"); summary(x_m)
 # https://lavaan.ugent.be/tutorial/mediation.html # example here
 if (!require(lavaan)) {install.packages("lavaan")}; library(lavaan)
 model <- ' # direct effect
-             rgpts_high ~ c*mc
+             rgpts_high ~ c*theta
            # mediator
-             f ~ a*mc
-             rgpts_high ~ b*f
+             resCri ~ a*theta
+             rgpts_high ~ b*resCri
            # indirect effect (a*b)
              ab := a*b
            # total effect
              total := c + (a*b)'
-# mod1 <- "# a path
-#            f ~ a * mc
-#          # b path
-#            rgpts_high ~ b * f
-#          # c prime path 
-#            rgpts_high ~ cp * mc
-# 
-#          # indirect and total effects
-#          ab := a * b
-#          total := cp + ab"
+mod1 <- "# a path
+           theta ~ a * resCri
+         # b path
+           rgpts_high ~ b * theta
+         # c prime path
+           rgpts_high ~ cp * resCri
+
+         # indirect and total effects
+         ab := a * b
+         total := cp + ab"
 # estimator = "WLSMV" from https://www.researchgate.net/post/How-to-deal-with-dichotomous-endogenous-variables-in-Lavaan-R-package
 fit <- lavaan::sem(model, data = genChar, ordered = c("rgpts_high"), 
                    estimator = "WLSMV")
@@ -418,8 +484,5 @@ summary(fit, standardized = TRUE)
 
 if (!require(tidySEM)) {install.packages("tidySEM")}; library(tidySEM)
 graph_sem(model = fit)
-
-
-
 
 

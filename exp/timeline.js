@@ -60,6 +60,7 @@ let trial = {
   sources: jsPsych.timelineVariable("stimulus"),
   data: jsPsych.timelineVariable("data"),
   choices: [48, 49],
+  // response_allowed_while_playing: false, // for Josh 31/05/2022
   trial_ends_after_video: false,
   response_ends_trial: true,
   on_finish: function (data) {
