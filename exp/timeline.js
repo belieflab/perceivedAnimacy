@@ -23,7 +23,7 @@ let instructions2 = {
     '<p style="font-size:22px;"> Half of the displays will be <i>Chasing</i> displays, in which one disc will <i>chase</i> another disc by following it around the screen. </p>' +
     '<p style="font-size:22px;"> The other half of the displays will be <i>No Chasing</i> displays, in which there is <i>no chasing</i>. </p>' +
     '<p style="font-size:22px;"> Your job is to detect if there is a <i>chase</i> or not on each display. </p>' +
-    '<p style="font-size:22px;"> For each display, please respond as quickly as possible to report whether you saw a <i>chase</i>. </p>' +
+    '<p style="font-size:22px;"> For each display, please report as accurately as possible whether you saw a <i>chase</i>. </p>' +
     '<p style="font-size:22px;"> Chasing: Press "1" </p>' +
     '<p style="font-size:22px;"> No Chasing: Press "0" </p>' +
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
@@ -32,7 +32,7 @@ let instructions2 = {
 
 let instructions3 = {
   type: "html-keyboard-response",
-  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. </p>' + 
+  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. Take your time to be as accurate as possible. </p>' + 
     '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 12 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
     '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 188 displays, and no feedback will be provided. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
@@ -133,7 +133,7 @@ let instructions5 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:26px;"> The practice trials are now over, and the next trials are real. </p>' +
     '<p style="font-size:22px;"> In the next set of testing trials you will not have feedback. </p>' +
-    '<p style="font-size:22px;"> Please do your best to pay attention throughout the experiment, since your data will be useful to us only if you stay focused and continue to respond as quickly and accurately as possible all the way until the end. </p>' +
+    '<p style="font-size:22px;"> Please do your best to pay attention throughout the experiment, since your data will be useful to us only if you stay focused and continue to respond as accurately as possible all the way until the end. </p>' +
     '<p style="font-size:24px;"> <i> Press the spacebar to begin. </i> </p>',
   choices: [32],
 };

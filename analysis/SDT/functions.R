@@ -86,7 +86,7 @@ f_create_fig1 <- function(genChar) {
     theme_classic()
   
   fig1 <- ggpubr::ggarrange(fig1A,fig1B,ncol=2,labels=c("A","B")) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig1)
 }
 
@@ -129,7 +129,7 @@ f_create_fig2 <- function(genChar) {
                       labels=c("A","B","C","D"),align = "hv"),
     top = text_grob("Signal Detection Theory",face="bold",size=16),
     bottom = text_grob("Paranoia",face="bold",size=16)) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig2)
 }
 
@@ -171,7 +171,7 @@ f_create_fig3 <- function(genChar) {
     ggpubr::ggarrange(fig3A,fig3B,fig3C,fig3D,nrow=2,ncol=2,common.legend = T,
                       labels=c("A","B","C","D"),align = "hv"),
     bottom = text_grob("Ideas of Reference",face="bold",size=16)) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig3)
 }
 
@@ -213,7 +213,7 @@ f_create_fig4 <- function(genChar) {
     ggpubr::ggarrange(fig4A,fig4B,fig4C,fig4D,nrow=2,ncol=2,common.legend = T,
                       labels=c("A","B","C","D"),align = "hv"),
     bottom = text_grob("Ideas of Persecution",face="bold",size=16)) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig4)
 }
 
@@ -238,7 +238,7 @@ fig5B <- ggplot2::ggplot(genChar, aes(x=rt)) +
 fig5 <- annotate_figure(ggpubr::ggarrange(fig5A,fig5B),
                         top = text_grob("Decision Time (DT) Distribution",
                                         face="bold",size=16)) + 
-  bgcolor("white")
+  bgcolor("white") + border("white")
 return(fig5)
 }
 
@@ -317,7 +317,7 @@ f_create_fig6 <- function (genChar) {
                                      face="bold",size=12,rot=90)),
     nrow=6,heights = c(1,10,1,10,1,10)),
     top=text_grob("Distance Window Integration Model (DWIM)",face="bold",size=18)) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig6)
 }
 
@@ -385,7 +385,7 @@ f_create_fig7 <- function(genChar) {
                                      face="bold",size=12,rot=90)),
     nrow=6,heights = c(1,10,1,10,1,10)),
     top=text_grob("DWIM and SDT",face="bold",size=18)) + 
-    bgcolor("white")
+    bgcolor("white") + border("white")
   return(fig7)
 }
 
@@ -446,7 +446,7 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
   
   fig1 <- ggpubr::ggarrange(fig1A,fig1B,fig1C,fig1D,nrow=2,ncol=2,
                             labels=c("A","B","C","D"),common.legend=T,align="hv") +
-    bgcolor("white")
+    bgcolor("white") + border("white")
   
   return(fig1)
 }
@@ -488,7 +488,7 @@ f_create_fig9 <- function(beh) {
   
   fig2 <- ggarrange(fig2A,fig2B,fig2C,fig2D,nrow=2,ncol=2,
                     labels=c("A","B","C","D"),common.legend=T,align="hv") +
-    bgcolor("white")
+    bgcolor("white") + border("white")
   
   return(fig2)
 }

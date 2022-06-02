@@ -440,9 +440,9 @@ ggplot2::ggplot(estimates, aes(x=Parameter,y=model,size=abs(Std_Coefficient),
 
 # mediation analysis
 # https://data.library.virginia.edu/introduction-to-mediation-analysis/
-y_x <- glm(rgpts_high~theta, data = genChar, family = "binomial"); summary(y_x)
-y_xm <- glm(rgpts_high~theta+resCri, data = genChar, family = "binomial"); summary(y_xm)
-x_m <- glm(resCri~theta, data = genChar, family = "gaussian"); summary(x_m)
+y_x <- glm(rgpts_high~mc, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~mc+resCri, data = genChar, family = "binomial"); summary(y_xm)
+x_m <- glm(resCri~mc, data = genChar, family = "gaussian"); summary(x_m)
 
 y_x <- glm(rgpts_high~resCri, data = genChar, family = "binomial"); summary(y_x)
 y_xm <- glm(rgpts_high~resCri+theta, data = genChar, family = "binomial"); summary(y_xm)
@@ -459,9 +459,9 @@ x_m <- glm(theta~resCri, data = genChar, family = "gaussian"); summary(x_m)
 # https://lavaan.ugent.be/tutorial/mediation.html # example here
 if (!require(lavaan)) {install.packages("lavaan")}; library(lavaan)
 model <- ' # direct effect
-             rgpts_high ~ c*theta
+             rgpts_high ~ c*mc
            # mediator
-             resCri ~ a*theta
+             resCri ~ a*mc
              rgpts_high ~ b*resCri
            # indirect effect (a*b)
              ab := a*b
