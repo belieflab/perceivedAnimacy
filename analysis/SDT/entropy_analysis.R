@@ -106,10 +106,10 @@ sMB <- step(mB);sMB
 summary(lmer(HpathW ~ scParanoia * chaseR * trialType + (1 | workerId), 
              data=beh, REML = FALSE))
 sMC <- step(mC);sMC
-summary(lmer(HpathS ~ chaseR + trialType + (1 | workerId), data=beh, REML = FALSE))
+summary(lmer(HpathS ~ scParanoia + chaseR + trialType + (1 | workerId) + scParanoia:chaseR, 
+             data=beh, REML = FALSE))
 sMD <- step(mD);sMD
-summary(lmer(rt ~ scParanoia + chaseR + trialType + (1 | workerId) + 
-               scParanoia:chaseR + chaseR:trialType, 
+summary(lmer(rt ~ scParanoia * chaseR * trialType + (1 | workerId), 
              data=beh, REML = FALSE))
 
 # summary(get_model(sMA))$call$formula
@@ -144,6 +144,7 @@ if (print_png == 1) {
 
 
 y_x <- lmer(rt ~ HpathW + (1 | workerId), data = beh, REML = F); summary(y_x)
+y_x <- lmer(rt ~ HpathS + (1 | workerId), data = beh, REML = F); summary(y_x)
 
 y_x <- lmer(HpathW ~ scParanoia + (1 | workerId), data = beh, REML = F); summary(y_x)
 y_xm <- lmer(HpathW ~ scParanoia + rt + (1 | workerId), data = beh, REML = F); summary(y_xm)

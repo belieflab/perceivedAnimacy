@@ -38,13 +38,16 @@ cloRes <- list.files("../../data/questionnaires/cloudResearch_details")
 cloRes1 <- read.csv("../../data/questionnaires/cloudResearch_details/perceivedAnimacy_SC [Psychology Detection Game(_ 30 minutes)] (364564).csv")
 cloRes1$sample <- "pilot"
 cloRes2 <- read.csv("../../data/questionnaires/cloudResearch_details/perceivedAnimacy_SC100 [Psychology Detection Game(_ 30 minutes)] (364802).csv")
-cloRes2$sample <- "experiment"
-cloRes <- rbind(cloRes1,cloRes2)
+cloRes2$sample <- "experiment100"
+cloRes3 <- read.csv("../../data/questionnaires/cloudResearch_details/perceivedAnimacy_SC50 [Psychology Detection Game(_ 30 minutes)] (366947).csv")
+cloRes3$sample <- "experiment50"
+cloRes <- rbind(cloRes1,cloRes2,cloRes3)
 cloRes <- cloRes[cloRes$ApprovalStatus != "Not Submitted",]
+cloRes <- cloRes[order(cloRes$AmazonIdentifier),]
 javScr <- substr(list.files("../../data/behaviour"),9,nchar(list.files("../../data/behaviour"))-4)
-intersect(cloRes$AmazonIdentifier,javScr)
+workerIdCloudRes <- intersect(cloRes$AmazonIdentifier,javScr)
 outersect(cloRes$AmazonIdentifier,javScr)
-remove(javScr,cloRes2,cloRes1,cloRes)
+remove(javScr,cloRes3,cloRes2,cloRes1)
 
 
 
@@ -55,14 +58,16 @@ remove(javScr,cloRes2,cloRes1,cloRes)
 
 # behaviour
 behDataFilesNames <- list.files("../../data/behaviour")
+behDataFilesNames <- behDataFilesNames[order(behDataFilesNames)]
 workerIdBeh <- substr(behDataFilesNames,9,nchar(behDataFilesNames)-4)
+sum(workerIdCloudRes[order(workerIdCloudRes)] == workerIdBeh[order(workerIdBeh)])
 
 # number of participants
-nSubj <- length(behDataFilesNames)
+nSubj <- length(workerIdBeh)
 
 # pool behavioural data
-genChar <- data.frame(matrix(NA,nrow=nSubj,ncol=2))
-colnames(genChar) <- c("workerId","taskDurationMin")
+genChar <- data.frame(matrix(NA,nrow=nSubj,ncol=4))
+colnames(genChar) <- c("workerId","sample","taskDurationMin","expDurMinCloudRes")
 for (i in 1:nSubj) {
   temp <- read.csv(paste0("../../data/behaviour/",behDataFilesNames[i]))
   if (i == 1) {
@@ -72,14 +77,23 @@ for (i in 1:nSubj) {
   }
   # read files
   genChar[i,1] <- unique(temp$workerId)[unique(temp$workerId) != ""]
-  genChar[i,2] <- (sum(as.numeric(temp$rt[temp$rt != "null"]))/1000)/60
-}; rm(temp)
+  boolFilter <- cloRes$AmazonIdentifier == genChar[i,1]
+  genChar[i,2] <- cloRes$sample[boolFilter]
+  genChar[i,3] <- (sum(as.numeric(temp$rt[temp$rt != "null"]))/1000)/60
+  genChar[i,4] <- strptime(substr(cloRes$CompletionTime[boolFilter],
+                                  unlist(gregexpr("2022 ", cloRes$CompletionTime[boolFilter]))+5,
+                                  nchar(cloRes$CompletionTime[boolFilter])),"%I:%M:%S %p") - 
+    strptime(substr(cloRes$StartTime[boolFilter],
+                    unlist(gregexpr("2022 ", cloRes$StartTime[boolFilter]))+5,
+                    nchar(cloRes$StartTime[boolFilter])),"%I:%M:%S %p")
+  
+}; rm(temp,boolFilter)
 genChar <- genChar[order(genChar$workerId),]
 
 # questionnaires
 questDataFilesNames <- list.files("../../data/questionnaires")
 # read files
-quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[4]))
+quest <- read.csv(paste0("../../data/questionnaires/",questDataFilesNames[3]))
 quest <- quest[-(1:2),]
 quest <- quest[16:nrow(quest),]
 quest <- quest[order(quest$workerId),]
@@ -156,6 +170,9 @@ beh$paranoia <- beh$rgpts_per <- beh$rgpts_ref <- NA
 
 # add behavioural columns
 genChar$rt <- genChar$corr <- genChar$age <- genChar$sex <- NA 
+genChar$corr1 <- genChar$corr2 <- NA
+genChar$resCri1 <- genChar$resCri2 <- NA
+genChar$sensit1 <- genChar$sensit2 <- NA
 
 # add SDT columns
 genChar$f <- genChar$h <- genChar$resCri <- genChar$sensit <- NA
@@ -166,10 +183,26 @@ genChar <- cbind(genChar,data.frame(R1_TTchase=NA, R1_TTmirror=NA,
 genChar$paranoia <- genChar$rgpts_per <- genChar$rgpts_ref <- NA
 
 for (i in 1:nSubj) {
-  genChar$rt[i] <- mean(beh$rt[beh$workerId == workerId[i]])
-  genChar$corr[i] <- mean(beh$corr[beh$workerId == workerId[i]])
+  temp0 <- beh[beh$workerId == workerId[i],]
+  # temp0 <- temp0[temp0$index <= 100,]
+  genChar$rt[i] <- mean(temp0$rt)
+  genChar$corr[i] <- mean(temp0$corr)
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+  if (nrow(temp0[temp0$index<=50,]) > 1) {
+    genChar$corr1[i] <- mean(temp0$corr[temp0$index<=100])
+    temp1 <- f_SDTparam(temp0[temp0$index<=100,],cells)
+    genChar$sensit1[i] <- temp1$sensit
+    genChar$resCri1[i] <- temp1$resCri
+  }
+  if (nrow(temp0[temp0$index>150,]) > 1) {
+    genChar$corr2[i] <- mean(temp0$corr[temp0$index>100])
+    temp2 <- f_SDTparam(temp0[temp0$index>100,],cells)
+    genChar$sensit2[i] <- temp2$sensit
+    genChar$resCri2[i] <- temp2$resCri
+  }
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
   # calculate SDT
-  temp <- f_SDTparam(beh[beh$workerId == workerId[i],],cells)
+  temp <- f_SDTparam(temp0,cells)
   genChar$sensit[i] <- temp$sensit
   genChar$resCri[i] <- temp$resCri
   genChar$h[i] <- temp$h
@@ -187,7 +220,7 @@ for (i in 1:nSubj) {
     beh$rgpts_ref[beh$workerId == genChar$workerId[i]] <- genChar$rgpts_ref[i]
     beh$rgpts_per[beh$workerId == genChar$workerId[i]] <- genChar$rgpts_per[i] 
   } else {warning(genChar$workerId[i])}
-}; remove(temp)
+}; remove(temp0,temp)
 genChar$rgpts_ref_high <- ifelse(genChar$rgpts_ref <= 5, "average","elevated")
 genChar$rgpts_per_high <- ifelse(genChar$rgpts_per <= 9, "average","elevated")
 # at least one subscale elevated
@@ -199,19 +232,35 @@ genChar$rgpts_high <- ifelse(genChar$rgpts_ref_high == "elevated" |
 # # # # # # # # # # remove bad participants # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+mean(genChar$corr,na.rm=T)
+mean(genChar$corr1,na.rm=T)
+mean(genChar$corr2,na.rm=T)
+mean(genChar$sensit,na.rm=T)
+mean(genChar$sensit1,na.rm=T)
+mean(genChar$sensit2,na.rm=T)
+
+plot(genChar$corr1,genChar$corr2)
+
 plot(genChar$rt,genChar$sensit)
 plot(genChar$taskDurationMin,genChar$sensit)
 plot(genChar$taskDurationMin,genChar$rt)
 plot(genChar$taskDurationMin,genChar$corr)
 plot(genChar$corr,genChar$sensit)
 
+# genChar$corr <- genChar$corr1
+# genChar$sensit <- genChar$sensit1
+# genChar$resCri <- genChar$resCri1
+
 # good and bad participants
 badParticipants <- union(genChar$workerId[genChar$corr <= 0.55 |
                                             genChar$taskDurationMin <= 7],
                          names(table(beh$workerId))[table(beh$workerId)<=50])
+length(badParticipants)
 goodParticipants <- intersect(genChar$workerId[genChar$corr > 0.55 &
                                                  genChar$taskDurationMin > 7],
                               names(table(beh$workerId))[table(beh$workerId)>50])
+length(goodParticipants)
+
 
 
 # remove trials from bad participants
@@ -222,6 +271,7 @@ for (i in 1:length(goodParticipants)) {
 }
 genCharBad <- genChar[genChar$remove == T,]; genCharBad$remove <- NULL
 genChar <- genChar[genChar$remove == F,]; genChar$remove <- NULL
+behBad <- beh[beh$remove == T,]; behBad$remove <- NULL
 beh <- beh[beh$remove == F,]; beh$remove <- NULL
 
 
@@ -244,10 +294,10 @@ fig1 <- f_create_fig1(genChar)
 fig2 <- f_create_fig2(genChar)
 # fig2
 
-fig3 <- f_create_fig3(genChar) 
+fig3 <- f_create_fig3(genChar)
 # fig3
 
-fig4 <- f_create_fig4(genChar) 
+fig4 <- f_create_fig4(genChar)
 # fig4
 
 fig5 <- f_create_fig5(beh,genChar)
@@ -331,6 +381,7 @@ if (print_fig == 1) {
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # univariate analysis
+# ggplot2::ggplot(genChar, aes(x=rgpts_high,y=f)) + stat_summary()
 summary(glm(rgpts_high~sensit, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~resCri, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~h, data = genChar, family = "binomial"))
@@ -341,7 +392,7 @@ summary(glm(rgpts_high~eta, data = genChar, family = "binomial"))
 
 
 # create vector with all combination of possible regressors
-covars <- c("resCri","mc","theta")
+covars <- c("f","mc","theta")
 for (i in 1:length(covars)) {
   temp <- t(combn(covars,i))
   if (ncol(temp) == 1) {
@@ -398,7 +449,7 @@ for (i in 1:length(m)) {
                               ifelse(sigmoid(predict(m[[i]]))>0.5,1,0))/nrow(genChar)
 }
 modComp
-write.csv(modComp,"figures_tables/modelComparisons.csv",row.names=F)
+# write.csv(modComp,"figures_tables/modelComparisons.csv",row.names=F)
 
 
 
