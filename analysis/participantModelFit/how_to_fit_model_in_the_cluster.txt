@@ -40,8 +40,14 @@ Special thanks to Thomas J. Langford, Ph.D. (HPC-Yale)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 [in terminal: https://ood-farnam.hpc.yale.edu/pun/sys/shell/ssh/farnam.hpc.yale.internal]
 
+# clone git repository within the Farnam cluster
+<code> git clone https://github.com/santiagocdo/perceivedAnimacy.git perceivedAnimacy </code>
+
 # "manual" open on demand. Activate the R version (similar to onDemand arnam)
 <code> module load R/4.1.0-foss-2020b </code>
+
+# write job_file.txt with write_terminal_text.R
+<code> Rscript write_terminal_text.R > job_file.txt </code>
 
 # to execute code, when the R script have already commandArgs() in it (e.g., singleModelFit.R)
 <code> Rscript [filename.R] </code> (e.g., Rscript singeModelFit.R)
@@ -55,12 +61,20 @@ Special thanks to Thomas J. Langford, Ph.D. (HPC-Yale)
 # -h is to get help
 <code> dsq -h </code>
 
-# create dsq-job_file-2022-05-19.sh
-<code> dsq --job-file job_file.txt -p general -c1 --mem-per-cpu=10G -t 1:00:00 </code>
+# create dsq-job_file-2022-05-19.sh OR dsq-job_file-2022-06-15.sh OR dsq-job_file-2022-06-16.sh
+<code> dsq --job-file job_file.txt -p general -c1 --mem-per-cpu=16G -t 6:00:00 </code>
 
 # run the batch in terminal
 <code> sbatch dsq-job_file-2022-05-19.sh </code>
 
+# check status of batch
+<code> squeue -j [batch number] </code>
+
+# load dSQ module
+<code> module load dSQ </code>
+
+# check status of various jobs
+<code> dsqa -j 27019864 -f job_file.txt  </code>
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

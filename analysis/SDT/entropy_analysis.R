@@ -58,7 +58,7 @@ if (is.null(beh$Herror)) {
     beh$HpathD6[i] <- H_path(temp$d6X,temp$d6Y)
   }
   # print data bases
-  print_csv <- 0
+  print_csv <- 1
   if (print_csv == 1) {
     write.csv(genChar,"figures_tables/genChar.csv",row.names = F)
     write.csv(beh, "figures_tables/beh.csv",row.names = F)
@@ -88,16 +88,16 @@ beh$trialType <- factor(beh$trialType, levels = c("mirror","chase"))
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 mA0 <- lmer(Herror~chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
-mA <- lmer(Herror~scParanoia*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
+mA <- lmer(Herror~rgpts_high*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
 anova(mA0,mA)
 mB0 <- lmer(HpathW~chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
-mB <- lmer(HpathW~scParanoia*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
+mB <- lmer(HpathW~rgpts_high*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
 anova(mB0,mB)
 mC0 <- lmer(HpathS~chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
-mC <- lmer(HpathS~scParanoia*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
+mC <- lmer(HpathS~rgpts_high*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
 anova(mC0,mC)
 mD0 <- lmer(rt~chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
-mD <- lmer(rt~scParanoia*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
+mD <- lmer(rt~rgpts_high*chaseR*trialType+(1|workerId),data=beh, REML = FALSE)
 anova(mD0,mD)
 
 sMA <- step(mA);sMA
@@ -123,23 +123,31 @@ summary(lmer(rt ~ scParanoia * chaseR * trialType + (1 | workerId),
 # # # # # # # # # # figures: visualization# # # # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
-fig8 <- f_create_fig8(beh,sMA,sMB,sMC,sMD)
-# fig8
-
-fig9 <- f_create_fig9(beh)
+fig9 <- f_create_fig9(beh,sMA,sMB,sMC,sMD)
 # fig9
+fig9 <- f_create_fig9_v2(beh,sMA,sMB,sMC,sMD)
+ 
 
+fig10 <- f_create_fig10(beh)
+# fig10
 
 
 print_png <- 0
 if (print_png == 1) {
-  ggsave("figures_tables/fig8.png",
-         plot = fig8, width = 14, height = 14, units = "cm", 
-         dpi = 1200, device='png', limitsize = T)
-  ggsave("figures_tables/fig9.png",
+  ggsave("figures_tables/fig9_v2.png",
          plot = fig9, width = 14, height = 14, units = "cm", 
+         dpi = 2400, device='png', limitsize = T)
+  ggsave("figures_tables/fig10.png",
+         plot = fig10, width = 14, height = 14, units = "cm", 
          dpi = 1200, device='png', limitsize = T)
 }
+
+
+# detect trials with more false alarm rates
+tab <- table(beh$trialCond,beh$cells)
+# tab[max(tab[,4])==tab[,4],]
+head(tab[tab[,4]==0,])
+tab <- tab[order(-tab[,4]),]
 
 
 

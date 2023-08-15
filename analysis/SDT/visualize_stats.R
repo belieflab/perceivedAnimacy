@@ -13,6 +13,7 @@ if (!require(ggplot2)) {install.packages("ggplot2")}; library(ggplot2) # ggplot
 if (!require(ggpubr)) {install.packages("ggpubr")}; library(ggpubr) # ggarrange
 if (!require(report)) {install.packages("report")}; library(report) # report_table
 if (!require(dplyr)) {install.packages("dplyr")}; library(dplyr) # revalue
+if (!require(reshape2)) {install.packages("reshape2")}; library(reshape2) # melt
 # if (!require(RCurl)) {install.packages("RCurl")}; library(RCurl)
 # oneSubj <- "https://belieflab.yale.edu/perceivedAnimacy/data/animacy_A1DUPOUC9RNU4L.csv"
 # oneSubj <- getURL(oneSubj)
@@ -101,8 +102,9 @@ quest$questDurationMin <- as.numeric(as.POSIXlt(quest$EndDate) - as.POSIXlt(ques
 
 # workerId vector the intersect between quest and bheaviour
 workerId <- intersect(quest$workerId,workerIdBeh)
+nSubj <- length(workerId)
 
-if (sum(genChar$workerId == quest$workerId)==length(workerId)) {
+if (sum(genChar$workerId == quest$workerId)==nSubj) {
   genChar$questDurationMin <- quest$questDurationMin
   genChar$expDurationMin <- genChar$taskDurationMin + genChar$questDurationMin
 }
@@ -226,7 +228,9 @@ genChar$rgpts_per_high <- ifelse(genChar$rgpts_per <= 9, "average","elevated")
 # at least one subscale elevated
 genChar$rgpts_high <- ifelse(genChar$rgpts_ref_high == "elevated" | 
                                genChar$rgpts_per_high == "elevated",1, 0)
-
+# general characteristics
+table(genChar$sex); (table(genChar$sex)/nrow(genChar)*100)
+mean(genChar$age); sd(genChar$age); range(genChar$age)
 
 
 # # # # # # # # # # remove bad participants # # # # # # # # # # # # # # # # ####
@@ -246,6 +250,7 @@ plot(genChar$taskDurationMin,genChar$sensit)
 plot(genChar$taskDurationMin,genChar$rt)
 plot(genChar$taskDurationMin,genChar$corr)
 plot(genChar$corr,genChar$sensit)
+plot(genChar$corr,genChar$rt)
 
 # genChar$corr <- genChar$corr1
 # genChar$sensit <- genChar$sensit1
@@ -269,6 +274,9 @@ for (i in 1:length(goodParticipants)) {
   genChar$remove[genChar$workerId == goodParticipants[i]] <- F
   beh$remove[beh$workerId == goodParticipants[i]] <- F
 }
+descrGuide <- f_suppTables(genChar,1)
+
+
 genCharBad <- genChar[genChar$remove == T,]; genCharBad$remove <- NULL
 genChar <- genChar[genChar$remove == F,]; genChar$remove <- NULL
 behBad <- beh[beh$remove == T,]; behBad$remove <- NULL
@@ -354,6 +362,10 @@ for (i in 1:length(modFitFilesNames)) {
 if (sum(genChar$workerId == modelFit$workerId) == nrow(genChar)) {
   genChar <- cbind(genChar,modelFit[!grepl("workerId",colnames(modelFit))])
 }
+print_fig <- 0
+if (print_fig == 1) {
+  write.csv(genChar,"figures_tables/genChar.csv",row.names = F)
+}
 
 
 
@@ -362,6 +374,9 @@ fig6 <- f_create_fig6(genChar)
 
 fig7 <- f_create_fig7(genChar)
 # fig7
+
+fig8 <- f_create_fig8(genChar)#[genChar$sample == "experiment50",])
+# fig8
 
 
 
@@ -373,15 +388,28 @@ if (print_fig == 1) {
   ggsave("figures_tables/fig7.png",
          plot = fig7, width = 12, height = 16, units = "cm", 
          dpi = 1200, device='png', limitsize = T)
+  ggsave("figures_tables/fig8_v2.png",
+         plot = fig8, width = 14, height = 14, units = "cm", 
+         dpi = 2400, device='png', limitsize = T)
 }
 
 
-
+# temp <- genChar[,c("R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror")]
+# temp <- genChar
+# temp$pChase <- rowSums(temp[,c("R1_TTchase","R1_TTmirror")])/rowSums(temp[,c("R1_TTchase","R1_TTmirror","R0_TTchase","R0_TTmirror")])
+# hit, FA, Ms, CR
+# .7100000 0.3434343
+# h <- temp[1,1]/(temp[1,1]+temp[1,3])
+# f <- temp[1,2]/(temp[1,2]+temp[1,4])
+# plot(temp$pChase,temp$resCri)
+# plot(temp$pChase,-qnorm(temp$f))
 # # # # # # # # # # modelling elevated paranoia # # # # # # # # # # # # # # ####
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # univariate analysis
 # ggplot2::ggplot(genChar, aes(x=rgpts_high,y=f)) + stat_summary()
+summary(glm(rgpts_high~corr, data = genChar, family = "binomial"))
+summary(glm(rgpts_high~rt, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~sensit, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~resCri, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~h, data = genChar, family = "binomial"))
@@ -390,9 +418,19 @@ summary(glm(rgpts_high~mc, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~theta, data = genChar, family = "binomial"))
 summary(glm(rgpts_high~eta, data = genChar, family = "binomial"))
 
+summary(glm(corr~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(rt~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(sensit~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(resCri~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(h~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(f~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(mc~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(theta~rgpts_high, data = genChar, family = "gaussian"))
+summary(glm(eta~rgpts_high, data = genChar, family = "gaussian"))
+
 
 # create vector with all combination of possible regressors
-covars <- c("f","mc","theta")
+covars <- c("corr","sensit","resCri","f","eta")
 for (i in 1:length(covars)) {
   temp <- t(combn(covars,i))
   if (ncol(temp) == 1) {
@@ -453,8 +491,15 @@ modComp
 
 
 
+# models multicolinearity (Variance Inflation Factor)
+if (!require(regclass)) {install.packages("regclass")}; library(regclass) # VIF
+regclass::VIF(m[[23]])
+
+
+
 # change regressors parameters labels
-factorLabels <- t(matrix(c("sensit","d'", "resCri","C", "f","far", "mc","tau"),nrow=2))
+factorLabels <- t(matrix(c("corr","corr", "sensit","d'", "resCri","C", "f","far", 
+                           "eta","eta"),nrow=2))
 for (i in 1:nrow(factorLabels)) {
   estimates$Parameter <- gsub(factorLabels[i,1],factorLabels[i,2],estimates$Parameter)
   estimates$model <- gsub(factorLabels[i,1],factorLabels[i,2],estimates$model)
@@ -489,19 +534,24 @@ ggplot2::ggplot(estimates, aes(x=Parameter,y=model,size=abs(Std_Coefficient),
 
 
 
+
+
+
 # mediation analysis
 # https://data.library.virginia.edu/introduction-to-mediation-analysis/
-y_x <- glm(rgpts_high~mc, data = genChar, family = "binomial"); summary(y_x)
-y_xm <- glm(rgpts_high~mc+resCri, data = genChar, family = "binomial"); summary(y_xm)
+y_x <- glm(rgpts_high~resCri, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~resCri+mc, data = genChar, family = "binomial"); summary(y_xm)
 x_m <- glm(resCri~mc, data = genChar, family = "gaussian"); summary(x_m)
 
-y_x <- glm(rgpts_high~resCri, data = genChar, family = "binomial"); summary(y_x)
-y_xm <- glm(rgpts_high~resCri+theta, data = genChar, family = "binomial"); summary(y_xm)
-x_m <- glm(theta~resCri, data = genChar, family = "gaussian"); summary(x_m)
+y_x <- glm(rgpts_high~sensit, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~sensit+mc, data = genChar, family = "binomial"); summary(y_xm)
+x_m <- glm(sensit~mc, data = genChar, family = "gaussian"); summary(x_m)
 
-# y_x <- glm(rgpts_high~mc, data = genChar, family = "binomial"); summary(y_x)
-# y_xm <- glm(rgpts_high~mc+resCri, data = genChar, family = "binomial"); summary(y_xm)
-# x_m <- glm(resCri~mc, data = genChar, family = "gaussian"); summary(x_m)
+y_x <- glm(rgpts_high~f, data = genChar, family = "binomial"); summary(y_x)
+y_xm <- glm(rgpts_high~f+mc, data = genChar, family = "binomial"); summary(y_xm)
+x_m <- glm(f~mc, data = genChar, family = "gaussian"); summary(x_m)
+
+
 
 # # # # # Mediation analysis with Lavaan # # # # #
 # categorical (binary) variables

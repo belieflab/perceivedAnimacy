@@ -46,7 +46,8 @@ f_SDTparam <- function (dbTrials, events) {
   # sensitivity (d')
   sensit <- qnorm(h) - qnorm(f)
   # response criterion
-  resCri  <- -1*(qnorm(h) + qnorm(f)) / 2
+  resCri <- -1*(qnorm(h) + qnorm(f)) / 2
+  # resCri <- resCri-qnorm(f)
   # prepare output
   names(SDTtab) <- events
   return(list(sensit=sensit,resCri=resCri,SDTtab=SDTtab,h=h,f=f))
@@ -243,7 +244,6 @@ return(fig5)
 }
 
 
-
 f_create_fig6 <- function (genChar) {
   fig6A <- ggplot2::ggplot(genChar, aes(x=paranoia,y=mc)) +
     labs(subtitle = corLab(genChar$paranoia,genChar$mc,method="spearman"),
@@ -391,11 +391,54 @@ f_create_fig7 <- function(genChar) {
 
 
 
+f_create_fig8 <- function(genChar) {
+  if (!require(reshape2)) {install.packages("reshape2")}; library(reshape2) # melt
+  behPar <- c("corr","rt","sensit","resCri","h","f", "mc","theta","eta")
+  genChar2 <- reshape2::melt(genChar, measure.vars = rev(behPar))
+  
+  sig <- as.vector(rep(NA,length(behPar)))
+  for (i in 1:length(behPar)) {
+    temp <- genChar2$value[genChar2$variable == behPar[i]]
+    genChar2$value[genChar2$variable == behPar[i]] <- 
+      (temp-min(temp))/max(temp-min(temp))
+    temp2 <- summary(glm(rgpts_high~., family = "binomial",
+                         data = genChar[,c("rgpts_high",behPar[i])]))
+    sig[i] <- temp2$coefficients[2,4]
+  }
+  # summary(glm(behPar[i]~rgpts_high, family = "binomial",data = genChar))
+  temp3 <- data.frame(behPar,sig,dich=
+                        ifelse(sig<0.001,"p < 0.001",
+                               ifelse(sig>0.001&sig<0.01,"p < 0.01",
+                                      ifelse(sig>0.01&sig<0.05,"p < 0.05","NS"))))
+  
+  fig8 <- ggplot(genChar2, aes(x=value,y=variable,col=as.factor(rgpts_high))) +
+    labs(title = "Perceived Animacy and Paranoia", col="Paranoia",
+         subtitle = paste0("N = ",nrow(genChar),"; logistic model [paranoia ~ behaviour]"),
+         x = "Normalized Scores", y = "Behavioural and Computational Parameters") +
+    stat_summary(fun.data = mean_cl_normal, position = position_dodge(0.1)) +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    scale_y_discrete(labels = c('eta'=expression(Explotation*`:`~eta),
+                                'theta'=expression(Closeness~Sensitivity*`:`~theta),
+                                'mc'=expression(Integration~Window*`:`~tau),
+                                'f'="False Alarm Rate",
+                                'h'="Hit Rate",'resCri'="Response Criterion: C",
+                                'sensit'="Sensitivity: d'",'rt'="Decision Time",
+                                'corr'="Correctness")) +
+    annotate("text",x=rev(c(0.3,0.45,0.22,0.4,0.5,0.3,0.5,0.35,0.3)),
+             y=seq(1.3,9.3,1),label=rev(temp3$dich)) +
+    theme_classic() + theme(legend.position = "bottom")
+  fig8
+  return(fig8)
+}
+
+
+
 sigmoid <- function (pred) {1/(1+exp(-pred))}
 
 
 
-f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
+f_create_fig9 <- function(beh,sMA,sMB,sMC,sMD) {
   AfinModLab <- as.character(summary(get_model(sMA))$call$formula)[3]
   fig1A <- ggplot2::ggplot(beh, aes(x=paranoia,y=Herror,col=respType)) + 
     labs(title = "Error Entropy (W-->S)", #subtitle = paste("n_trials =",sum(!is.na(beh$Herror))),
@@ -403,7 +446,7 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
          x = "Paranoia", y = expression(H[error]),
          col = "Responses") +
     geom_smooth(method="lm", alpha=0.1) +
-    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    scale_color_manual(values = viridis::viridis(7)[c(2,6)]) +
     facet_grid(. ~ trialType, labeller =
                  labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
     theme_classic() + theme(plot.subtitle = element_text(size = 4))
@@ -415,7 +458,7 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
          x = "Paranoia", y = expression(H[path]),
          col = "Responses") +
     geom_smooth(method="lm", alpha=0.1) +
-    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    scale_color_manual(values = viridis::viridis(7)[c(2,6)]) +
     facet_grid(. ~ trialType, labeller =
                  labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
     theme_classic() + theme(plot.subtitle = element_text(size = 4))
@@ -427,7 +470,7 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
          x = "Paranoia", y = expression(H[path]),
          col = "Responses") +
     geom_smooth(method="lm", alpha=0.1) +
-    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    scale_color_manual(values = viridis::viridis(7)[c(2,6)]) +
     facet_grid(. ~ trialType, labeller =
                  labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
     theme_classic() + theme(plot.subtitle = element_text(size = 4))
@@ -439,7 +482,7 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
          x = "Paranoia", y = "DT",
          col = "Responses") +
     geom_smooth(method="lm", alpha=0.1) +
-    scale_color_manual(values = viridis::magma(7)[c(2,6)]) +
+    scale_color_manual(values = viridis::viridis(7)[c(2,6)]) +
     facet_grid(. ~ trialType, labeller =
                  labeller(trialType = c(`chase`="Chase",`mirror`="No Chase"))) +
     theme_classic() + theme(plot.subtitle = element_text(size = 4))
@@ -450,14 +493,86 @@ f_create_fig8 <- function(beh,sMA,sMB,sMC,sMD) {
   
   return(fig1)
 }
+f_create_fig9_v2 <- function(beh,sMA,sMB,sMC,sMD) {
+  AfinModLab <- as.character(summary(get_model(sMA))$call$formula)[3]
+  fig1A <- ggplot2::ggplot(beh, aes(x=respType,y=Herror,col=as.factor(rgpts_high))) + 
+    labs(title = "Error Entropy (W-->S)", #subtitle = paste("n_trials =",sum(!is.na(beh$Herror))),
+         #subtitle = substr(AfinModLab,1,nchar(AfinModLab)),
+         x = "Detection", y = expression(H[error]),
+         col = "Paranoia") +
+    stat_summary(position = position_dodge(0.1)) +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Trial: Chase",
+                                        `mirror`="Trial: No Chase"))) +
+    theme_classic() + theme(#plot.subtitle = element_text(size = 4),
+                            axis.text.x = element_text(angle = 30, hjust = 1),
+                            axis.title.x = element_blank())
+  
+  BfinModLab <- as.character(summary(get_model(sMB))$call$formula)[3]
+  fig1B <- ggplot2::ggplot(beh, aes(x=respType,y=HpathW,col=as.factor(rgpts_high))) + 
+    labs(title = "Wolf Path Entropy", #subtitle = paste("n_trials =",sum(!is.na(beh$HpathW))),
+         #subtitle = substr(BfinModLab,1,nchar(BfinModLab)),
+         x = "Detection", y = expression(H[path]),
+         col = "Paranoia") +
+    stat_summary(position = position_dodge(0.1)) +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Trial: Chase",
+                                        `mirror`="Trial: No Chase"))) +
+    theme_classic() + theme(#plot.subtitle = element_text(size = 4),
+                            axis.text.x = element_text(angle = 30, hjust = 1),
+                            axis.title.x = element_blank())
+  
+  CfinModLab <- as.character(summary(get_model(sMC))$call$formula)[3]
+  fig1C <- ggplot2::ggplot(beh, aes(x=respType,y=HpathS,col=as.factor(rgpts_high))) + 
+    labs(title = "Sheep Path Entropy", #subtitle = paste("n_trials =",sum(!is.na(beh$HpathS))), 
+         #subtitle = substr(CfinModLab,1,nchar(CfinModLab)),
+         x = "Detection", y = expression(H[path]),
+         col = "Paranoia") +
+    stat_summary(position = position_dodge(0.1)) +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Trial: Chase",
+                                        `mirror`="Trial: No Chase"))) +
+    theme_classic() + theme(#plot.subtitle = element_text(size = 4),
+                            axis.text.x = element_text(angle = 30, hjust = 1),
+                            axis.title.x = element_blank())
+  
+  DfinModLab <- as.character(summary(get_model(sMD))$call$formula)[3]
+  fig1D <- ggplot2::ggplot(beh, aes(x=respType,y=rt,col=as.factor(rgpts_high))) + 
+    labs(title = "Decision Time (DT ms)", #subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
+         #subtitle = substr(DfinModLab,1,nchar(DfinModLab)),
+         x = "Detection", y = "DT",
+         col = "Paranoia") +
+    stat_summary(position = position_dodge(0.1)) +
+    scale_color_manual(values = viridis::inferno(5)[c(2,4)],
+                       labels = c("average","elevated")) +
+    facet_grid(. ~ trialType, labeller =
+                 labeller(trialType = c(`chase`="Trial: Chase",
+                                        `mirror`="Trial: No Chase"))) +
+    theme_classic() + theme(#plot.subtitle = element_text(size = 4),
+                            axis.text.x = element_text(angle = 30, hjust = 1),
+                            axis.title.x = element_blank())
+  
+  fig1 <- annotate_figure(
+    ggpubr::ggarrange(fig1A,fig1B,fig1C,fig1D,nrow=2,ncol=2,
+                            labels=c("A","B","C","D"),common.legend=T,align="hv"),
+    bottom = text_grob("Detection")) +
+    bgcolor("white") + border("white")
+  return(fig1)
+}
 
 
 
-f_create_fig9 <- function(beh) {
+f_create_fig10 <- function(beh) {
   fig2A <- ggplot(beh, aes(x=sdtTrials,y=Herror,col=as.factor(rgpts_high))) + 
     labs(title = "Error Entropy (W-->S)", subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
          x = "SDT event", y = expression(H[error]), col="Paranoia") +
-    stat_summary() +
+    stat_summary(fun.data = mean_cl_boot, position = position_dodge(0.2)) +
     scale_color_manual(values = viridis::inferno(5)[c(2,4)],
                        labels = c("average","elevated")) +
     theme_classic()
@@ -465,7 +580,7 @@ f_create_fig9 <- function(beh) {
   fig2B <- ggplot(beh, aes(x=sdtTrials,y=HpathW,col=as.factor(rgpts_high))) + 
     labs(title = "Wolf Path Entropy", subtitle = paste("n_trials =",sum(!is.na(beh$HpathW))),
          x = "SDT event", y = expression(H[path]), col="Paranoia") +
-    stat_summary() +
+    stat_summary(fun.data = mean_cl_boot, position = position_dodge(0.2)) +
     scale_color_manual(values = viridis::inferno(5)[c(2,4)],
                        labels = c("average","elevated")) +
     theme_classic()
@@ -473,7 +588,7 @@ f_create_fig9 <- function(beh) {
   fig2C <- ggplot(beh, aes(x=sdtTrials,y=HpathS,col=as.factor(rgpts_high))) + 
     labs(title = "Sheep Path Entropy", subtitle = paste("n_trials =",sum(!is.na(beh$HpathS))), 
          x = "SDT event", y = expression(H[path]), col="Paranoia") +
-    stat_summary() +
+    stat_summary(fun.data = mean_cl_boot, position = position_dodge(0.2)) +
     scale_color_manual(values = viridis::inferno(5)[c(2,4)],
                        labels = c("average","elevated")) +
     theme_classic()
@@ -481,7 +596,7 @@ f_create_fig9 <- function(beh) {
   fig2D <- ggplot(beh, aes(x=sdtTrials,y=rt,col=as.factor(rgpts_high))) + 
     labs(title = "Decision Time (DT ms)", subtitle = paste("n_trials =",sum(!is.na(beh$rt))),  
          x = "SDT event", y = "DT", col="Paranoia") +
-    stat_summary() +
+    stat_summary(fun.data = mean_cl_boot, position = position_dodge(0.2)) +
     scale_color_manual(values = viridis::inferno(5)[c(2,4)],
                        labels = c("average","elevated")) +
     theme_classic()
@@ -491,4 +606,74 @@ f_create_fig9 <- function(beh) {
     bgcolor("white") + border("white")
   
   return(fig2)
+}
+
+
+# categorical descriptive variable
+f_descrCategorical <- function(vec) {return(paste0(levels(as.factor(vec)), ": ",table(vec), " (",round((table(vec) / length(vec)) * 100, 1), ")"))}
+# continuous descriptive variable
+f_descrContinuous <- function(vec) {return(c(paste0("M: ", round(mean(vec, na.rm = T), 2)),paste0("SD: ", round(sd(vec, na.rm = T), 2)),paste0(c("from: ", "to: "), round(range(vec, na.rm = T), 2))))}
+# mean difference function
+f_mean_difference <- function(sample1, sample2, paired){
+  
+  alpha <- 0.05 
+  
+  norm1 <- shapiro.test(sample1) # Shapiro-Wilk normality test
+  norm2 <- shapiro.test(sample2) # Shapiro-Wilk normality test
+  
+  homoce <- var.test(sample1,sample2) # F test to compare two variances
+  
+  if (homoce$p.value > alpha) {var_equal = 1} else {var_equal = 0} 
+  # there is a difference in t test depending homocedasticity. 
+  # For var_equal: 1 = Two Sample t-test; 0 = Welch Two Sample t-test
+  
+  if (norm1$p.value > alpha  & norm2$p.value > alpha) {
+    test <- t.test(sample1,sample2, paired = paired, var.equal = var_equal)
+  } else {
+    test <- wilcox.test(sample1,sample2, paired = paired)
+  }
+  return(test)
+}
+# built appendix (Table A1 and A3)
+f_suppTables <- function (genChar,print_csvANDfig) {
+  # # # # # # # # # # # # # # # # Supplementary Materials # # # # # # # # # # #
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+  # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+  # difference in excluded and included participants
+  sum(genChar$remove == TRUE); sum(genChar$remove == TRUE)/nrow(genChar)
+  sum(genChar$remove == FALSE); sum(genChar$remove == FALSE)/nrow(genChar)
+  
+  descrGuide <- matrix(c("age","sex","corr","rt","sensit","resCri",
+                         "rgpts_ref","rgpts_per","paranoia",
+                         "rgpts_ref_high","rgpts_per_high","rgpts_high",
+                         1,0,1,1,1,1,1,1,1,0,0,0),ncol=2)
+  descrGuide <- cbind(descrGuide,matrix(NA,nrow=nrow(descrGuide),ncol=5))
+  
+  # excluded vs included
+  for (i in 1:nrow(descrGuide)) {
+    if (descrGuide[i,2] == 1) {
+      descrGuide[i,3] <- paste(f_descrContinuous(genChar[genChar$remove == T,descrGuide[i,1]]),collapse = " ")
+      descrGuide[i,4] <- paste(f_descrContinuous(genChar[genChar$remove == F,descrGuide[i,1]]),collapse = " ")
+      temp <- f_mean_difference(genChar[genChar$remove == T,descrGuide[i,1]],
+                                genChar[genChar$remove == F,descrGuide[i,1]],FALSE)
+      descrGuide[i,5] <- temp$statistic
+      if (!is.null(temp$parameter)) {descrGuide[i,6] <- temp$parameter}
+      descrGuide[i,7] <- temp$p.value
+    } else {
+      descrGuide[i,3] <- paste(f_descrCategorical(genChar[genChar$remove == T,descrGuide[i,1]]),collapse = " ")
+      descrGuide[i,4] <- paste(f_descrCategorical(genChar[genChar$remove == F,descrGuide[i,1]]),collapse = " ")
+      temp <- chisq.test(table(genChar[,descrGuide[i,1]],genChar$remove))
+      descrGuide[i,5] <- temp$statistic
+      descrGuide[i,6] <- temp$parameter
+      descrGuide[i,7] <- temp$p.value
+    }
+  }
+  colnames(descrGuide) <- c("var","cont","badPart","goodPart","test","df","pValue")
+  
+  if (print_csvANDfig == 1) {
+    write.csv(descrGuide,"figures_tables/table_A1.csv",row.names = F)
+  }
+  
+  # function output
+  return(list(descrGuide=descrGuide))
 }

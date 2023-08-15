@@ -38,9 +38,9 @@ discsPositions <- read.csv("figures_tables/discsPositions.csv")
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # vector with multiple memory capacities
-mc <- seq(6,120,by=6)
+mc <- seq(6,120,by=60)
 # vector with multiple distance threshold
-theta <- seq(15,300,by=15)
+theta <- seq(15,300,by=150)
 # create combinations of all previous parameters (mc and theta)
 params <- data.frame(mc=rep(mc,length(theta)),theta=rep(theta,each=length(mc)))
 
