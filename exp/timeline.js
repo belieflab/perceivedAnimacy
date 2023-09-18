@@ -36,7 +36,7 @@ let instructions3 = {
     '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 12 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
     '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 188 displays, and no feedback will be provided. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
-
+    choices: [32],
 };
 
 let instructions4 = {
