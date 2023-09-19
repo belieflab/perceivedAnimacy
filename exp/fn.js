@@ -1,3 +1,34 @@
+// // // // Joan's code functions // // // // 
+function get_random_value(array) {
+  return jsPsych.randomization.sampleWithoutReplacement(array, 1)[0]
+};
+
+function get_viewport_size() {
+  let test = document.createElement("div");
+
+  test.style.cssText = "position: fixed;top: 0;left: 0;bottom: 0;right: 0;";
+  document.documentElement.insertBefore(test, document.documentElement.firstChild);
+
+  let dims = {
+      width: test.offsetWidth,
+      height: test.offsetHeight
+  };
+  document.documentElement.removeChild(test);
+
+  return dims;
+};
+
+function range(start, end) {
+  return Array(end - start + 1).fill().map((_, idx) => start + idx)
+};
+
+function shuffle(array) {
+  array.sort(() => Math.random() - 0.5);
+}
+
+
+
+// // // // jsWrapper default functions // // // //
 /* start the experiment */
 function startExperiment() {
   jsPsych.init({

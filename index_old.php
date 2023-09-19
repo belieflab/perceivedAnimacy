@@ -24,47 +24,13 @@ require_once 'db/config.php';
   <script type="text/javascript" src="jsPsych/jspsych.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
-  <!-- these are the plug ins required in joanPerceivedAnimacy -->
-  <script type="text/javascript" src="jsPsych/plugins/jspsych-fullscreen.js"></script>
-  <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-keyboard-response.js"></script>
-  <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-button-response.js"></script>
-  <script type="text/javascript" src="jsPsych/plugins/joan/jo-show-animacy-sheep.js"></script>
-  <script type="text/javascript" src="jsPsych/plugins/joan/jo-show-animacy-wolf.js"></script>
-  <script type="text/javascript" src="jsPsych/plugins/joan/jo-input-code.js"></script>
-
-  <script src="stim/chasing_output/dist1X.js"></script>
-  <script src="stim/chasing_output/dist1Y.js"></script>
-  <script src="stim/chasing_output/dist2X.js"></script>
-  <script src="stim/chasing_output/dist2Y.js"></script>
-  <script src="stim/chasing_output/dist3X.js"></script>
-  <script src="stim/chasing_output/dist3Y.js"></script>
-  <script src="stim/chasing_output/dist4X.js"></script>
-  <script src="stim/chasing_output/dist4Y.js"></script>
-  <script src="stim/chasing_output/dist5X.js"></script>
-  <script src="stim/chasing_output/dist5Y.js"></script>
-  <script src="stim/chasing_output/dist6X.js"></script>
-  <script src="stim/chasing_output/dist6Y.js"></script>
-  <script src="stim/chasing_output/sheepX.js"></script>
-  <script src="stim/chasing_output/sheepY.js"></script>
-  <script src="stim/chasing_output/wolfX.js"></script>
-  <script src="stim/chasing_output/wolfY.js"></script>
-  <script src="stim/mirror_chasing_output/dist1X.js"></script>
-  <script src="stim/mirror_chasing_output/dist1Y.js"></script>
-  <script src="stim/mirror_chasing_output/dist2X.js"></script>
-  <script src="stim/mirror_chasing_output/dist2Y.js"></script>
-  <script src="stim/mirror_chasing_output/dist3X.js"></script>
-  <script src="stim/mirror_chasing_output/dist3Y.js"></script>
-  <script src="stim/mirror_chasing_output/dist4X.js"></script>
-  <script src="stim/mirror_chasing_output/dist4Y.js"></script>
-  <script src="stim/mirror_chasing_output/dist5X.js"></script>
-  <script src="stim/mirror_chasing_output/dist5Y.js"></script>
-  <script src="stim/mirror_chasing_output/dist6X.js"></script>
-  <script src="stim/mirror_chasing_output/dist6Y.js"></script>
-  <script src="stim/mirror_chasing_output/sheepX.js"></script>
-  <script src="stim/mirror_chasing_output/sheepY.js"></script>
-  <script src="stim/mirror_chasing_output/wolfX.js"></script>
-  <script src="stim/mirror_chasing_output/wolfY.js"></script>
-
+   <!-- these are the plug ins required in joanPerceivedAnimacy -->
+   <script type="text/javascript" src="jsPsych/plugins/jspsych-fullscreen.js"></script>
+   <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-keyboard-response.js"></script>
+   <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-button-response.js"></script>
+   <script type="text/javascript" src="jsPsych/plugins/joan/jo-show-animacy-sheep.js"></script>
+   <script type="text/javascript" src="jsPsych/plugins/joan/jo-show-animacy-wolf.js"></script>
+   <script type="text/javascript" src="jsPsych/plugins/joan/jo-input-code.js"></script>
   <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css">
   </link>
   <link rel="stylesheet" type="text/css" href="css/style.css">
@@ -100,11 +66,10 @@ require_once 'db/config.php';
   ?>
 </body>
 <footer>
-  <script type="text/javascript" src="exp/conf.js"></script>  
   <script type="text/javascript" src="exp/fn.js"></script>
-  <script type="text/javascript" src="exp/lang.js"></script>
-  <script type="text/javascript" src="exp/rand.js"></script>
+  <script type="text/javascript" src="exp/conf.js"></script>
   <script type="text/javascript" src="exp/var.js"></script>
+  <script type="text/javascript" src="exp/lang.js"></script>
   <script>
     // show page when loaded 
     window.onload = function() {
