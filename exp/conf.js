@@ -24,5 +24,5 @@ function get_random_value(array) {
 // // // // jsWrapper default functions // // // //
 let workerId = getParamFromURL('workerId');
 
-// const numberTrialsTest = 2;// 72;
-// const numberTrialsPractice = 2;
+const numberTrialsTest = 2;
+const numberTrialsPractice = 2;

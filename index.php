@@ -100,10 +100,11 @@ require_once 'db/config.php';
   ?>
 </body>
 <footer>
-  <script type="text/javascript" src="exp/conf.js"></script>  
+  <!-- the order of srcing must remain -->
   <script type="text/javascript" src="exp/fn.js"></script>
-  <script type="text/javascript" src="exp/lang.js"></script>
   <script type="text/javascript" src="exp/rand.js"></script>
+  <script type="text/javascript" src="exp/conf.js"></script>  
+  <script type="text/javascript" src="exp/lang.js"></script>
   <script type="text/javascript" src="exp/var.js"></script>
   <script>
     // show page when loaded 

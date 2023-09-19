@@ -5,16 +5,14 @@ trialIterator = 1;
 
 // // // // Joan's code functions // // // // 
 var trial_list = range(2, 300);
-var practice_list = Array(2).fill('chase');
-var condition_list = Array(2).fill('chase').concat(Array(50).fill('mirror'));
-var num_practice = 2;
+var practice_list = Array(numberTrialsPractice).fill('chase');
+var condition_list = Array(numberTrialsTest).fill('chase').concat(Array(numberTrialsTest).fill('mirror'));
+var num_practice = numberTrialsPractice;
 var num_trials = condition_list.length
 shuffle(trial_list);
 shuffle(condition_list);
 
 trial_count = 0
-
-
 
 var begin_prac_promptS = {
     type: 'jo-html-keyboard-response',
