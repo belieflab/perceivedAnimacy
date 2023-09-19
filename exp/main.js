@@ -1,7 +1,8 @@
 // // // // jsWrapper default functions // // // //
 // main order in which things are pushed to timeline 
-timeline.push(instructions0);
-
+// timeline.push(instructions0);
+// timeline.push(dataSave);
+// timeline.push(end);
 
 
 // // // // Joan's code functions // // // //
@@ -141,7 +142,22 @@ if (expt_name == 'sheep'){
     }
 }
 
-
-// // // // jsWrapper default functions // // // //
-timeline.push(dataSave);
-timeline.push(end);
+// DEBRIEFING SECTION
+timeline.push({
+  type: 'fullscreen',
+  fullscreen_mode: false,
+  button_label: 'Exit Fullscreen',
+  message: '<p>You can now exit full screen mode.</p>',
+  on_finish: function (data) {
+      viewport_width = get_viewport_size().width;
+      viewport_height = get_viewport_size().height;
+      data.screen_width = viewport_width;
+      data.screen_height = viewport_height;
+      console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
+  }
+});
+timeline.push(check_debrief_response);
+timeline.push(get_code_prompt);
+timeline.push(show_code_prompt);
+timeline.push(close_prompt);
+console.log(timeline);

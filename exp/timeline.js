@@ -279,4 +279,71 @@ let end = {
   // }
 };
 
+let check_debrief_response = {
+  type: 'survey-html-form',
+  data: {
+      subj_id: subj_name,
+      test_part: 'debrief',
+      completion_code: completion_code
+  },
+  check_blanks: true,
+  on_finish: function (data) {
+      console.log("Responses:", data.responses);
+      let respObj = JSON.parse(data.responses);
+      data.resp_age = respObj["age"];
+      data.resp_gender = respObj["gender"];
+      data.resp_expt = respObj["what_about"];
+      data.resp_strategies = respObj["what_strategies"];
+      data.resp_experience = respObj["prev_exp"];
+      data.resp_problems = respObj["problems"];
+      data.resp_final = respObj["addl"];
+      data.resp_attention = respObj["attn"];
+      let interaction_data = jsPsych.data.getInteractionData();
+      let interaction_filename = 'interactions_' + subj_name;
+      saveData(interaction_filename, jsPsych.data.getInteractionData().csv());
+      saveData(subj_name, jsPsych.data.get().csv());
+  },
+  timeline: debrief_prompt
+};
+
+let get_code_prompt = {
+  type: 'html-keyboard-response',
+  choices: ['space'],
+  stimulus: '<p>Great, you have completed this experiment.  Please press spacebar to proceed to the next page, and get your code.</p>',
+  data: {
+      subj_id: subj_name,
+      test_part: 'instruct_prompt'
+  },
+  on_finish: function (data) {
+      saveData(subj_name, jsPsych.data.get().csv());
+  }
+};
+
+let show_code_prompt = {
+  type: 'html-keyboard-response',
+  choices: ['space'],
+  stimulus: '<p>Here is your completion code:</p><p style="font-size: 140%; color: grey"><strong>' + completion_code +
+      '</strong></p>' + '<p>Press the spacebar to continue.</p>',
+  data: {
+      subj_id: subj_name,
+      test_part: 'instruct_prompt'
+  }
+};
+
+let close_prompt = {
+  type: 'html-keyboard-response',
+  choices: ['space'],
+  stimulus: '<p>Thank you for helping!  You are all set.  You can now close the window!</p>',
+  data: {
+      subj_id: subj_name,
+      test_part: 'instruct_prompt'
+  },
+  on_finish: function (data) {
+      let interaction_data = jsPsych.data.getInteractionData();
+      let interaction_filename = 'interactions_' + subj_name;
+      saveData(interaction_filename, jsPsych.data.getInteractionData().csv());
+      saveData(subj_name, jsPsych.data.get().csv());
+  }
+};
+
 $.getScript("exp/main.js");

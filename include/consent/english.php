@@ -7,7 +7,7 @@
     <h1 class="loading">Loading...</h1>
   </div>
   <div id="consentHolder" class="consent centeredDiv">
-  <h3 id="consentPreamble" class="consent">In order for us to conduct this experiment online, we need to include the standard consent form below: <br /> <br /> </h3>
+  <h3 id="consentPreamble" class="consent"> <br /> <br /> </h3>
 
 <div id="consentForm" class="consent consent-box"> 
     <h2 id="consentHeading" class="consent">
@@ -20,7 +20,7 @@
       
  </h2>
     <p id="consentInstructions" class="consent" style="color: black">
-      <b>Study Title:</b> Beliefs and Personality Traits
+      <b>Study Title:</b> Chase Detection Task
       <br><br>
       <b>Principal Investigator:</b> Philip R. Corlett, PhD
       <br><br>
@@ -42,7 +42,7 @@
       <br><br>
       <u><b>Economic Considerations</b></u>
       <br>
-      You will receive the reward specified on the Mechanical-Turk HIT for completing both the game and the questionnaire. Payment for completion of the HIT is $6.00 with a $2.00 bonus to individuals who score in the top 25% on the card game. Upon finishing the game and submitting the questionnaire, you will receive code numbers. Please record these two code numbers and submit them for payment. 
+      You will receive the reward specified on the Mechanical-Turk HIT for completing both the game and the questionnaire. Payment for completion of the HIT is $6.00 USD. Upon finishing the game and submitting the questionnaire, you will receive a completion code number. Please record this completion code and submit it for payment. 
       <br><br>
       <u><b>Confidentiality</b></u>
       <br>
@@ -81,6 +81,7 @@
       $.getScript("exp/timeline.js");
       // $.getScript("exp/main.js");
   }); </script>
+
 
 
   
