@@ -1,4 +1,6 @@
 // // // // Joan's code functions // // // //
+let timeline = [];
+
 let FullScreenWarning = {
   type: 'fullscreen',
   fullscreen_mode: true,
@@ -222,62 +224,24 @@ let instructions_nextpart = {
   }
 };
 
+let debrief_text =
+    "<div style='width: 50%; text-align: left; margin: 0 auto'><p style='text-align: center'>(You should have been returned to the normal size of your browser.)<br>Finally, we just have a couple questions for you!<br>Please note that you must answer <strong>ALL</strong> the questions before pressing the CONTINUE button below.</p>" +
+    '<p>Age: <br><input name="age" type="number" style="width: 20%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/>' +
+    '<p>Please indicate your gender:<br><input type="radio" id="male" name="gender" value="male"><label for="male">Male</label><br><input type="radio" id="female" name="gender" value="female"><label for="female">Female</label><br><input type="radio" id="other" name="gender" value="other"><label for="other">Other</label><br><input type="radio" id="NA" name="gender" value="NA"><label for="NA">I prefer not to say</label><br>' +
+    '<p>In 1-2 sentences, what do you think the experiment is about?<br><input name="what_about" type="text" size="50" style="width: 100%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/>' +
+    '<p>In 1-2 sentences, did you have any strategies for completing the task?<br><input name="what_strategies" type="text" size="50" style="width: 100%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/>' +
+    '<p>Have you ever, to your knowledge, participated in an experiment similar to this one?  If yes, please describe this experiment in 1-2 sentences.  If no, please just type "No" in the text box.<br><input name="prev_exp" type="text" size="50" style="width: 100%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/>' +
+    '<p>Did you encounter any problems in the experiment? <br><input name="problems" type="text" size="50" style="width: 100%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/></p>' +
+    '<p>Anything else to share? <br><input name="addl" type="text" size="50" style="width: 100%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"/></p>' +
+    '<p>We know it is generally difficult to stay focused in these online experiments.  On a scale of 1-100 (with 1 being very distracted, and 100 being very focused), how well did you pay attention to the experiment?  (This will not affect whether you receive credit or compensation.) <br><input name="attn" type="number" max="100" style="width: 20%; border-radius: 4px; padding: 10px 10px; margin: 8px 0; border: 1px solid #ccc; font-size: 15px"></p></div>';
 
-// // // // jsWrapper default functions // // // //
-let timeline = [];
-
-let instructions0 = {
-  type: "html-keyboard-response",
-  stimulus: "<p> Hello and thank you for taking part in our experiment!</p>" +
-    "<p>It should take about 30 minutes.</p>" +
-    "<p> <i> Press spacebar to continue</i> </p>",
-  choices: [32],
-  on_finish: function (data) {
-    data.index = 'lol';
-  }
-};
-
-let dataSave = {
-  type: "html-keyboard-response",
-  stimulus: "<p style='color:white;'>Data saving...</p>" +
-    '<div class="sk-cube-grid">' +
-    '<div class="sk-cube sk-cube1"></div>' +
-    '<div class="sk-cube sk-cube2"></div>' +
-    '<div class="sk-cube sk-cube3"></div>' +
-    '<div class="sk-cube sk-cube4"></div>' +
-    '<div class="sk-cube sk-cube5"></div>' +
-    '<div class="sk-cube sk-cube6"></div>' +
-    '<div class="sk-cube sk-cube7"></div>' +
-    '<div class="sk-cube sk-cube8"></div>' +
-    '<div class="sk-cube sk-cube9"></div>' +
-    '</div>' +
-    "<p style='color:white;'>Do not close this window until the text dissapears.</p>",
-  choices: jsPsych.NO_KEYS,
-  trial_duration: 5000,
-  on_finish: function () {
-    saveData("task_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
-    document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
-    // returns cursor functionality
-    $(document).ready(function () {
-      $("body").addClass("showCursor"); // returns cursor functionality
-      closeFullscreen(); // kill fullscreen
-    });
-  }
-};
-
-let end = {
-  type: "html-keyboard-response",
-  stimulus: "<p style='color:white;'>Thank you!</p>" +
-    "<p style='color:white;'>You have successfully completed the experiment and your data has been saved.</p>" +
-    // "<p style='color:white;'>To leave feedback on this task, please click the following link:</p>"+
-    // "<p style='color:white;'><a href="+feedbackLink+">Leave Task Feedback!</a></p>"+
-    // "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
-    "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
-  choices: jsPsych.NO_KEYS,
-  // on_load: function() {
-  //   alert(reward);
-  // }
-};
+let debrief_prompt = [{
+    html: debrief_text,
+    data: {
+        subj_id: subj_name,
+        test_part: 'debrief'
+    },
+}];
 
 let check_debrief_response = {
   type: 'survey-html-form',
@@ -345,5 +309,63 @@ let close_prompt = {
       saveData(subj_name, jsPsych.data.get().csv());
   }
 };
+
+
+
+// // // // jsWrapper default functions // // // //
+// let timeline = [];
+// 
+// let instructions0 = {
+//   type: "html-keyboard-response",
+//   stimulus: "<p> Hello and thank you for taking part in our experiment!</p>" +
+//     "<p>It should take about 30 minutes.</p>" +
+//     "<p> <i> Press spacebar to continue</i> </p>",
+//   choices: [32],
+//   on_finish: function (data) {
+//     data.index = 'lol';
+//   }
+// };
+// 
+// let dataSave = {
+//   type: "html-keyboard-response",
+//   stimulus: "<p style='color:white;'>Data saving...</p>" +
+//     '<div class="sk-cube-grid">' +
+//     '<div class="sk-cube sk-cube1"></div>' +
+//     '<div class="sk-cube sk-cube2"></div>' +
+//     '<div class="sk-cube sk-cube3"></div>' +
+//     '<div class="sk-cube sk-cube4"></div>' +
+//     '<div class="sk-cube sk-cube5"></div>' +
+//     '<div class="sk-cube sk-cube6"></div>' +
+//     '<div class="sk-cube sk-cube7"></div>' +
+//     '<div class="sk-cube sk-cube8"></div>' +
+//     '<div class="sk-cube sk-cube9"></div>' +
+//     '</div>' +
+//     "<p style='color:white;'>Do not close this window until the text dissapears.</p>",
+//   choices: jsPsych.NO_KEYS,
+//   trial_duration: 5000,
+//   on_finish: function () {
+//     saveData("task_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
+//     document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
+//     // returns cursor functionality
+//     $(document).ready(function () {
+//       $("body").addClass("showCursor"); // returns cursor functionality
+//       closeFullscreen(); // kill fullscreen
+//     });
+//   }
+// };
+// 
+// let end = {
+//   type: "html-keyboard-response",
+//   stimulus: "<p style='color:white;'>Thank you!</p>" +
+//     "<p style='color:white;'>You have successfully completed the experiment and your data has been saved.</p>" +
+//     // "<p style='color:white;'>To leave feedback on this task, please click the following link:</p>"+
+//     // "<p style='color:white;'><a href="+feedbackLink+">Leave Task Feedback!</a></p>"+
+//     // "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
+//     "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
+//   choices: jsPsych.NO_KEYS,
+//   // on_load: function() {
+//   //   alert(reward);
+//   // }
+// };
 
 $.getScript("exp/main.js");

@@ -12,8 +12,6 @@ let completion_code = 'lH7vUsB6qxVm';
 let shortVersion = false;
 let show_boilerplate = true;
 let forceFullscreen = true;
-let limitToDesktop = true;
-let limitToGoogle = false;
 
 function get_random_value(array) {
     return jsPsych.randomization.sampleWithoutReplacement(array, 1)[0]

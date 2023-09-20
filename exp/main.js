@@ -15,29 +15,32 @@ if (forceFullscreen){
 // }
 
 if (expt_name == 'sheep'){
-    timeline.push(instructions_sheep0);
-    timeline.push(instructions_sheep1);
-    timeline.push(instructions_sheep2);
-    timeline.push(instructions_sheep3);
-    timeline.push(blank);
-    timeline.push(show_animacy_sheep(-1, 1, "chase", true));
-    timeline.push(begin_prac_promptS);
+  timeline.push(instructions_sheep0);
+  timeline.push(instructions_sheep1);
+  timeline.push(instructions_sheep2);
+  timeline.push(instructions_sheep3);
+  timeline.push(blank);
+  timeline.push(show_animacy_sheep(-1, 1, "chase", true));
+  timeline.push(begin_prac_promptS);
   
-    trial_count = 0
-    for (i=0; i<num_practice; i++){
-      timeline.push(fixation);
-      timeline.push(show_animacy_sheep(i+90, trial_list[trial_count], condition_list[i], true));
-      trial_count = trial_count + 1;
-    }
-    
-    timeline.push(begin_expt_promptS);
-    
-    for (i=0; i<num_trials; i++){
-      timeline.push(fixation);
-      timeline.push(show_animacy_sheep(i, trial_list[trial_count], condition_list[i], false));
-      trial_count = trial_count + 1;
-    }
+  // sheep first. sheep practice trials
+  trial_count = 0
+  for (i=0; i<num_practice; i++){
+    timeline.push(fixation);
+    timeline.push(show_animacy_sheep(i+90, trial_list[trial_count], condition_list[i], true));
+    trial_count = trial_count + 1;
+  }
   
+  // sheep first. sheep test trials
+  timeline.push(begin_expt_promptS);
+    
+  for (i=0; i<num_trials; i++){
+    timeline.push(fixation);
+    timeline.push(show_animacy_sheep(i, trial_list[trial_count], condition_list[i], false));
+    trial_count = trial_count + 1;
+  }
+    
+  if (!shortVersion) {
     timeline.push(redirect_qualtrics2);
     timeline.push(begin_learning2);
     timeline.push({
@@ -46,11 +49,11 @@ if (expt_name == 'sheep'){
       button_label: 'Enter Fullscreen',
       message: "You are about to begin the final part of this experiment.<br>",
       on_finish: function (data) {
-          viewport_width = get_viewport_size().width;
-          viewport_height = get_viewport_size().height;
-          data.screen_width = viewport_width;
-          data.screen_height = viewport_height;
-          console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
+        viewport_width = get_viewport_size().width;
+        viewport_height = get_viewport_size().height;
+        data.screen_width = viewport_width;
+        data.screen_height = viewport_height;
+        console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
       }
     });
   
@@ -63,13 +66,15 @@ if (expt_name == 'sheep'){
     timeline.push(show_animacy_wolf(-1, 1, "chase", true));
     timeline.push(begin_prac_promptW);
   
+    // sheep first. wolf pratice trials
     trial_count = 0
     for (i=0; i<num_practice; i++){
       timeline.push(fixation);
       timeline.push(show_animacy_wolf(i+90, trial_list[trial_count], condition_list[i], true));
       trial_count = trial_count + 1;
     }
-    
+  
+    // sheep first. wolf test trials
     timeline.push(begin_expt_promptW);
     
     for (i=0; i<num_trials; i++){
@@ -77,30 +82,37 @@ if (expt_name == 'sheep'){
       timeline.push(show_animacy_wolf(i, trial_list[trial_count], condition_list[i], false));
       trial_count = trial_count + 1;
     }
+  }   
+
+
+
 } else if (expt_name == 'wolf'){
-    timeline.push(instructions_wolf0);
-    timeline.push(instructions_wolf1);
-    timeline.push(instructions_wolf2);
-    timeline.push(instructions_wolf3);
-    timeline.push(blank);
-    timeline.push(show_animacy_wolf(-1, 1, "chase", true));
-    timeline.push(begin_prac_promptW);
+  timeline.push(instructions_wolf0);
+  timeline.push(instructions_wolf1);
+  timeline.push(instructions_wolf2);
+  timeline.push(instructions_wolf3);
+  timeline.push(blank);
+  timeline.push(show_animacy_wolf(-1, 1, "chase", true));
+  timeline.push(begin_prac_promptW);
   
-    trial_count = 0
-    for (i=0; i<num_practice; i++){
-      timeline.push(fixation);
-      timeline.push(show_animacy_wolf(i+90, trial_list[trial_count], condition_list[i], true));
-      trial_count = trial_count + 1;
-    }
+  // wolf first. wolf pratice trials
+  trial_count = 0
+  for (i=0; i<num_practice; i++){
+    timeline.push(fixation);
+    timeline.push(show_animacy_wolf(i+90, trial_list[trial_count], condition_list[i], true));
+    trial_count = trial_count + 1;
+  }
     
-    timeline.push(begin_expt_promptW);
-    
-    for (i=0; i<num_trials; i++){
-      timeline.push(fixation);
-      timeline.push(show_animacy_wolf(i, trial_list[trial_count], condition_list[i], false));
-      trial_count = trial_count + 1;
-    }
+  // wolf first. wolf test trials
+  timeline.push(begin_expt_promptW);
+   
+  for (i=0; i<num_trials; i++){
+    timeline.push(fixation);
+    timeline.push(show_animacy_wolf(i, trial_list[trial_count], condition_list[i], false));
+    trial_count = trial_count + 1;
+  }
   
+  if (!shortVersion) {
     timeline.push(redirect_qualtrics2);
     timeline.push(begin_learning2);
     timeline.push({
@@ -109,11 +121,11 @@ if (expt_name == 'sheep'){
       button_label: 'Enter Fullscreen',
       message: "You are about to begin the final part of this experiment.<br>",
       on_finish: function (data) {
-          viewport_width = get_viewport_size().width;
-          viewport_height = get_viewport_size().height;
-          data.screen_width = viewport_width;
-          data.screen_height = viewport_height;
-          console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
+        viewport_width = get_viewport_size().width;
+        viewport_height = get_viewport_size().height;
+        data.screen_width = viewport_width;
+        data.screen_height = viewport_height;
+        console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
       }
     });
   
@@ -126,6 +138,7 @@ if (expt_name == 'sheep'){
     timeline.push(show_animacy_sheep(-1, 1, "chase", true));
     timeline.push(begin_prac_promptS);
   
+    // wolf first. sheep test trials
     trial_count = 0
     for (i=0; i<num_practice; i++){
       timeline.push(fixation);
@@ -133,6 +146,7 @@ if (expt_name == 'sheep'){
       trial_count = trial_count + 1;
     }
     
+    // wolf first. sheep test trials
     timeline.push(begin_expt_promptS);
     
     for (i=0; i<num_trials; i++){
@@ -140,6 +154,7 @@ if (expt_name == 'sheep'){
       timeline.push(show_animacy_sheep(i, trial_list[trial_count], condition_list[i], false));
       trial_count = trial_count + 1;
     }
+  }
 }
 
 // DEBRIEFING SECTION
