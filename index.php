@@ -26,6 +26,7 @@ require_once 'db/config.php';
   <script type="text/javascript" src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
   <!-- these are the plug ins required in joanPerceivedAnimacy -->
   <script type="text/javascript" src="jsPsych/plugins/jspsych-fullscreen.js"></script>
+  <script type="text/javascript" src="jsPsych/plugins/jspsych-survey-html-form.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-keyboard-response.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/joan/jo-html-button-response.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/joan/jo-show-animacy-sheep.js"></script>
@@ -71,32 +72,28 @@ require_once 'db/config.php';
 </head>
 
 <body id='unload' onbeforeunload="return areYouSure()">
-  <?php
-  if ($turkprime_online == true) {
-    switch ($language) {
-      case 'english':
-        include_once "include/consent/english.php";
-        break;
 
-      case 'french':
-        include_once "include/consent/french.php";
-        break;
 
-      case 'german':
-        include_once "include/consent/german.php";
-        break;
+<?php
+    if (isset($_GET["workerId"])) {
+      switch ($language) {
+        case 'english':
+          include_once "include/consent/english.php";
+          break;
+  
+        case 'french':
+          include_once "include/consent/french.php";
+          break;
+  
+        case 'german':
+          include_once "include/consent/german.php";
+          break;
+      }
+    } else if (isset($_GET["src_subject_id"])) {
+      include_once "include/nda.php";
+    } else {
+      include_once "include/intake.php";
     }
-    // echo'<br>';
-    // echo'connected';
-  } else if ($db_connection_status == true) {
-    include_once "include/nda.php";
-    // echo'<br>';
-    // echo'connected';
-  } else if ($db_connection_status == false) {
-    include_once "include/intake.php";
-    // echo'<br>';
-    // echo'not connected';
-  }
   ?>
 </body>
 <footer>

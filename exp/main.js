@@ -6,13 +6,11 @@
 
 
 // // // // Joan's code functions // // // //
-if (forceFullscreen){
-    timeline.push(FullScreenWarning);
-}
-// if (show_boilerplate) {
-//     timeline.push(consent);
-//     timeline.push(welcome_prompt);
+// if (forceFullscreen){
+//     timeline.push(FullScreenWarning);
 // }
+
+timeline.push(welcome_prompt);
 
 if (expt_name == 'sheep'){
   timeline.push(instructions_sheep0);
@@ -171,7 +169,7 @@ timeline.push({
       console.log("ID", subj_name, "W", viewport_width, "H", viewport_height)
   }
 });
-timeline.push(check_debrief_response);
+// timeline.push(check_debrief_response); // questionnaire we do not want it.
 timeline.push(get_code_prompt);
 timeline.push(show_code_prompt);
 timeline.push(close_prompt);
