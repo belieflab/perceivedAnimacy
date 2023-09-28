@@ -29,9 +29,15 @@
     }
     // Take the user to a random URL, selected from the pool below 
     var links = [];
-    var usernameFromParamString = getParamFromURL('workerId');
+    const workerIdFromParamString = getParamFromURL('workerId');
+    const prolificPidFromParamString = getParamFromURL('PROLIFIC_PID');
 
-    links[0] = "index.php" + "?workerId=" + usernameFromParamString; // Expt 1: Paranoia Reversals 11-30-2017
+    if (workerIdFromParamString) {
+      links[0] = "index.php" + "?workerId=" + workerIdFromParamString; // Expt 1: Paranoia Reversals 11-30-2017
+    }
+    if (prolificPidFromParamString) {
+      links[0] = "index.php" + "?PROLIFIC_PID=" + prolificPidFromParamString; // Expt 1: Paranoia Reversals 11-30-2017
+    }
 
 
 

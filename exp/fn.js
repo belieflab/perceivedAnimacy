@@ -40,6 +40,7 @@ function getParameterByName(name, url = window.location.href) {
 // // // // jsWrapper default functions // // // //
 /* start the experiment */
 function startExperiment() {
+  openFullscreen();
   jsPsych.init({
     timeline: timeline,
     show_progress_bar: true,

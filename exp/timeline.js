@@ -266,7 +266,7 @@ let get_code_prompt = {
 let show_code_prompt = {
   type: 'html-keyboard-response',
   choices: ['space'],
-  stimulus: '<p>Here is your completion code:</p><p style="font-size: 140%; color: grey"><strong>' + completion_code +
+  stimulus: '<p>Here is your completion code, copy it because the platorm will need it later:</p><p style="font-size: 140%; color: white"><strong>' + completion_code + 
       '</strong></p>' + '<p>Press the spacebar to continue.</p>',
   data: {
       subj_id: subj_name,

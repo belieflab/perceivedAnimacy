@@ -71,9 +71,9 @@ var redirect_qualtrics2 = {
     wait_duration: 0,
     choices: ['space'],
     on_start: function(trial){
-      workerId = getParameterByName("PROLIFIC_PID");
+      workerId = getParameterByName("workerId");
       if (workerId!=""){
-        trial.stimulus="You are now halfway through the experiment!  You will now complete several surveys before continuing with this experiment.  By clicking the link below, you will be redirected to a Qualtrics page. Please complete all the questions there in order to obtain the code that will allow you to continue.<p><a href='https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3rtAPMG3HZkxXee?PROLIFIC_PID=" + workerId + "' target='_blank'>CLICK HERE</a>";
+        trial.stimulus="You are now halfway through the experiment!  You will now complete several surveys before continuing with this experiment.  By clicking the link below, you will be redirected to a Qualtrics page. Please complete all the questions there in order to obtain the code that will allow you to continue.<p><a href='https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3rtAPMG3HZkxXee?workerId=" + workerId + "' target='_blank'>CLICK HERE</a>";
       }
       let interaction_filename = 'interactions_' + subj_name;
       saveData(interaction_filename, jsPsych.data.getInteractionData().csv());
