@@ -141,6 +141,8 @@ let show_animacy_sheep = function(trial_num, trial_id, condition, feedback){
     condition: condition,
     give_feedback: feedback,
     data: {
+        version: "sheep-and-wolf",
+        interview_date: today,
         subj_id: subj_name,
         test_part: 'show_animacy',
         trial_num: trial_num
@@ -160,6 +162,8 @@ let show_animacy_wolf = function(trial_num, trial_id, condition, feedback){
     condition: condition,
     give_feedback: feedback,
     data: {
+        version: "sheep-and-wolf",
+        interview_date: today,
         subj_id: subj_name,
         test_part: 'show_animacy',
         trial_num: trial_num
@@ -242,10 +246,14 @@ let check_debrief_response = {
       data.resp_problems = respObj["problems"];
       data.resp_final = respObj["addl"];
       data.resp_attention = respObj["attn"];
+      // data.interview_date = today;
+      // data.workerId = workerId;
+      // data.version = "sheep-and-wolf";
       let interaction_data = jsPsych.data.getInteractionData();
       let interaction_filename = 'interactions_' + subj_name;
       saveData(interaction_filename, jsPsych.data.getInteractionData().csv());
       saveData(subj_name, jsPsych.data.get().csv());
+
   },
   timeline: debrief_prompt
 };
@@ -283,6 +291,9 @@ let close_prompt = {
       test_part: 'instruct_prompt'
   },
   on_finish: function (data) {
+      // data.interview_date = today;
+      // data.workerId = workerId;
+      // data.version = "sheep-and-wolf";
       let interaction_data = jsPsych.data.getInteractionData();
       let interaction_filename = 'interactions_' + subj_name;
       saveData(interaction_filename, jsPsych.data.getInteractionData().csv());
