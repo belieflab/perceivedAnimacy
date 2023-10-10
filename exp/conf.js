@@ -5,7 +5,7 @@
 // // // // jsWrapper default functions // // // //
 let workerId = getParamFromURL('workerId');
 
-const numberTrialsTest = 50;
+const numberTrialsTest = 35;
 const numberTrialsPractice = 5;
 
 
