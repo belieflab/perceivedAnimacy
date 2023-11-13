@@ -65,7 +65,7 @@ let fixation = {
 
 let trial = {
   type: "video-keyboard-response",
-  // sources: ["stim/mirror_chasing/trial10.mp4"],
+  // sources: ["stim/mirrorChasing/trial10mod.mp4"],
   sources: jsPsych.timelineVariable("stimulus"),
   data: jsPsych.timelineVariable("data"),
   choices: [70, 74],
@@ -75,6 +75,7 @@ let trial = {
   on_finish: function (data) {
     data.index = trialIterator;
     data.workerId = workerId;
+    data.interview_date = today;
     // trialIterator ++;
     // data.version = version;
     let response = data.key_press;
