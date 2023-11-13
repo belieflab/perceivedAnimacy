@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Bistable Perception</title>
+  <title>Chase Detection Task</title>
   <script>
     //onbeforeunload in body
     function areYouSure() {

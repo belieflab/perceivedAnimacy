@@ -7,7 +7,7 @@ require_once 'db/config.php';
 <html>
 
 <head>
-  <title>jsPsych Template</title>
+  <title>Chase Detection Task</title>
   <script>
     //onbeforeunload in body
     function areYouSure() {
@@ -93,7 +93,7 @@ require_once 'db/config.php';
       sexAtBirth = "";
       siteNumber = "";
       ageAtAssessment = "";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?workerId=<?php echo $workerId?>";
+      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?workerId=<?php echo $workerId?>";
       visit = "";
       week = "";
     } else {
@@ -103,7 +103,7 @@ require_once 'db/config.php';
         sexAtBirth = "";
         siteNumber = "";
         ageAtAssessment = "";
-        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
+        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
         visit = "";
         week = "";
       } else if (db_connection == true) {
@@ -117,7 +117,7 @@ require_once 'db/config.php';
         groupStatus = "<?php echo $groupStatus ?>";
         visit = "<?php echo $visit ?>";
         week = "<?php echo $week ?>";
-        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
+        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
       }
     }
 
@@ -132,7 +132,7 @@ require_once 'db/config.php';
       feedbackLink = "";
       visit = "";
       week = "";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
+      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
     } else if (db_connection === true) {
       GUID = "<?php echo $subjectKey ?>";
       workerId = "<?php echo $consortId ?>"; // this is necessary so that the data save with the correct id
@@ -142,8 +142,7 @@ require_once 'db/config.php';
       ageAtAssessment = "<?php echo $ageInMonths ?>";
       visit = "<?php echo $visit ?>";
       week = "<?php echo $week ?>";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_3kfXLz58dAKGRJs?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
-
+      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
     }
   </script>
 </footer>

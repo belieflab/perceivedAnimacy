@@ -12,5 +12,5 @@
 
   // number of trials per trial type, e.g., 100 will be a total of 200 (100 chase and 100 mirror)
   // practice trials always have feedback, test trials do not.
-  const numberTestTrials = 94; // 94 is default value
-  const numberPracticeTrials = 6; // 6 is default value
+  const numberTestTrials = 1; // 94 is default value
+  const numberPracticeTrials = 1; // 6 is default value

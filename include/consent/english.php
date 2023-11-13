@@ -20,7 +20,7 @@
       
  </h2>
     <p id="consentInstructions" class="consent" style="color: black">
-      <b>Study Title:</b> Beliefs and Personality Traits
+      <b>Study Title:</b> Chasing Detection Task
       <br><br>
       <b>Principal Investigator:</b> Philip R. Corlett, PhD
       <br><br>
@@ -34,7 +34,7 @@
       <br>
       If you agree to participate in this study, this Human Intelligence Task (HIT) will require you to (1) play a computer game using the computer mouse or keys on your keyboard and (2) answer simple questions about your demographics, health (including mental health), beliefs, and personality through an interactive web survey. You will never be asked for personally identifiable information such as your name, address, or date of birth. 
       <br>
-      The experiment is designed to take approximately 1 hour. You will have up to six hours to complete the experiment and submit codes for credit. 
+      The experiment is designed to take approximately 30 mins. You will have up to six hours to complete the experiment and submit codes for credit. 
       <br><br>
       <u><b>Risks and Inconveniences</b></u>
       <br>
@@ -42,7 +42,7 @@
       <br><br>
       <u><b>Economic Considerations</b></u>
       <br>
-      You will receive the reward specified on the Mechanical-Turk HIT for completing both the game and the questionnaire. Payment for completion of the HIT is $6.00 with a $2.00 bonus to individuals who score in the top 25% on the card game. Upon finishing the game and submitting the questionnaire, you will receive code numbers. Please record these two code numbers and submit them for payment. 
+      You will receive the reward specified on the Mechanical-Turk HIT for completing both the game and the questionnaire. Payment for completion of the HIT is $6.00 USD. Upon finishing the game and submitting the questionnaire, you will receive a completion code number. Please record this completion code and submit it for payment.
       <br><br>
       <u><b>Confidentiality</b></u>
       <br>

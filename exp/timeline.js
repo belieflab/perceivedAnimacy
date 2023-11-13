@@ -21,25 +21,34 @@ let instructions2 = {
   stimulus: '<p style="font-size:26px;"> Chasing Detection Task </p>' +
     '<p style="font-size:22px;"> In this task, you will see a series of displays containing several moving white discs. </p>' +
     '<p style="font-size:22px;"> Half of the displays will be <i>Chasing</i> displays, in which one disc will <i>chase</i> another disc by following it around the screen. </p>' +
-    '<p style="font-size:22px;"> The other half of the displays will be <i>No Chasing</i> displays, in which there is <i>no chasing</i>. </p>' +
+    '<p style="font-size:22px;"> The other half of the displays will be <i>No Chasing</i> displays, in which there is <i>no chasing</i> disc. </p>' +
     '<p style="font-size:22px;"> Your job is to detect if there is a <i>chase</i> or not on each display. </p>' +
     '<p style="font-size:22px;"> For each display, please report as accurately as possible whether you saw a <i>chase</i>. </p>' +
-    '<p style="font-size:22px;"> Chasing: Press "1" </p>' +
-    '<p style="font-size:22px;"> No Chasing: Press "0" </p>' +
+    '<p style="font-size:22px;"> Chasing: Press "J" </p>' +
+    '<p style="font-size:22px;"> No Chasing: Press "F" </p>' +
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
   choices: [32],
 };
 
 let instructions3 = {
   type: "html-keyboard-response",
-  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. Take your time to be as accurate as possible. </p>' + 
-    '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 12 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
-    '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 188 displays, and no feedback will be provided. </p>' + 
+  stimulus: '<p style="font-size:26px;"> Chasing Detection Task </p>' +
+    '<p style="font-size:22px;"> After detecting a chase ("J") or not detecting it ("F"), you will be asked how confident you were with your choice. </p>' + 
+    '<p style="font-size:22px;"> Press 1, 2, 3, 4, or 5 on your keyboard to rate your confidence level, where 1 is not confident at all and 5 is very confident. </p>' + 
+    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
+  choices: [32],
+};
+
+let instructions4 = {
+  type: "html-keyboard-response",
+  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end and you will be ask about your confidence. Take your time to be as accurate as possible. </p>' + 
+    '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 20 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
+    '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 180 displays, and no feedback will be provided. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
     choices: [32],
 };
 
-let instructions4 = {
+let instructions5 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
     '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes completing the study and responding the questionnaires then: </p>' +
@@ -56,24 +65,24 @@ let fixation = {
 
 let trial = {
   type: "video-keyboard-response",
-  // sources: ["stim/mirrorChasing/trial10.mp4"],
+  // sources: ["stim/mirror_chasing/trial10.mp4"],
   sources: jsPsych.timelineVariable("stimulus"),
   data: jsPsych.timelineVariable("data"),
-  choices: [48, 49],
+  choices: [70, 74],
   // response_allowed_while_playing: false, // for Josh 31/05/2022
   trial_ends_after_video: false,
   response_ends_trial: true,
   on_finish: function (data) {
     data.index = trialIterator;
     data.workerId = workerId;
-    trialIterator ++;
+    // trialIterator ++;
     // data.version = version;
     let response = data.key_press;
     // console.log(response);
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
     // console.log(trialType);
     switch (response) {
-      case 48: 
+      case 70: 
         if (trialType == "chase") {
           data.response = "incorrect";
         } else if (trialType == "no_chase") {
@@ -81,7 +90,7 @@ let trial = {
         } 
         break;
 
-      case 49:
+      case 74:
         if (trialType == "chase") {
           data.response = "correct";
         } else if (trialType == "no_chase") {
@@ -103,7 +112,7 @@ let feedback = {
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
     // console.log(trialType);
     switch (response) {
-      case 48: 
+      case 70: 
         if (trialType == "chase") {
           document.getElementById("feedback").innerHTML = "incorrect";
         } else if (trialType == "no_chase") {
@@ -111,7 +120,7 @@ let feedback = {
         } 
         break;
 
-      case 49:
+      case 74:
         if (trialType == "chase") {
           document.getElementById("feedback").innerHTML = "correct";
         } else if (trialType == "no_chase") {
@@ -120,16 +129,47 @@ let feedback = {
         break;
     }
   },
+};
 
+let confidence = {
+  type: "html-keyboard-response",
+  stimulus: '<div style="font-size:24px; color:white;">How confident are you? (from 1 to 5)</div>'+ 
+  '<p style="font-size:24px;"> <i> 1 = Not confident at all, 5 = Very confident. </i> </p>',
+  data: jsPsych.timelineVariable("data"),
+  choices: [49, 50, 51, 52, 53],
+  on_finish: function (data) {
+    data.index = trialIterator;
+    data.workerId = workerId;
+    data.interview_date = today;
+    trialIterator ++;
+    let response = data.key_press;
+    switch (response) {
+      case 49:
+        data.confidence = "1";
+      break;
+      case 50: 
+        data.confidence = "2";
+      break;
+      case 51: 
+        data.confidence = "3";
+      break;
+      case 52: 
+        data.confidence = "4";
+      break;
+      case 53: 
+        data.confidence = "5";
+      break;
+    }
+  }
 };
 
 let procedurePractice = {
-  timeline: [fixation, trial, feedback],
+  timeline: [fixation, trial, feedback, confidence],
   timeline_variables: randomizedPracticeTrials,
-  choices: [48, 49],
+  // choices: [48, 49],
 };
 
-let instructions5 = {
+let instructions6 = {
   type: "html-keyboard-response",
   stimulus: '<p style="font-size:26px;"> The practice trials are now over, and the next trials are real. </p>' +
     '<p style="font-size:22px;"> In the next set of testing trials you will not have feedback. </p>' +
@@ -139,9 +179,9 @@ let instructions5 = {
 };
 
 let procedureTest = {
-  timeline: [fixation, trial],
+  timeline: [fixation, trial, confidence],
   timeline_variables: randomizedTestTrials,
-  choices: [48, 49],
+  // choices: [48, 49],
 };
 
 let dataSave = {
@@ -162,7 +202,7 @@ let dataSave = {
   choices: jsPsych.NO_KEYS,
   trial_duration: 5000,
   on_finish: function () {
-    saveData("animacy_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
+    saveData("animacyConfidence_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
     document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
     // returns cursor functionality
     $(document).ready(function () {
@@ -184,7 +224,5 @@ let end = {
   // alert(reward);
   // }
 };
-
-
 
 $.getScript("exp/main.js");

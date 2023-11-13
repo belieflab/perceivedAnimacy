@@ -3,11 +3,11 @@ cd 'C:\xampp\htdocs\perceivedAnimacy\stim'
 
 % create last black frame in RGB (0,0,0) is black
 % black = repmat(0,[720 1152 3]);
-black = imread('lastFrame3.png');
+black = imread('lastFrame.jpg');
 
 % loop for chasing
 for v = 1:300 
-    reader = VideoReader(['van_Buren_stimuli\chasing_detection_stimuli\chasing\trial' ...
+    reader = VideoReader(['chasing\trial' ...
         num2str(v) '.mp4']);
     writer = VideoWriter(['chasing2\trial' num2str(v) 'mod.mp4'], ...
         'MPEG-4');
@@ -32,9 +32,9 @@ end
 
 % loop for mirror chasing
 for v = 1:300 
-    reader = VideoReader(['van_Buren_stimuli\chasing_detection_stimuli\mirror_chasing\trial' ...
+    reader = VideoReader(['mirror_chasing\trial' ...
         num2str(v) '.mp4']);
-    writer = VideoWriter(['mirrorChasing2\trial' num2str(v) 'mod.mp4'], ...
+    writer = VideoWriter(['mirror_chasing2\trial' num2str(v) 'mod.mp4'], ...
         'MPEG-4');
     writer.FrameRate = reader.FrameRate;
     
