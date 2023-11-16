@@ -1,46 +1,40 @@
+<?php
+require_once 'exp/conf.php';
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Chase Detection Task</title>
-  <script>
-    //onbeforeunload in body
-    function areYouSure() {
-      return "Write something clever here...";
-    }
-    areYouSure();
-  </script>
-
+  <title><?php echo $experimentName; ?></title>
 </head>
 
 <body id='unload' onbeforeunload="return areYouSure()">
 
 
-  <script>
-    function getParamFromURL(name) {
-      name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-      var regexS = "[\?&]" + name + "=([^&#]*)";
-      var regex = new RegExp(regexS);
-      var results = regex.exec(window.location.href);
-      if (results == null)
-        return "";
-      else
-        return results[1];
-    }
-    // Take the user to a random URL, selected from the pool below 
-    var links = [];
-    var usernameFromParamString = getParamFromURL('workerId');
+<?php
 
-    links[0] = "index.php" + "?workerId=" + usernameFromParamString; // Expt 1: Paranoia Reversals 11-30-2017
+// Get the params from the URL
+$workerId = $_GET['workerId'];
+$PROLIFIC_PID = $_GET['PROLIFIC_PID'];
 
+if ($workerId) {
+    // Redirect to index.php with the workerId parameter
+    header("Location: index.php?workerId=$workerId");
+    exit; // Make sure to exit after the header redirect
+} else if ($PROLIFIC_PID) {
+    // Redirect to index.php with the workerId parameter
+    header("Location: index.php?PROLIFIC_PID=$PROLIFIC_PID");
+    exit; // Make sure to exit after the header redirect
+} else {
+    // Redirect to index.php with the workerId parameter
+    echo"<h1>Ah! Ah! Ah!<h1>";
+    echo"<h1>You didn't say the magic word!<h1/>";
+    echo"<img src='magicword.gif'>";
+    exit; // Make sure to exit after the header redirect
+}
 
-
-    function randomizeURL(linkArray) {
-      window.location = linkArray[Math.floor(Math.random() * linkArray.length)];
-    }
-
-    randomizeURL(links);
-  </script>
+?>
 
 </body>
 

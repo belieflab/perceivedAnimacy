@@ -60,7 +60,7 @@ let fixation = {
   type: "html-keyboard-response",
   stimulus: '<div style="font-size:60px; color:white;">+</div>',
   choices: jsPsych.NO_KEYS,
-  trial_duration: 1000
+  trial_duration: 500
 };
 
 let trial = {
@@ -74,14 +74,12 @@ let trial = {
   response_ends_trial: true,
   on_finish: function (data) {
     data.index = trialIterator;
-    data.workerId = workerId;
+    data.subjectId = subjectId;
     data.interview_date = today;
     // trialIterator ++;
     // data.version = version;
     let response = data.key_press;
-    // console.log(response);
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
-    // console.log(trialType);
     switch (response) {
       case 70: 
         if (trialType == "chase") {
@@ -109,9 +107,7 @@ let feedback = {
   trial_duration: feedbackDuration,
   on_load: function (data) {
     let response = jsPsych.data.get().last(1).values()[0].key_press;
-    // console.log(response);
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
-    // console.log(trialType);
     switch (response) {
       case 70: 
         if (trialType == "chase") {
@@ -140,7 +136,7 @@ let confidence = {
   choices: [49, 50, 51, 52, 53],
   on_finish: function (data) {
     data.index = trialIterator;
-    data.workerId = workerId;
+    data.subjectId = subjectId;
     data.interview_date = today;
     trialIterator ++;
     let response = data.key_press;
@@ -203,7 +199,7 @@ let dataSave = {
   choices: jsPsych.NO_KEYS,
   trial_duration: 5000,
   on_finish: function () {
-    saveData("animacyConfidence_" + workerId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
+    saveData("animacyConfidence_" + subjectId, jsPsych.data.get().csv()); //function with file name and which type of file as the 2 arguments
     document.getElementById("unload").onbeforeunload = ''; //removes popup (are you sure you want to exit) since data is saved now
     // returns cursor functionality
     $(document).ready(function () {
@@ -217,7 +213,7 @@ let end = {
   stimulus: "<p style='color:white;'>Thank you!</p>" +
     "<p style='color:white;'>You have successfully completed the experiment and your data has been saved.</p>" +
     "<p style='color:white;'>To proceed to the next section of this experiment, please click the following link:</p>" +
-    "<p style='color:white;'><a href="+ feedbackLink +">Continue to questionnaires!</a></p>",
+    "<p style='color:white;'><a href=" + feedbackLink + ">Continue to questionnaires!</a></p>",
     // "<p style='color:white;'>Please wait for the experimenter to continue.</p>"+
     // "<p style='color:white;'><i>You may now close the expriment window at anytime.</i></p>",
   choices: jsPsych.NO_KEYS,

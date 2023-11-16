@@ -1,13 +1,14 @@
 <?php
 require_once 'db/data.php';
-require_once 'db/config.php';
+require_once 'exp/conf.php';
 ?>
 
 <!DOCTYPE html>
 <html>
 
 <head>
-  <title>Chase Detection Task</title>
+  <!-- add the title of the experiment that would be seen in the browser -->
+  <title><?php echo $experimentName; ?></title>
   <script>
     //onbeforeunload in body
     function areYouSure() {
@@ -17,12 +18,14 @@ require_once 'db/config.php';
   </script>
   <!-- set js language variable from php variable in config.php -->
   <script>
-    const language = "<?php echo $language ?>";
+    const language = "<?php echo $language; ?>";
   </script>
   <script type="text/javascript" src="db/validate.js"></script>
   <script type="text/javascript" src="jQuery/jquery-3.5.1.min.js"></script>
+  <!-- add plugins that you need for your experiment -->
   <script type="text/javascript" src="jsPsych/jspsych.js"></script>
   <script type="text/javascript" src="jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
+  <!-- <script type="text/javascript" src="jsPsych/plugins/jspsych-image-keyboard-response.js"></script> -->
   <script type="text/javascript" src="jsPsych/plugins/jspsych-video-keyboard-response.js"></script>
   <link href="jsPsych/css/jspsych.css" rel="stylesheet" type="text/css">
   </link>
@@ -30,39 +33,33 @@ require_once 'db/config.php';
 </head>
 
 <body id='unload' onbeforeunload="return areYouSure()">
-  <?php
-  if ($turkprime_online == true) {
-    switch ($language) {
-      case 'english':
-        include_once "include/consent/english.php";
-        break;
-
-      case 'french':
-        include_once "include/consent/french.php";
-        break;
-
-      case 'german':
-        include_once "include/consent/german.php";
-        break;
+<?php
+    if (isset($_GET["workerId"]) || isset($_GET["PROLIFIC_PID"])) {
+      switch ($language) {
+        case 'english':
+          include_once "include/consent/english.php";
+          break;
+  
+        case 'french':
+          include_once "include/consent/french.php";
+          break;
+  
+        case 'german':
+          include_once "include/consent/german.php";
+          break;
+        }
+    } else if ($_GET["src_subject_id"]) {
+      include_once "include/nda.php";
+    } else {
+      include_once "include/intake.php";
     }
-    // echo'<br>';
-    // echo'connected';
-  } else if ($db_connection_status == true) {
-    include_once "include/nda.php";
-    // echo'<br>';
-    // echo'connected';
-  } else if ($db_connection_status == false) {
-    include_once "include/intake.php";
-    // echo'<br>';
-    // echo'not connected';
-  }
   ?>
 </body>
 <footer>
   <script type="text/javascript" src="exp/fn.js"></script>
   <script type="text/javascript" src="exp/conf.js"></script>
-  <script type="text/javascript" src="exp/var.js"></script>
   <script type="text/javascript" src="exp/lang.js"></script>
+  <script type="text/javascript" src="exp/var.js"></script>
   <script>
     // show page when loaded 
     window.onload = function() {
@@ -76,74 +73,6 @@ require_once 'db/config.php';
         display: "block"
       });
     };
-  </script>
-  <script type="text/javascript">
-    // declare NDA required variables
-    // let GUID;
-    // let subjectID;
-    // let sexAtBirth;
-    // let siteNumber;
-    // let ageAtAssessment;
-    // let feedbackLink;
-    // let visit;
-    // let week;
-    if (workerId != "") {
-      GUID = "";
-      subjectID = "";
-      sexAtBirth = "";
-      siteNumber = "";
-      ageAtAssessment = "";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?workerId=<?php echo $workerId?>";
-      visit = "";
-      week = "";
-    } else {
-      if (db_connection == false) {
-        GUID = "";
-        subjectID = "";
-        sexAtBirth = "";
-        siteNumber = "";
-        ageAtAssessment = "";
-        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
-        visit = "";
-        week = "";
-      } else if (db_connection == true) {
-        GUID = "<?php echo $subjectKey ?>";
-        subjectID = "<?php echo $consortId ?>";
-        workerId = "<?php echo $consortId ?>";
-        labId = "<?php echo $labId ?>";
-        sexAtBirth = "<?php echo $sexAtBirth ?>";
-        siteNumber = "<?php echo $institutionAlias ?>";
-        ageAtAssessment = "<?php echo $ageInMonths ?>";
-        groupStatus = "<?php echo $groupStatus ?>";
-        visit = "<?php echo $visit ?>";
-        week = "<?php echo $week ?>";
-        feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
-      }
-    }
-
-    if (turkprime_online === true) {
-
-    } else if (db_connection === false) {
-      GUID = "";
-      subjectID = "";
-      sexAtBirth = "";
-      siteNumber = "";
-      ageAtAssessment = "";
-      feedbackLink = "";
-      visit = "";
-      week = "";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
-    } else if (db_connection === true) {
-      GUID = "<?php echo $subjectKey ?>";
-      workerId = "<?php echo $consortId ?>"; // this is necessary so that the data save with the correct id
-      subjectID = "<?php echo $consortId ?>";
-      sexAtBirth = "<?php echo $sexAtBirth ?>";
-      siteNumber = "<?php echo $institutionAlias ?>";
-      ageAtAssessment = "<?php echo $ageInMonths ?>";
-      visit = "<?php echo $visit ?>";
-      week = "<?php echo $week ?>";
-      feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?interview_age=<?php echo $ageInMonths ?>&src_subject_id=<?php echo $consortId ?>&study_id=<?php echo $labId ?>&subjectkey=<?php echo $subjectKey ?>&site=<?php echo $institutionAlias ?>&sex=<?php echo $sexAtBirth ?>&phenotype=<?php echo $groupStatus ?>&candidateId=<?php echo $candidateId ?>&visit=<?php echo $visit ?>";
-    }
   </script>
 </footer>
 

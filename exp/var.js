@@ -2,7 +2,6 @@
 let trialIterator = 1;
 let feedbackGenerator = '<div id="feedback" style="font-size:60px; color:white;">lol</div>';
 
-
 //// (1) create a random sample sized numberTestTrials from numbers between 1 and 300
 // array from 1 to 300 by 1
 let posibleTrials = Array(300).fill().map((element, index) => index + 1);
