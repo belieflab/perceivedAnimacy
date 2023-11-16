@@ -10,7 +10,7 @@ const experimentAlias = "animacyConfidence";
 const workerId = getParamFromURL('workerId');
 if (workerId != "") {
   var subjectId = workerId;
-  var feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?workerId=<?php echo $workerId?>";
+  var feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?workerId=" + subjectId;
 }
 const PROLIFIC_PID = getParamFromURL('PROLIFIC_PID');
 if (PROLIFIC_PID != "") {
