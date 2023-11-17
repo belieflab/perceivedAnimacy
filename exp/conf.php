@@ -56,14 +56,14 @@ function get_current_git_commit( $branch='master' ) {
 }
 ?>
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
   const experimentName = "<?php echo $experimentName; ?>";
   const experimentAlias = "<?php echo $experimentAlias; ?>";
-  const workerId = "<?php echo $workserId; ?>";
+  const workerId = "<?php echo $workerId; ?>";
   const PROLIFIC_PID = "<?php echo $PROLIFIC_PID; ?>";
   let src_subject_id = "<?php echo $src_subject_id; ?>";
   let subjectId = "<?php echo $subjectId; ?>";
   const language = "<?php echo $language; ?>";
   const adminEmail = "joshua.kenney@yale.edu";
   const feedbackLink = "https://belieflab.yale.edu/omnibus/eCRFs/feedback/tasks/kamin.php?candidateId=<?php echo $candidateId?>&studyId=<?php echo $studyId?>";
-</script>
+</script> -->
