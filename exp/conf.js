@@ -5,6 +5,7 @@
 // SET EXPERIMENT NAME
 const experimentName = "Chase Detection Task";
 const experimentAlias = "animacyConfidence";
+const version = "chase-confidence";
 
 // SET SUBJECT IDENTIFICATION
 const workerId = getParamFromURL('workerId');

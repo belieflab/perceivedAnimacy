@@ -26,34 +26,17 @@ let instructions2 = {
     '<p style="font-size:22px;"> For each display, please report as accurately as possible whether you saw a <i>chase</i>. </p>' +
     '<p style="font-size:22px;"> Chasing: Press "J" </p>' +
     '<p style="font-size:22px;"> No Chasing: Press "F" </p>' +
-    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
-  choices: [32],
+    '<p style="font-size:24px;"> <i> Press the J key to continue. </i> </p>',
+  choices: [74],
 };
 
 let instructions3 = {
   type: "html-keyboard-response",
-  stimulus: '<p style="font-size:26px;"> Chasing Detection Task </p>' +
-    '<p style="font-size:22px;"> After detecting a chase ("J") or not detecting it ("F"), you will be asked how confident you were with your choice. </p>' + 
-    '<p style="font-size:22px;"> Press 1, 2, 3, 4, or 5 on your keyboard to rate your confidence level, where 1 is not confident at all and 5 is very confident. </p>' + 
-    '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
-  choices: [32],
-};
-
-let instructions4 = {
-  type: "html-keyboard-response",
-  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end and you will be ask about your confidence. Take your time to be as accurate as possible. </p>' + 
+  stimulus: '<p style="font-size:22px;"> If you make a choice before the end of a display, the display will end. Take your time to be as accurate as possible. </p>' + 
     '<p style="font-size:22px;"> The first part of the Chasing Detection Task is a practice block. Here you will see 20 displays and feedback will be provided (you will see a "correct" or an "incorrect" word on the screen). </p>' + 
-    '<p style="font-size:22px;"> The second part of the task is the testing block. You will see 180 displays, and no feedback will be provided. </p>' + 
+    '<p style="font-size:22px;"> The second part of the task is the testing block, where you will see 180 displays with no feedback. </p>' + 
     '<p style="font-size:24px;"> <i> Press the spacebar to continue. </i> </p>',
     choices: [32],
-};
-
-let instructions5 = {
-  type: "html-keyboard-response",
-  stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
-    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes completing the study and responding the questionnaires then: </p>' +
-    '<p style="font-size:24px;"> <i> Press the spacebar to start. </i> </p>',
-  choices: [32],
 };
 
 let fixation = {
@@ -77,7 +60,7 @@ let trial = {
     data.subjectId = subjectId;
     data.interview_date = today;
     // trialIterator ++;
-    // data.version = version;
+    data.version = version;
     let response = data.key_press;
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
     switch (response) {
@@ -106,6 +89,7 @@ let feedback = {
   choices: jsPsych.NO_KEYS,
   trial_duration: feedbackDuration,
   on_load: function (data) {
+    trialIterator ++;
     let response = jsPsych.data.get().last(1).values()[0].key_press;
     let trialType = jsPsych.data.get().last(1).values()[0].test_part;
     switch (response) {
@@ -128,6 +112,23 @@ let feedback = {
   },
 };
 
+let instructions4 = {
+  type: "html-keyboard-response",
+  stimulus: '<p style="font-size:26px;"> Chasing Detection Task </p>' +
+    '<p style="font-size:22px;"> Well done! For the testing block, in addition to detect a chase ("J") or not detecting it ("F"), you will be asked how confident you were with your choice. </p>' + 
+    '<p style="font-size:22px;"> Press 1, 2, 3, 4, or 5 on your keyboard to rate your confidence level, where 1 is not confident at all and 5 is very confident. </p>' + 
+    '<p style="font-size:24px;"> <i> Press the number 5 to continue. </i> </p>',
+  choices: [53],
+};
+
+let instructions5 = {
+  type: "html-keyboard-response",
+  stimulus: '<p style="font-size:22px;"> Finally, after this screen you will start the task. </p>' +
+    '<p style="font-size:22px;"> If you are ready to invest the next 30 minutes completing the study and responding the questionnaires then: </p>' +
+    '<p style="font-size:24px;"> <i> Press the spacebar to start. </i> </p>',
+  choices: [32],
+};
+
 let confidence = {
   type: "html-keyboard-response",
   stimulus: '<div style="font-size:24px; color:white;">How confident are you? (from 1 to 5)</div>'+ 
@@ -139,6 +140,7 @@ let confidence = {
     data.subjectId = subjectId;
     data.interview_date = today;
     trialIterator ++;
+    data.version = version;
     let response = data.key_press;
     switch (response) {
       case 49:
@@ -161,9 +163,8 @@ let confidence = {
 };
 
 let procedurePractice = {
-  timeline: [fixation, trial, feedback, confidence],
+  timeline: [fixation, trial, feedback],
   timeline_variables: randomizedPracticeTrials,
-  // choices: [48, 49],
 };
 
 let instructions6 = {
@@ -178,7 +179,6 @@ let instructions6 = {
 let procedureTest = {
   timeline: [fixation, trial, confidence],
   timeline_variables: randomizedTestTrials,
-  // choices: [48, 49],
 };
 
 let dataSave = {
