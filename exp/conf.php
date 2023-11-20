@@ -24,6 +24,11 @@ if (isset($_GET["PROLIFIC_PID"])) {
   $subjectId = $_GET["PROLIFIC_PID"];
 }
 
+if (isset($_GET["participantId"])) {
+  $participantId = $_GET["participantId"];
+  $subjectId = $_GET["participantId"];
+}
+
 if (isset($_GET["src_subject_id"])) {
   $src_subject_id = $_GET["src_subject_id"];
   $subjectId = $_GET["src_subject_id"];

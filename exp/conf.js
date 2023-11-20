@@ -18,9 +18,14 @@ if (PROLIFIC_PID != "") {
   var subjectId = PROLIFIC_PID;
   var feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?PROLIFIC_PID=" + subjectId;
 }
+const participantId = getParamFromURL('participantId');
+if (participantId != "") {
+  var subjectId = participantId;
+  var feedbackLink = "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_9L8MEILFrNBAF5I?participantId=" + subjectId;
+}
 // note: subjectId will be your unique indentifier that will be used in .js files
 
 // // specific config parameters for perceivedAnimacy[chase-confidence]
 const feedbackDuration = 500;
 const numberTestTrials = 90; // 90 is default value
-const numberPracticeTrials = 10; // 10 is default value
+const numberPracticeTrials = 90; // 10 is default value
