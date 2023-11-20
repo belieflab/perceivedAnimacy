@@ -28,4 +28,4 @@ if (participantId != "") {
 // // specific config parameters for perceivedAnimacy[chase-confidence]
 const feedbackDuration = 500;
 const numberTestTrials = 90; // 90 is default value
-const numberPracticeTrials = 90; // 10 is default value
+const numberPracticeTrials = 10; // 10 is default value
