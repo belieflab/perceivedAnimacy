@@ -14,21 +14,22 @@ $language = 'english';
 // $language = 'german';
 
 // SET SUBJECT IDENTIFICATION
+// MTurk case
 if (isset($_GET["workerId"])) {
   $workerId = $_GET["workerId"];
   $subjectId = $_GET["workerId"];
 }
-
+// Prolific case
 if (isset($_GET["PROLIFIC_PID"])) {
   $PROLIFIC_PID = $_GET["PROLIFIC_PID"];
   $subjectId = $_GET["PROLIFIC_PID"];
 }
-
+// Connect case
 if (isset($_GET["participantId"])) {
   $participantId = $_GET["participantId"];
   $subjectId = $_GET["participantId"];
 }
-
+// NDA case
 if (isset($_GET["src_subject_id"])) {
   $src_subject_id = $_GET["src_subject_id"];
   $subjectId = $_GET["src_subject_id"];
