@@ -1,0 +1,34 @@
+
+Notes on these stimuli:
+
+- This folder contains 600 four-second mp4s for the chasing detection task described in van Buren, Gao & Scholl (2017).  
+
+- All movies feature a wolf, a sheep, and six randomly moving distractor discs. Unlike van Buren et al. (2017), there are no lines.
+
+- The chasing folder contains 300 movies in which chasing is present (the wolf chases the sheep). It also contains a text file with the coordinates of the discs on each frame of each movie: trial, frame, wolfX, wolfY, sheepX, sheepY, distractor1X, distractor1Y, distractor2X, distractor2Y�
+
+- The mirror_chasing folder contains 300 movies in which chasing is absent (the wolf chases the sheep�s invisible mirror image, reflected through the vertical midline of the display). It also contains a text file with the discs� coordinates.
+
+- If you use these stimuli, please cite Gao, Newman, & Scholl (2009) and van Buren, Gao & Scholl (2017). Feel free to share the stimuli, and to address any questions to vanburenb@gmail.com.  
+
+- I am always open to new collaborations, so let me know if you have a different experimental design in mind and would like to develop some new chasing stimuli together.
+
+SPECIFICATIONS
+
+Animation width: 80% of browser width
+Animation height: 80% of browser height
+Disc radius: 1% of browser width
+Trial duration: 4s
+
+Variables collected per trial:
+1. animation ID - which animation it was of the 300 possible animations
+2. x-position of mouse click
+3. y-position of mouse click
+4. response time - how long it took for subject to respond
+5. selected disc - whether it was the real wolf, real sheep, or one of the distractors
+
+10 practice trials - 10 chase trials - so there is always a correct answer
+100 experimental trials - 50 chase, 50 no chase
+
+
+*** MAKE SURE TO ACCOUNT FOR OVERLAPPING DISCS IN THE ANALYSIS
