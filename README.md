@@ -1,5 +1,8 @@
 # Perceived Animacy
-
+```
+ git clone --recurse-submodules -j4 --branch chase-confidence git@github.com:belieflab/perceivedAnimacy.git && cd perceivedAnimacy && git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo main)' && git update-index --assume-unchanged exp/conf.js
+ ```
+ 
 ## Configuration
 
 feedbackDuration: duration of "correct" or "incorrect" feedback words  after each trial (in miliseconds).
