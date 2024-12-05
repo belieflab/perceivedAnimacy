@@ -6,7 +6,7 @@ let feedbackGenerator = '<div id="feedback" style="font-size:60px; color:white;"
 // array from 1 to 300 by 1
 let posibleTrials = Array(300).fill().map((element, index) => index + 1);
 // randomize posibleTrials vector
-let randTrials = jsPsych.randomization.repeat(posibleTrials, 1); //shuffled array no repeats
+let randTrials = shuffleArray(posibleTrials); //shuffled array no repeats
 // take only the firt numberTestTrials  
 const randPracticeTrials = randTrials.slice(0, numberPracticeTrials);
 const randTestTrials = randTrials.slice(numberPracticeTrials, numberPracticeTrials+numberTestTrials);
@@ -76,5 +76,5 @@ for (let i = 0; i < noChaseTest.length; i++) {
 
 
 // # # # # (4) randomize chase and no chase trials # # # # 
-let randomizedPracticeTrials = jsPsych.randomization.repeat(practiceTrials, 1); //shuffled array no repeats
-let randomizedTestTrials = jsPsych.randomization.repeat(testTrials, 1); 
+let randomizedPracticeTrials = shuffleArray(practiceTrials); //shuffled array no repeats
+let randomizedTestTrials = shuffleArray(testTrials); 
