@@ -1,3 +1,8 @@
+<?php
+
+?>
+
+<script>
 // trial counter
 let trialIterator = 1;
 
@@ -85,3 +90,4 @@ for (let i = 0; i < noChaseTest.length; i++) {
 // # # # # (4) randomize chase and no chase trials # # # #
 let randomizedPracticeTrials = shuffleArray(practiceTrials); //shuffled array no repeats
 let randomizedTestTrials = shuffleArray(testTrials);
+</script>

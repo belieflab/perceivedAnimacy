@@ -6,6 +6,12 @@ const jsPsych = initJsPsych({
 
 let timeline = [];
 
+const preload = {
+    type: jsPsychPreload,
+    video: [chaseTest, chasePractice, noChaseTest, noChasePractice],
+    show_detailed_errors: true,
+};
+
 let instructions0 = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus:

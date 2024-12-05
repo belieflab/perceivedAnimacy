@@ -40,19 +40,23 @@ const repetitions = {
 const adminEmail = undefined;
 
 // Intake Settings
+// Intake Settings
 const intake = {
     subject: {
-        minLength: 5,
-        maxLength: 5,
+        minLength: 7,
+        maxLength: 7,
+        prefix: "VIP",
     },
     sites: ["Vanderbilt"],
-    phenotypes: ["hc"],
+    phenotypes: ["sz"],
+    visits: ["1", "3"],
+    weeks: [],
 };
 
 // Redirect and Counterbalance Configuration
 
 // choose true if you would like to counterbalance the surveys based on the participant's subjectId
-const counterbalance = true;
+const counterbalance = false;
 
 let phase = undefined;
 

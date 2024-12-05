@@ -1,5 +1,7 @@
 "use strict";
 
+// Preload images
+timeline.push(preload);
 timeline.push(instructions0);
 timeline.push(instructions1);
 timeline.push(instructions2);
