@@ -21,7 +21,7 @@ const language = "english"; // Language setting for the experiment
 
 // User Interface Theme
 // Options: "light", "dark", "gray", "white" (useful for images with white backgrounds)
-const theme = "light"; // Default theme setting for the user interface
+const theme = "dark"; // Default theme setting for the user interface
 
 // Manual Intake Form
 // set these options to control the lists of sites and phenotypes on the manual intake form
@@ -61,7 +61,6 @@ const urlConfig = {
     // redirect only
     chase_confidence: "https://yalesurvey.ca1.qualtrics.com/jfe/form/SV_XXX",
 };
-
 
 // // specific config parameters for perceivedAnimacy[chase-confidence]
 const feedbackDuration = 500;
