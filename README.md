@@ -76,8 +76,9 @@ The sum of numberPracticeTrials and numberTestTrials should be no larger than 30
      cd /var/www/html
      ```
 2. Clone the repository:
-   ```bash
- git clone --recurse-submodules -j4 --branch chase-confidence git@github.com:belieflab/perceivedAnimacy.git && cd perceivedAnimacy && git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo main)' && git update-index --assume-unchanged exp/conf.js
+
+```
+git clone --recurse-submodules -j4 --branch chase-confidence git@github.com:belieflab/perceivedAnimacy.git && cd perceivedAnimacy && git submodule foreach --recursive 'git checkout $(git config -f $toplevel/.gitmodules submodule.$name.branch || echo main)' && git update-index --assume-unchanged exp/conf.js
 ```
 
 ### Modify Permissions
